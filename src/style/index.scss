@@ -1,0 +1,8 @@
+@import 'reset';
+@import 'variables';
+
+body {
+  background: $color-grey-light;
+  height: 100vh;
+  overflow-x: hidden;
+}
