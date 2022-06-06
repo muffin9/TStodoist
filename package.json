@@ -1,0 +1,45 @@
+{
+  "name": "tstodoist",
+  "version": "1.0.0",
+  "description": "타입스크립트로 만들어보는 투두리스트.",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "start": "NODE_ENV=development webpack serve",
+    "lint": "eslint . --ext js,ts --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muffin9/TStodoist.git"
+  },
+  "author": "Muffin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Muffin9/TStodoist/issues"
+  },
+  "homepage": "https://github.com/Muffin9/TStodoist#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.17.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "node-sass": "^7.0.1",
+    "prettier": "^2.6.2",
+    "sass-loader": "^13.0.0",
+    "style-loader": "^3.3.1",
+    "typescript": "^4.7.3",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.1"
+  },
+  "dependencies": {
+    "core-js": "^3.22.8"
+  }
+}
