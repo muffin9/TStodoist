@@ -1,0 +1,28 @@
+.header__main {
+  height: 7rem;
+  padding: 2rem 5rem;
+  margin-bottom: 1.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0px 4px 10px rgba(51, 51, 51, 0.1),
+    0px 0px 4px rgba(51, 51, 51, 0.05);
+
+  .header__logo {
+    font-size: $font-32;
+    font-weight: 400;
+  }
+  .header__menu {
+    cursor: pointer;
+    z-index: 99;
+    div {
+      width: 1.56rem;
+      height: 0.125rem;
+      background: $color-black;
+      margin: 0.3125rem 0;
+    }
+  }
+}

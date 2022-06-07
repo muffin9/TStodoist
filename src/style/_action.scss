@@ -1,0 +1,43 @@
+.action-wrapper {
+  width: 28.25rem;
+  height: 100vh;
+  padding: 5rem 2.5rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: $color-white;
+  z-index: 99;
+  overflow-y: auto;
+
+  .action--close {
+    width: 0.65rem;
+    height: 0.65rem;
+    position: absolute;
+    top: 3.125rem;
+    right: 5.32rem;
+    cursor: pointer;
+  }
+
+  .action {
+    padding: 1rem;
+
+    &__inner {
+      display: flex;
+    }
+
+    &__icon {
+      margin-right: 1rem;
+    }
+
+    &__content {
+      margin: 0.5rem 0;
+      line-height: 1.43rem;
+    }
+
+    &__time {
+      font-size: $font-14;
+      font-weight: 400;
+      color: $color-grey-dark;
+    }
+  }
+}
