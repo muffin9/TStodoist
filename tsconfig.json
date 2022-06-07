@@ -3,9 +3,9 @@
     "target": "es2015",
     "module": "commonjs",
     "allowJs": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@*": ["src/*"]
+      "@/*": ["src/*"]
     },
     "outDir": "./dist",
     "esModuleInterop": true,
