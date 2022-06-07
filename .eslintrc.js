@@ -2,9 +2,9 @@ module.exports = {
   extends: ['airbnb-typescript/base', 'plugin:import/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 6,
     sourceType: 'module',
     project: ['tsconfig.json'],
+    extraFileExtensions: ['.js', '.ts', '.html'],
   },
   ignorePatterns: ['webpack.config.js', 'dist'],
   rules: {

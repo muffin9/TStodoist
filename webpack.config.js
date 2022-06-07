@@ -5,7 +5,7 @@ const PORT = 3000;
 
 module.exports = {
   mode: 'development',
-  entry: './src/app.ts',
+  entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -14,6 +14,7 @@ module.exports = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
+    extensions: ['.ts', '.js'],
   },
   module: {
     rules: [
@@ -21,7 +22,7 @@ module.exports = {
         test: /\.(js|ts)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: 'ts-loader',
         },
       },
       {
@@ -38,9 +39,6 @@ module.exports = {
     }),
   ],
   devServer: {
-    static: {
-      directory: path.resolve(__dirname, 'dist/index.html'),
-    },
     host: 'localhost',
     port: PORT,
     client: {
