@@ -1,0 +1,37 @@
+.card-wrapper {
+  height: 6.75rem;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  position: relative;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: $color-white;
+  box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+
+  .card__delete {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .card__title {
+    font-size: $font-16;
+    font-weight: 700;
+    color: $color-black;
+  }
+
+  .card__content {
+    font-size: $font-14;
+    font-weight: 400;
+    color: $color-black;
+  }
+
+  .card__writer {
+    font-size: $font-12;
+    font-weight: 400;
+    color: $color-grey;
+  }
+}
