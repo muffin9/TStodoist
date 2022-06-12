@@ -43,12 +43,17 @@ module.exports = {
     }),
   ],
   devServer: {
-    host: 'localhost',
-    port: PORT,
-    client: {
-      overlay: true,
+    open: true,
+    historyApiFallback: true,
+    static: {
+      directory: path.join(__dirname, 'public'),
     },
     hot: true,
-    compress: true,
+    client: {
+      overlay: {
+        errors: true,
+        warnings: false,
+      },
+    },
   },
 };
