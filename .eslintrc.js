@@ -1,4 +1,5 @@
 module.exports = {
+  plugins: ['prettier'],
   extends: ['airbnb-typescript/base', 'plugin:import/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -8,10 +9,10 @@ module.exports = {
   },
   ignorePatterns: ['webpack.config.js', 'dist'],
   rules: {
+    'prettier/prettier': 'error',
     'import/order': [
       'error',
       {
-        groups: ['builtin', 'external', 'internal', 'index'],
         alphabetize: {
           order: 'asc',
           caseInsensitive: true,
