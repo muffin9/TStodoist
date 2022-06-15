@@ -1,3 +1,57 @@
 .column-wrapper {
+  display: flex;
+  width: 100%;
   margin-top: 8.5rem;
+}
+
+.column-list {
+  margin-right: 1.25rem;
+
+  .column {
+    width: 19.25rem;
+    height: 2.625rem;
+    display: flex;
+    justify-content: space-between;
+
+    &__left {
+      gap: 0.3125rem;
+      display: flex;
+      align-items: center;
+    }
+
+    &__title {
+      font-size: $font-18;
+      font-weight: $font-700;
+    }
+
+    &__count {
+      width: 1.625rem;
+      height: 1.625rem;
+      background: $color-grey;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 1.625rem;
+    }
+
+    &__right {
+      gap: 0.3125rem;
+      display: flex;
+      align-items: center;
+    }
+
+    &__add {
+      color: $color-grey;
+      font-size: $font-20;
+      cursor: pointer;
+      &:hover {
+        color: $color-blue-light;
+      }
+    }
+
+    &__delete {
+      color: $color-grey;
+      font-size: $font-20;
+      cursor: pointer;
+    }
+  }
 }
