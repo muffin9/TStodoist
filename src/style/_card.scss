@@ -1,8 +1,6 @@
 .card-wrapper {
   height: 6.75rem;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  @include flexbox($flex-direction: column, $justify-content: space-between);
   position: relative;
   margin: 1rem 0;
   padding: 1rem;

@@ -1,3 +1,4 @@
+import TodoAddForm from '@/components/TodoAddForm';
 import { $ } from '@/utils/dom';
 
 export default class TodoColumn {
@@ -33,11 +34,22 @@ export default class TodoColumn {
     this.onModify = !this.onModify;
   };
 
-  handleClickOutside = (event: any) => {
+  handleOnClickAddCard = () => {
+    $(`.${this.title} .column__add`)!.addEventListener('click', () => {
+      const newAddForm = new TodoAddForm();
+      $(`.${this.title} .column`)!.insertAdjacentHTML(
+        'afterend',
+        newAddForm.render(),
+      );
+      newAddForm.registerEventListener();
+    });
+  };
+
+  handleOnClickOutside = (event: any) => {
     const target = event.target;
     if (target.id === `${this.title}`) return;
     this.toggleModifyValue();
-    this.onChangeTitleElement();
+    this.changeTitleElement();
   };
 
   handleOnDbClickTitle = () => {
@@ -45,7 +57,7 @@ export default class TodoColumn {
       const targetElement = event.target as HTMLDivElement | HTMLInputElement;
       if (targetElement.classList.contains('column__title')) {
         this.toggleModifyValue();
-        this.onChangeTitleElement();
+        this.changeTitleElement();
       }
     });
   };
@@ -56,21 +68,22 @@ export default class TodoColumn {
     });
   };
 
-  onChangeTitleElement = () => {
+  changeTitleElement = () => {
     const titleElement = $(`.${this.title} .column__title`);
     if (this.onModify) {
       titleElement!.outerHTML = `<input id="${this.title}" class="column__title" type="input" maxlength="50" />`;
-      document.addEventListener('click', this.handleClickOutside, true);
+      document.addEventListener('click', this.handleOnClickOutside, true);
       this.handleOnChangeTitle();
     } else {
       titleElement!.outerHTML = `<div class="column__title" type="input" maxlength="50">${this.changeTitle}</div>`;
-      document.removeEventListener('click', this.handleClickOutside, true);
+      document.removeEventListener('click', this.handleOnClickOutside, true);
       this.handleOnDbClickTitle();
     }
   };
 
   registerEventListener = () => {
     this.handleOnDbClickTitle();
+    this.handleOnClickAddCard();
   };
 
   render = () => {
