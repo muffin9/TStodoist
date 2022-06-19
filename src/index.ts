@@ -51,7 +51,7 @@ const createColumns = () => {
     const todoData = dummyTodos[data.title as Todo];
     column.setCount(todoData.length);
     columnWrapperElement.insertAdjacentHTML('beforeend', column.render());
-    column.handleEventListener();
+    column.registerEventListener();
     createTodos(column, todoData);
   });
 };
