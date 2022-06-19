@@ -1,0 +1,48 @@
+.input-wrapper {
+    @include flexbox($flex-direction: column, $justify-content: center);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: $color-white;
+    border-radius: 6px;
+
+    .input-header {
+        border: none;
+        outline: none;
+        margin-bottom: 0.5rem;
+        color: $color-grey-dark;
+        font-size: $font-16;
+        font-weight: 700;
+    }
+
+    .input-content {
+        border: none;
+        outline: none;
+        margin-bottom: 1rem;
+        color: $color-grey-dark;
+        font-size: $font-14;
+        resize: none;
+        overflow: hidden;
+        font-weight: 400;
+    }
+
+    .input-button-wrapper {
+        @include flexbox();
+
+        .input__button {
+            width: 134px;
+            height: 40px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .input--cancel {
+            background: $color-grey-mlight;
+            color: $color-grey-dark;
+            margin-right: 6px;
+        }
+
+        .input--register {
+            color: $color-white;
+        }
+    }
+}

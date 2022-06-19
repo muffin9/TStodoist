@@ -22,7 +22,7 @@
     padding: 1rem;
 
     &__inner {
-      display: flex;
+      @include flexbox();
     }
 
     &__icon {

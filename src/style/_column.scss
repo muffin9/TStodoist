@@ -1,5 +1,5 @@
 .column-wrapper {
-  display: flex;
+  @include flexbox();
   width: 100%;
   margin-top: 8.5rem;
 }
@@ -10,13 +10,11 @@
   .column {
     width: 19.25rem;
     height: 2.625rem;
-    display: flex;
-    justify-content: space-between;
+    @include flexbox($justify-content: space-between);
 
     &__left {
       gap: 0.3125rem;
-      display: flex;
-      align-items: center;
+      @include flexbox($align-items: center);
     }
 
     &__title {
@@ -35,8 +33,7 @@
 
     &__right {
       gap: 0.3125rem;
-      display: flex;
-      align-items: center;
+      @include flexbox($align-items: center);
     }
 
     &__add {
