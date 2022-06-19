@@ -1,8 +1,11 @@
 import { $ } from '@/utils/dom';
+
 export default class TodoColumn {
   id: number;
 
   title: string;
+
+  changeTitle: string;
 
   isdeleted: boolean;
 
@@ -15,6 +18,7 @@ export default class TodoColumn {
   constructor(id: number, title: string, isdeleted: boolean, date?: string) {
     this.id = id;
     this.title = title;
+    this.changeTitle = this.title;
     this.isdeleted = isdeleted;
     this.date = date;
     this.onModify = false;
@@ -25,25 +29,48 @@ export default class TodoColumn {
     this.count = count;
   };
 
-  handleEventListener = () => {
-    $(`.${this.title} .column__title`)!.addEventListener(
-      'dblclick',
-      ({ target }: any) => {
-        const targetElement = target as HTMLDivElement | HTMLInputElement;
-        if (targetElement.classList.contains('column__title')) {
-          this.onModify = !this.onModify;
-          this.changeTitle();
-        }
-      },
-    );
+  toggleModifyValue = () => {
+    this.onModify = !this.onModify;
   };
 
-  changeTitle = () => {
+  handleClickOutside = (event: any) => {
+    const target = event.target;
+    if (target.id === `${this.title}`) return;
+    this.toggleModifyValue();
+    this.onChangeTitleElement();
+  };
+
+  handleOnDbClickTitle = () => {
+    $(`.${this.title} .column__title`)!.addEventListener('dblclick', event => {
+      const targetElement = event.target as HTMLDivElement | HTMLInputElement;
+      if (targetElement.classList.contains('column__title')) {
+        this.toggleModifyValue();
+        this.onChangeTitleElement();
+      }
+    });
+  };
+
+  handleOnChangeTitle = () => {
+    $(`.${this.title} .column__title`)?.addEventListener('change', (e: any) => {
+      this.changeTitle = e.target.value;
+    });
+  };
+
+  onChangeTitleElement = () => {
     const titleElement = $(`.${this.title} .column__title`);
     if (this.onModify) {
-      titleElement!.outerHTML =
-        '<input class="column__title" type="input" maxlength="50" />';
+      titleElement!.outerHTML = `<input id="${this.title}" class="column__title" type="input" maxlength="50" />`;
+      document.addEventListener('click', this.handleClickOutside, true);
+      this.handleOnChangeTitle();
+    } else {
+      titleElement!.outerHTML = `<div class="column__title" type="input" maxlength="50">${this.changeTitle}</div>`;
+      document.removeEventListener('click', this.handleClickOutside, true);
+      this.handleOnDbClickTitle();
     }
+  };
+
+  registerEventListener = () => {
+    this.handleOnDbClickTitle();
   };
 
   render = () => {
