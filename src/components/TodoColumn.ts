@@ -37,6 +37,12 @@ export default class TodoColumn {
     this.count = count;
   };
 
+  addCount = () => {
+    this.count += 1;
+    this.element!.querySelector('.column__count')!.innerHTML =
+      this.count.toString();
+  };
+
   toggleModifyValue = () => {
     this.onModify = !this.onModify;
   };
@@ -51,7 +57,7 @@ export default class TodoColumn {
           return;
         }
 
-        const newAddForm = new TodoAddForm();
+        const newAddForm = new TodoAddForm(this.element, this.addCount);
         this.element
           ?.querySelector('.column')!
           .insertAdjacentHTML('afterend', newAddForm.render());
