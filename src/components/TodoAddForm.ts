@@ -78,7 +78,9 @@ export default class TodoAddForm {
         this.parentElement
           ?.querySelector('.column')
           ?.insertAdjacentHTML('afterend', newCard.render());
+        newCard.registerEventListener();
         // TodoAddForm remove
+
         this.element?.remove();
         // set Action
 

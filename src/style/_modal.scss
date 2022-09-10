@@ -1,0 +1,55 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    background-color: $color-black;
+    opacity: 0.5;
+}
+
+.modal-wrapper {
+    @include flexbox($flex-direction: column, $justify-content: space-between, $align-items: center);
+    width: 17.5rem;
+    height: 10rem;
+    padding: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $color-white;
+    z-index: 1000;
+    border-radius: 2rem;
+    text-align: center;
+}
+
+.modal-header--close {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    border: none;
+    background: transparent;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.modal-button {
+    @include flexbox($justify-content: center);
+    gap: 1rem;
+
+    button {
+        border-radius: 1rem;
+        width: 5rem;
+        height: 2rem;
+        cursor: pointer;
+    }
+
+    &--ok {
+        background-color: $color-blue;
+    }
+
+    &--cancel {
+        background-color: $color-red;
+    }
+}
