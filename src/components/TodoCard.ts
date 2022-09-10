@@ -1,4 +1,4 @@
-import closeImg from '@/assets/close.png';
+// import { Close, HoverClose } from '@/assets';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
 
@@ -24,25 +24,45 @@ export default class TodoCard {
     this.date = state.date;
   }
 
-  handleOnMouseEnter = () => {
-    this.element?.addEventListener('mouseenter', e => {
+  handleOnClick = () => {
+    this.element?.addEventListener('click', e => {
       const target = e.target as HTMLElement;
-      if (target.classList.contains('card__delete')) {
-        console.log('해당 카드 색상 변경 예정');
+      if (target.classList.contains('card__delete--img')) {
+        console.log('modal 띄우기');
+      }
+    });
+  };
+
+  handleMouseOver = () => {
+    this.element?.addEventListener('mouseover', e => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('card__delete--img')) {
+        this.element?.classList.add('todo-delete-border');
+      }
+    });
+  };
+
+  handleMouseOut = () => {
+    this.element?.addEventListener('mouseout', e => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('card__delete--img')) {
+        this.element?.classList.remove('todo-delete-border');
       }
     });
   };
 
   registerEventListener = () => {
     this.element = $$(this.id);
-    this.handleOnMouseEnter();
+    this.handleMouseOver();
+    this.handleMouseOut();
+    this.handleOnClick();
   };
 
   render = () => {
     return /* html */ `
       <article class="card-wrapper" id="${this.id}">
         <div class="card__delete">
-          <img src=${closeImg} alt="closeImage"/>
+          <img class="card__delete--img" />
         </div>
         <h1 class="card__title">
         ${this.title}
