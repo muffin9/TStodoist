@@ -45,10 +45,10 @@ export default class TodoCard {
           <img src=${closeImg} alt="closeImage"/>
         </div>
         <h1 class="card__title">
-        Github 공부하기
+        ${this.title}
         </h1>
         <div class="card__content">
-        add, commit, push
+        ${this.content}
         </div>
         <div class="card__writer">
         author by web

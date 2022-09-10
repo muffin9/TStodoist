@@ -1,8 +1,12 @@
+import TodoCard from './TodoCard';
+
 import { $$ } from '@/utils/dom';
 import { newID } from '@/utils/util';
 
 export default class TodoAddForm {
   id: string;
+
+  parentElement: HTMLElement | null;
 
   element: HTMLElement | null;
 
@@ -10,11 +14,15 @@ export default class TodoAddForm {
 
   content: string;
 
-  constructor() {
+  addCount: () => void;
+
+  constructor(parentElement: HTMLElement | null, addCount: () => void) {
     this.id = newID();
+    this.parentElement = parentElement;
     this.element = null;
     this.title = '';
     this.content = '';
+    this.addCount = addCount;
   }
 
   checkValue = () => {
@@ -52,12 +60,24 @@ export default class TodoAddForm {
       if (target.classList.contains('input--cancel')) {
         this.element?.remove();
       } else if (target.classList.contains('input--register')) {
-        console.log('clicked!');
         // set TodoCard
+        const newCard = new TodoCard({
+          id: this.id,
+          title: this.title,
+          content: this.content,
+          status: 'todo',
+          date: new Date().toString(),
+        });
         // Column 뒤에 붙이기
+        this.parentElement
+          ?.querySelector('.column')
+          ?.insertAdjacentHTML('afterend', newCard.render());
         // TodoAddForm remove
+        this.element?.remove();
         // set Action
+
         // add count
+        this.addCount();
       }
     });
   };
