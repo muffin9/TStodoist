@@ -2,17 +2,28 @@
   height: 6.75rem;
   @include flexbox($flex-direction: column, $justify-content: space-between);
   position: relative;
-  margin: 1rem 0;
+  margin-top: 1rem;
   padding: 1rem;
   background-color: $color-white;
   box-shadow: 0px 1px 30px rgba(224, 224, 224, 0.3);
   border-radius: 0.375rem;
-  cursor: pointer;
 
   .card__delete {
     position: absolute;
     top: 1rem;
     right: 1rem;
+    cursor: pointer;
+
+    &--img {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      content: url("https://s3.amazonaws.com/static.graphemica.com/glyphs/i500s/000/002/004/original/0058-500x500.png?1275291789");
+
+      &:hover {
+        content: url("https://dictionary.cambridge.org/ko/images/thumb/cross_noun_002_09265.jpg?version=5.0.250");
+      }
+    }
   }
 
   .card__title {
@@ -32,4 +43,5 @@
     font-weight: 400;
     color: $color-grey;
   }
+
 }
