@@ -41,14 +41,20 @@ export default class TodoAddForm {
     }
   };
 
+  heightResize = () => {
+    const target = this.element?.querySelector('.input-content') as HTMLElement;
+    target.style.height = 'auto';
+    target.style.height = `${target.scrollHeight + 6}px`;
+  };
+
   handleOnChangeValue = () => {
     this.element?.addEventListener('keyup', e => {
       const target = e.target as HTMLInputElement;
-      console.log(target.value);
       if (target.classList.contains('input-title')) {
         this.title = target.value;
       } else if (target.classList.contains('input-content')) {
         this.content = target.value;
+        this.heightResize();
       }
       this.checkValue();
     });
