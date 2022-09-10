@@ -24,14 +24,19 @@ export default class TodoAddForm {
 
     if (this.title && this.content) {
       registerButton.disabled = false;
+      registerButton.classList.remove('bg-sky-blue');
+      registerButton.classList.add('bg-dark-blue');
     } else {
       registerButton.disabled = true;
+      registerButton.classList.remove('bg-dark-blue');
+      registerButton.classList.add('bg-sky-blue');
     }
   };
 
   handleOnChangeValue = () => {
-    this.element?.addEventListener('change', e => {
+    this.element?.addEventListener('keyup', e => {
       const target = e.target as HTMLInputElement;
+      console.log(target.value);
       if (target.classList.contains('input-title')) {
         this.title = target.value;
       } else if (target.classList.contains('input-content')) {
@@ -47,6 +52,7 @@ export default class TodoAddForm {
       if (target.classList.contains('input--cancel')) {
         this.element?.remove();
       } else if (target.classList.contains('input--register')) {
+        console.log('clicked!');
         // set TodoCard
         // Column 뒤에 붙이기
         // TodoAddForm remove
