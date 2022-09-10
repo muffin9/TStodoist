@@ -6,22 +6,10 @@ import { dummyTodos } from './mocks/todos';
 
 import TodoColumn from '@/components/TodoColumn';
 import TodoHeader from '@/components/TodoHeader';
-import { $, $$ } from '@/utils/dom';
-
-interface IColumn {
-  id: number;
-  title: string;
-  isDeleted: boolean;
-}
-
-export interface ITodo {
-  id: number;
-  title: string;
-  content: string;
-  status: string;
-  userId?: number;
-  date: string;
-}
+import IColumn from '@/interface/IColumn';
+import ITodo from '@/interface/ITodo';
+import { $$ } from '@/utils/dom';
+import { newID } from '@/utils/util';
 
 type Todo = 'todo' | 'doing' | 'done';
 
@@ -29,15 +17,15 @@ const root = $$('root')!;
 
 const createTodos = (column: any, todos: ITodo[]) => {
   todos.forEach((todo: ITodo) => {
-    const newTodo = new TodoCard(
-      todo.id,
-      todo.title,
-      todo.content,
-      todo.status,
-      todo.date,
-    );
-    $(`.${column.title}`)!.insertAdjacentHTML('beforeend', newTodo.render());
-    newTodo.handleEventListener();
+    const newTodo = new TodoCard({
+      id: newID(),
+      title: todo.title,
+      content: todo.content,
+      status: todo.status,
+      date: todo.date,
+    });
+    $$(column.id)!.insertAdjacentHTML('beforeend', newTodo.render());
+    newTodo.registerEventListener();
   });
 };
 
@@ -47,7 +35,11 @@ const createColumns = () => {
   root.appendChild(columnWrapperElement);
 
   dummyColumns.forEach((data: IColumn) => {
-    const column = new TodoColumn(data.id, data.title, data.isDeleted);
+    const column = new TodoColumn({
+      id: newID(),
+      title: data.title,
+      isDeleted: data.isDeleted,
+    });
     const todoData = dummyTodos[data.title as Todo];
     column.setCount(todoData.length);
     columnWrapperElement.insertAdjacentHTML('beforeend', column.render());
