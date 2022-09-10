@@ -1,8 +1,11 @@
 import TodoAddForm from '@/components/TodoAddForm';
-import { $ } from '@/utils/dom';
+import IColumn from '@/interface/IColumn';
+import { $$ } from '@/utils/dom';
 
 export default class TodoColumn {
-  id: number;
+  id: string;
+
+  element: HTMLElement | null;
 
   title: string;
 
@@ -18,12 +21,13 @@ export default class TodoColumn {
 
   onAddForm: boolean;
 
-  constructor(id: number, title: string, isdeleted: boolean, date?: string) {
-    this.id = id;
-    this.title = title;
+  constructor(state: IColumn) {
+    this.id = state.id;
+    this.element = null;
+    this.title = state.title;
     this.changeTitle = this.title;
-    this.isdeleted = isdeleted;
-    this.date = date;
+    this.isdeleted = state.isDeleted;
+    this.date = new Date().toString();
     this.onModify = false;
     this.onAddForm = false;
     this.count = 0;
@@ -37,34 +41,36 @@ export default class TodoColumn {
     this.onModify = !this.onModify;
   };
 
-  handleOnClickAddCard = () => {
-    $(`.${this.title} .column__add`)!.addEventListener('click', () => {
-      const addForm = $(`.${this.title} .input-wrapper`);
-      if (addForm) {
-        addForm.remove();
-        return;
+  handleOnClick = () => {
+    this.element?.addEventListener('click', e => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('column__add')) {
+        const addForm = this.element?.querySelector('.input-wrapper');
+        if (addForm) {
+          addForm.remove();
+          return;
+        }
+
+        const newAddForm = new TodoAddForm();
+        this.element
+          ?.querySelector('.column')!
+          .insertAdjacentHTML('afterend', newAddForm.render());
+
+        newAddForm.registerEventListener();
       }
-
-      const newAddForm = new TodoAddForm();
-      $(`.${this.title} .column`)!.insertAdjacentHTML(
-        'afterend',
-        newAddForm.render(),
-      );
-
-      newAddForm.registerEventListener();
     });
   };
 
-  handleOnClickOutside = (event: any) => {
-    const target = event.target;
+  handleOnClickOutside = (e: any) => {
+    const target = e.target as HTMLElement;
     if (target.id === `${this.title}`) return;
     this.toggleModifyValue();
     this.changeTitleElement();
   };
 
-  handleOnDbClickTitle = () => {
-    $(`.${this.title} .column__title`)!.addEventListener('dblclick', event => {
-      const targetElement = event.target as HTMLDivElement | HTMLInputElement;
+  handleOnDbClick = () => {
+    this.element?.addEventListener('dblclick', e => {
+      const targetElement = e.target as HTMLDivElement | HTMLInputElement;
       if (targetElement.classList.contains('column__title')) {
         this.toggleModifyValue();
         this.changeTitleElement();
@@ -72,33 +78,36 @@ export default class TodoColumn {
     });
   };
 
-  handleOnChangeTitle = () => {
-    $(`.${this.title} .column__title`)?.addEventListener('change', (e: any) => {
-      this.changeTitle = e.target.value;
+  handleOnChange = () => {
+    this.element?.addEventListener('change', e => {
+      const target = e.target as HTMLInputElement;
+      this.changeTitle = target.value;
     });
   };
 
   changeTitleElement = () => {
-    const titleElement = $(`.${this.title} .column__title`);
+    const titleElement = this.element?.querySelector('.column__title');
+
     if (this.onModify) {
       titleElement!.outerHTML = `<input id="${this.title}" class="column__title" type="input" maxlength="50" />`;
       document.addEventListener('click', this.handleOnClickOutside, true);
-      this.handleOnChangeTitle();
+      this.handleOnChange();
     } else {
       titleElement!.outerHTML = `<div class="column__title" type="input" maxlength="50">${this.changeTitle}</div>`;
       document.removeEventListener('click', this.handleOnClickOutside, true);
-      this.handleOnDbClickTitle();
+      this.handleOnDbClick();
     }
   };
 
   registerEventListener = () => {
-    this.handleOnDbClickTitle();
-    this.handleOnClickAddCard();
+    this.element = $$(this.id);
+    this.handleOnDbClick();
+    this.handleOnClick();
   };
 
   render = () => {
     return /* html */ `
-    <div class="column-list ${this.title}">
+    <div class="column-list" id="${this.id}">
       <nav class="column">
           <div class="column__left">
               <div class="column__title">${this.title}</div>

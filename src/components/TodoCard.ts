@@ -1,10 +1,13 @@
 import closeImg from '@/assets/close.png';
-import { $ } from '@/utils/dom';
+import ITodo from '@/interface/ITodo';
+import { $$ } from '@/utils/dom';
 
 export default class TodoCard {
-  id: number;
+  id: string;
 
   title: string;
+
+  element: HTMLElement | null;
 
   content: string;
 
@@ -12,29 +15,32 @@ export default class TodoCard {
 
   date: string;
 
-  constructor(
-    id: number,
-    title: string,
-    content: string,
-    status: string,
-    date: string,
-  ) {
-    this.id = id;
-    this.title = title;
-    this.content = content;
-    this.status = status;
-    this.date = date;
+  constructor(state: ITodo) {
+    this.id = state.id;
+    this.element = null;
+    this.title = state.title;
+    this.content = state.content;
+    this.status = state.status;
+    this.date = state.date;
   }
 
-  handleEventListener = () => {
-    $('.card__delete')!.addEventListener('mouseenter', () => {
-      console.log('해당 카드 색상 변경 예정');
+  handleOnMouseEnter = () => {
+    this.element?.addEventListener('mouseenter', e => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('card__delete')) {
+        console.log('해당 카드 색상 변경 예정');
+      }
     });
+  };
+
+  registerEventListener = () => {
+    this.element = $$(this.id);
+    this.handleOnMouseEnter();
   };
 
   render = () => {
     return /* html */ `
-      <article class="card-wrapper">
+      <article class="card-wrapper" id="${this.id}">
         <div class="card__delete">
           <img src=${closeImg} alt="closeImage"/>
         </div>

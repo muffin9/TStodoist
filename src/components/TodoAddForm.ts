@@ -1,8 +1,10 @@
-import { $ } from '@/utils/dom';
+import { $$ } from '@/utils/dom';
 import { newID } from '@/utils/util';
 
 export default class TodoAddForm {
   id: string;
+
+  element: HTMLElement | null;
 
   title: string;
 
@@ -10,13 +12,14 @@ export default class TodoAddForm {
 
   constructor() {
     this.id = newID();
+    this.element = null;
     this.title = '';
     this.content = '';
   }
 
   checkValue = () => {
-    const registerButton = $(
-      `.input-${this.id} .input--register`,
+    const registerButton = this.element?.querySelector(
+      '.input--register',
     ) as HTMLButtonElement;
 
     if (this.title && this.content) {
@@ -26,54 +29,42 @@ export default class TodoAddForm {
     }
   };
 
-  handleOnRegisterBtn = () => {
-    $(`.input-${this.id} .input--register`)?.addEventListener('click', () => {
-      console.log('clicked');
+  handleOnChangeValue = () => {
+    this.element?.addEventListener('change', e => {
+      const target = e.target as HTMLInputElement;
+      if (target.classList.contains('input-title')) {
+        this.title = target.value;
+      } else if (target.classList.contains('input-content')) {
+        this.content = target.value;
+      }
+      this.checkValue();
     });
-
-    // set TodoCard
-    // Column 뒤에 붙이기
-    // TodoAddForm remove
-    // set Action
-    // add count
   };
 
-  handleOnChangeTitle = () => {
-    $(`.input-${this.id} .input-title`)?.addEventListener(
-      'change',
-      (e: any) => {
-        this.title = e.target.value;
-        this.checkValue();
-      },
-    );
-  };
-
-  handleOnChangeContent = () => {
-    $(`.input-${this.id} .input-content`)?.addEventListener(
-      'change',
-      (e: any) => {
-        this.content = e.target.value;
-        this.checkValue();
-      },
-    );
-  };
-
-  handleOnRemoveForm = () => {
-    $(`.input-${this.id} .input--cancel`)?.addEventListener('click', () => {
-      $(`.input-${this.id}`)?.remove();
+  handleOnClick = () => {
+    this.element?.addEventListener('click', e => {
+      const target = e.target as HTMLInputElement;
+      if (target.classList.contains('input--cancel')) {
+        this.element?.remove();
+      } else if (target.classList.contains('input--register')) {
+        // set TodoCard
+        // Column 뒤에 붙이기
+        // TodoAddForm remove
+        // set Action
+        // add count
+      }
     });
   };
 
   registerEventListener = () => {
-    this.handleOnChangeTitle();
-    this.handleOnChangeContent();
-    this.handleOnRegisterBtn();
-    this.handleOnRemoveForm();
+    this.element = $$(this.id);
+    this.handleOnChangeValue();
+    this.handleOnClick();
   };
 
   render = () => {
     return /* html */ `
-        <article class="input-wrapper todo-border input-${this.id}">
+        <article class="input-wrapper todo-border" id="${this.id}">
             <input class="input-title" placeholder="제목을 입력하세요" />
             <textarea class="input-content" placeholder="내용을 입력하세요" maxlength ='500'></textarea>
             <div class="input-button-wrapper">

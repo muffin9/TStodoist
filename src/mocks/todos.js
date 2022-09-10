@@ -1,7 +1,7 @@
 export const dummyTodos = {
   todo: [
     {
-      id: 1,
+      id: '1',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'ing',
@@ -9,7 +9,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 2,
+      id: '2',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'todo',
@@ -17,7 +17,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 3,
+      id: '3',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -25,7 +25,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 4,
+      id: '4',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -33,7 +33,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 5,
+      id: '5',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -41,7 +41,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 6,
+      id: '6',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -51,7 +51,7 @@ export const dummyTodos = {
   ],
   doing: [
     {
-      id: 11,
+      id: '11',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'ing',
@@ -59,7 +59,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 12,
+      id: '12',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'todo',
@@ -67,7 +67,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 13,
+      id: '13',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -75,7 +75,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 14,
+      id: '14',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -83,7 +83,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 15,
+      id: '15',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -91,7 +91,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 16,
+      id: '16',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -101,7 +101,7 @@ export const dummyTodos = {
   ],
   done: [
     {
-      id: 6,
+      id: '6',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'ing',
@@ -109,7 +109,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 7,
+      id: '7',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'todo',
@@ -117,7 +117,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 8,
+      id: '8',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -125,7 +125,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 9,
+      id: '9',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -133,7 +133,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 10,
+      id: '10',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
@@ -141,7 +141,7 @@ export const dummyTodos = {
       date: 'Thu Jun 09 2022 22:24:04 GMT+0900 (한국 표준시)',
     },
     {
-      id: 11,
+      id: '11',
       title: 'GitHub 공부하기',
       content: 'add, commit, push',
       status: 'complete',
