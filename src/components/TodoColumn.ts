@@ -16,6 +16,8 @@ export default class TodoColumn {
 
   onModify: boolean;
 
+  onAddForm: boolean;
+
   constructor(id: number, title: string, isdeleted: boolean, date?: string) {
     this.id = id;
     this.title = title;
@@ -23,6 +25,7 @@ export default class TodoColumn {
     this.isdeleted = isdeleted;
     this.date = date;
     this.onModify = false;
+    this.onAddForm = false;
     this.count = 0;
   }
 
@@ -36,11 +39,18 @@ export default class TodoColumn {
 
   handleOnClickAddCard = () => {
     $(`.${this.title} .column__add`)!.addEventListener('click', () => {
+      const addForm = $(`.${this.title} .input-wrapper`);
+      if (addForm) {
+        addForm.remove();
+        return;
+      }
+
       const newAddForm = new TodoAddForm();
       $(`.${this.title} .column`)!.insertAdjacentHTML(
         'afterend',
         newAddForm.render(),
       );
+
       newAddForm.registerEventListener();
     });
   };
