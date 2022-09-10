@@ -1,4 +1,4 @@
-// import { Close, HoverClose } from '@/assets';
+import GlobalModal from '@/components/GlobalModal';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
 
@@ -28,13 +28,26 @@ export default class TodoCard {
     this.element?.addEventListener('click', e => {
       const target = e.target as HTMLElement;
       if (target.classList.contains('card__delete--img')) {
-        console.log('modal 띄우기');
+        const modalContent = `${this.title} 삭제하시겠습니까?`;
+        const globalModal = new GlobalModal(
+          modalContent,
+          this.handleDeleteTodo,
+        );
+        globalModal.render();
+        globalModal.registerEventListener();
       }
     });
   };
 
+  handleDeleteTodo = () => {
+    // data 삭제는 실제 데이터 사용할때.. 적용
+    // view 에서 해당 카드 삭제
+    this.element?.remove();
+  };
+
   handleMouseOver = () => {
     this.element?.addEventListener('mouseover', e => {
+      console.log(this.element);
       const target = e.target as HTMLElement;
       if (target.classList.contains('card__delete--img')) {
         this.element?.classList.add('todo-delete-border');
