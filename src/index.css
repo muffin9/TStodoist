@@ -266,7 +266,7 @@ button {
   margin-bottom: 1rem;
   background: #fff;
   border-radius: 6px; }
-  .input-wrapper .input-header {
+  .input-wrapper .input-title {
     border: none;
     outline: none;
     margin-bottom: 0.5rem;
@@ -298,6 +298,9 @@ button {
 
 .bg-sky-blue {
   background-color: #86C6FF; }
+
+.bg-dark-blue {
+  background-color: #584CF4; }
 
 .todo-border {
   border: 1px solid #0075de; }
