@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 import bodyParser from "body-parser";
+import rootRouter from './routers/index.js';
 import columnRouter from './routers/columnRouter.js';
 
 const PORT = process.env.PORT || 3000;
@@ -18,4 +19,6 @@ app.listen(PORT, () => {
   console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
 });
 
+
+app.use('/', rootRouter);
 app.use("/column", columnRouter);
