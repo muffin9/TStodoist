@@ -4,10 +4,10 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',
-    project: ['tsconfig.json'],
-    extraFileExtensions: ['.js', '.ts', '.html'],
+    tsconfigRootDir: __dirname,
+    project: './tsconfig.json',
   },
-  ignorePatterns: ['webpack.config.js', 'dist'],
+  ignorePatterns: [".eslintrc.js", 'webpack.config.js', 'dist', "server"],
   rules: {
     'prettier/prettier': 'error',
     'import/order': [
