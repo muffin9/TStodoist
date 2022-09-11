@@ -1,12 +1,10 @@
 import TodoCard from './TodoCard';
 
-import { $$ } from '@/utils/dom';
+import { $, $$ } from '@/utils/dom';
 import { newID } from '@/utils/util';
 
-export default class TodoAddForm {
+export default class TodoForm {
   id: string;
-
-  parentElement: HTMLElement | null;
 
   element: HTMLElement | null;
 
@@ -14,21 +12,40 @@ export default class TodoAddForm {
 
   content: string;
 
-  addCount: () => void;
+  status: string;
 
-  constructor(parentElement: HTMLElement | null, addCount: () => void) {
+  type: string;
+
+  addCount?: () => void;
+
+  constructor(
+    state: { title?: string; content?: string; status: string; type: string },
+    addCount?: () => void,
+  ) {
     this.id = newID();
-    this.parentElement = parentElement;
     this.element = null;
-    this.title = '';
-    this.content = '';
+    this.title = state.title || '';
+    this.content = state.content || '';
+    this.status = state.status;
+    this.type = state.type;
     this.addCount = addCount;
   }
+
+  setInitValue = () => {
+    if (this.content) {
+      const $textArea = this.element?.querySelector(
+        '.input-content',
+      ) as HTMLTextAreaElement;
+
+      $textArea!.value = this.content;
+    }
+  };
 
   checkValue = () => {
     const registerButton = this.element?.querySelector(
       '.input--register',
     ) as HTMLButtonElement;
+    console.log(this.title, this.content);
 
     if (this.title && this.content) {
       registerButton.disabled = false;
@@ -67,31 +84,36 @@ export default class TodoAddForm {
         this.element?.remove();
       } else if (target.classList.contains('input--register')) {
         // set TodoCard
+        const columnElement = $(`[data-column-status=${this.status}]`);
+
         const newCard = new TodoCard({
           id: this.id,
           title: this.title,
           content: this.content,
-          status: 'todo',
+          status: this.status,
           date: new Date().toString(),
         });
+
         // Column 뒤에 붙이기
-        this.parentElement
+        columnElement
           ?.querySelector('.column')
           ?.insertAdjacentHTML('afterend', newCard.render());
         newCard.registerEventListener();
-        // TodoAddForm remove
+        // TodoForm remove
 
         this.element?.remove();
         // set Action
 
         // add count
-        this.addCount();
+        this.addCount?.();
       }
     });
   };
 
   registerEventListener = () => {
     this.element = $$(this.id);
+    this.setInitValue();
+    this.checkValue();
     this.handleOnChangeValue();
     this.handleOnClick();
   };
@@ -99,11 +121,13 @@ export default class TodoAddForm {
   render = () => {
     return /* html */ `
         <article class="input-wrapper todo-border" id="${this.id}">
-            <input class="input-title" placeholder="제목을 입력하세요" />
+            <input class="input-title" placeholder="제목을 입력하세요"
+            value=${this.title}>
             <textarea class="input-content" placeholder="내용을 입력하세요" maxlength ='500'></textarea>
             <div class="input-button-wrapper">
                 <button class="input__button input--cancel" type="button">취소</button>
-                <button class="input__button input--register bg-sky-blue" type="button" disabled>등록</button>
+                <button class="input__button input--register bg-sky-blue" type="button" disabled>
+                ${this.type === 'add' ? '등록' : '수정'}</button>
             </div>
         </article>
     `;

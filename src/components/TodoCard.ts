@@ -1,3 +1,5 @@
+import TodoForm from './TodoForm';
+
 import GlobalModal from '@/components/GlobalModal';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
@@ -39,6 +41,19 @@ export default class TodoCard {
     });
   };
 
+  handleOnDbClick = () => {
+    this.element?.addEventListener('dblclick', () => {
+      const todoForm = new TodoForm({
+        title: this.title,
+        content: this.content,
+        status: this.status,
+        type: 'modify',
+      });
+      this.element!.outerHTML = todoForm.render();
+      todoForm.registerEventListener();
+    });
+  };
+
   handleDeleteTodo = () => {
     // data 삭제는 실제 데이터 사용할때.. 적용
     // view 에서 해당 카드 삭제
@@ -47,7 +62,6 @@ export default class TodoCard {
 
   handleMouseOver = () => {
     this.element?.addEventListener('mouseover', e => {
-      console.log(this.element);
       const target = e.target as HTMLElement;
       if (target.classList.contains('card__delete--img')) {
         this.element?.classList.add('todo-delete-border');
@@ -69,6 +83,7 @@ export default class TodoCard {
     this.handleMouseOver();
     this.handleMouseOut();
     this.handleOnClick();
+    this.handleOnDbClick();
   };
 
   render = () => {
