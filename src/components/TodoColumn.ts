@@ -1,4 +1,4 @@
-import TodoAddForm from '@/components/TodoAddForm';
+import TodoForm from '@/components/TodoForm';
 import IColumn from '@/interface/IColumn';
 import { $$ } from '@/utils/dom';
 
@@ -57,7 +57,10 @@ export default class TodoColumn {
           return;
         }
 
-        const newAddForm = new TodoAddForm(this.element, this.addCount);
+        const newAddForm = new TodoForm(
+          { status: this.title, type: 'add' },
+          this.addCount,
+        );
         this.element
           ?.querySelector('.column')!
           .insertAdjacentHTML('afterend', newAddForm.render());
@@ -113,7 +116,7 @@ export default class TodoColumn {
 
   render = () => {
     return /* html */ `
-    <div class="column-list" id="${this.id}">
+    <div class="column-list" id="${this.id}" data-column-status="${this.title}">
       <nav class="column">
           <div class="column__left">
               <div class="column__title">${this.title}</div>
