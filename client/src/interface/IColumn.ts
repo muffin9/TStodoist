@@ -1,6 +1,6 @@
 export default interface IColumn {
-  id: string;
+  id: number;
+  uuid: string;
   title: string;
-  isDeleted: boolean;
   date?: string;
 }

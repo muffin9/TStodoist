@@ -3,15 +3,15 @@ import IColumn from '@/interface/IColumn';
 import { $$ } from '@/utils/dom';
 
 export default class TodoColumn {
-  id: string;
+  id: number;
+
+  uuid: string;
 
   element: HTMLElement | null;
 
   title: string;
 
   changeTitle: string;
-
-  isdeleted: boolean;
 
   date?: string;
 
@@ -23,10 +23,10 @@ export default class TodoColumn {
 
   constructor(state: IColumn) {
     this.id = state.id;
+    this.uuid = state.uuid;
     this.element = null;
     this.title = state.title;
     this.changeTitle = this.title;
-    this.isdeleted = state.isDeleted;
     this.date = new Date().toString();
     this.onModify = false;
     this.onAddForm = false;
@@ -58,7 +58,7 @@ export default class TodoColumn {
         }
 
         const newAddForm = new TodoForm(
-          { status: this.title, type: 'add' },
+          { columnId: this.id, status: this.title, type: 'add' },
           this.addCount,
         );
         this.element
@@ -109,14 +109,14 @@ export default class TodoColumn {
   };
 
   registerEventListener = () => {
-    this.element = $$(this.id);
+    this.element = $$(this.uuid);
     this.handleOnDbClick();
     this.handleOnClick();
   };
 
   render = () => {
     return /* html */ `
-    <div class="column-list" id="${this.id}" data-column-status="${this.title}">
+    <div class="column-list" id="${this.uuid}" data-column-status="${this.title}">
       <nav class="column">
           <div class="column__left">
               <div class="column__title">${this.title}</div>
