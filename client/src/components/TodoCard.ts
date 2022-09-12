@@ -1,11 +1,16 @@
 import TodoForm from './TodoForm';
 
 import GlobalModal from '@/components/GlobalModal';
+import api from '@/helpers/api';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
 
 export default class TodoCard {
-  id: string;
+  id: any;
+
+  uuid: string;
+
+  columnId: number;
 
   title: string;
 
@@ -19,6 +24,8 @@ export default class TodoCard {
 
   constructor(state: ITodo) {
     this.id = state.id;
+    this.uuid = state.uuid;
+    this.columnId = state.columnId;
     this.element = null;
     this.title = state.title;
     this.content = state.content;
@@ -44,6 +51,8 @@ export default class TodoCard {
   handleOnDbClick = () => {
     this.element?.addEventListener('dblclick', () => {
       const todoForm = new TodoForm({
+        id: this.id,
+        columnId: this.columnId,
         title: this.title,
         content: this.content,
         status: this.status,
@@ -54,10 +63,13 @@ export default class TodoCard {
     });
   };
 
-  handleDeleteTodo = () => {
+  handleDeleteTodo = async () => {
     // data 삭제는 실제 데이터 사용할때.. 적용
+    const responseStatus = await api.deleteFetch(this.id);
     // view 에서 해당 카드 삭제
-    this.element?.remove();
+    if (responseStatus) {
+      this.element?.remove();
+    }
   };
 
   handleMouseOver = () => {
@@ -79,7 +91,7 @@ export default class TodoCard {
   };
 
   registerEventListener = () => {
-    this.element = $$(this.id);
+    this.element = $$(this.uuid);
     this.handleMouseOver();
     this.handleMouseOut();
     this.handleOnClick();
@@ -88,7 +100,7 @@ export default class TodoCard {
 
   render = () => {
     return /* html */ `
-      <article class="card-wrapper" id="${this.id}">
+      <article class="card-wrapper" id="${this.uuid}">
         <div class="card__delete">
           <img class="card__delete--img" />
         </div>
