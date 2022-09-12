@@ -1,5 +1,6 @@
 import TodoCard from './TodoCard';
 
+import actionStore, { ADD_ACTION } from '@/actionStore';
 import api from '@/helpers/api';
 import { $, $$ } from '@/utils/dom';
 import { newID } from '@/utils/util';
@@ -107,8 +108,12 @@ export default class TodoForm {
           title: this.title,
           content: this.content,
           status: this.status,
-          date: new Date().toString(),
+          type: this.type,
+          date: new Date(),
         };
+
+        // set Action
+        actionStore.dispatch({ type: ADD_ACTION, payload: cardData });
 
         const todoId = this.type === 'modify' ? this.id : 0;
         const responseStatus = await api.postOrPatchFetch(todoId, cardData);
@@ -124,8 +129,6 @@ export default class TodoForm {
           // TodoForm remove
 
           this.element?.remove();
-          // set Action
-
           // add count
           this.addCount?.();
         }

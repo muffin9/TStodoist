@@ -13,7 +13,9 @@ export default class TodoColumn {
 
   changeTitle: string;
 
-  date?: string;
+  status: string;
+
+  date?: Date;
 
   count: number;
 
@@ -27,7 +29,8 @@ export default class TodoColumn {
     this.element = null;
     this.title = state.title;
     this.changeTitle = this.title;
-    this.date = new Date().toString();
+    this.status = state.status;
+    this.date = new Date();
     this.onModify = false;
     this.onAddForm = false;
     this.count = 0;
@@ -58,7 +61,7 @@ export default class TodoColumn {
         }
 
         const newAddForm = new TodoForm(
-          { columnId: this.id, status: this.title, type: 'add' },
+          { columnId: this.id, status: this.status, type: 'add' },
           this.addCount,
         );
         this.element
@@ -116,7 +119,7 @@ export default class TodoColumn {
 
   render = () => {
     return /* html */ `
-    <div class="column-list" id="${this.uuid}" data-column-status="${this.title}">
+    <div class="column-list" id="${this.uuid}" data-column-status="${this.status}">
       <nav class="column">
           <div class="column__left">
               <div class="column__title">${this.title}</div>

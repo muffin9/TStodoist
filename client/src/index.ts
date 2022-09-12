@@ -4,12 +4,13 @@ import TodoCard from './components/TodoCard';
 
 import TodoColumn from '@/components/TodoColumn';
 import TodoHeader from '@/components/TodoHeader';
+import { todoColumnMap } from '@/constants/todo';
 import api from '@/helpers/api';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
 
 const columnMap = new Map();
-const root = $$('root')!;
+const root = $$('root') as HTMLElement;
 
 const createTodos = (column: any, todos: ITodo[]) => {
   todos.forEach((todo: any) => {
@@ -53,7 +54,8 @@ const createColumns = async () => {
     const column = new TodoColumn({
       id: values.id,
       uuid: `column-${values.id}`,
-      title: key,
+      status: key,
+      title: todoColumnMap.get(key),
     });
     const todoData = values.data;
     column.setCount(todoData.length);
@@ -66,7 +68,7 @@ const createColumns = async () => {
 const app = () => {
   const header = new TodoHeader();
   root.insertAdjacentHTML('afterend', header.render());
-  header.handleEventListener();
+  header.registerEventListener();
   createColumns();
 };
 

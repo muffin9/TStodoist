@@ -6,5 +6,5 @@ export default interface ITodo {
   content: string;
   status: string;
   userId?: number;
-  date: string;
+  date: Date;
 }
