@@ -1,10 +1,15 @@
 import TodoCard from './TodoCard';
 
+import api from '@/helpers/api';
 import { $, $$ } from '@/utils/dom';
 import { newID } from '@/utils/util';
 
 export default class TodoForm {
-  id: string;
+  id: number;
+
+  uuid: string;
+
+  columnId: number;
 
   element: HTMLElement | null;
 
@@ -19,10 +24,20 @@ export default class TodoForm {
   addCount?: () => void;
 
   constructor(
-    state: { title?: string; content?: string; status: string; type: string },
+    state: {
+      id?: any;
+      uuid?: string;
+      columnId: number;
+      title?: string;
+      content?: string;
+      status: string;
+      type: string;
+    },
     addCount?: () => void,
   ) {
-    this.id = newID();
+    this.id = state.id;
+    this.uuid = state.uuid || newID();
+    this.columnId = state.columnId;
     this.element = null;
     this.title = state.title || '';
     this.content = state.content || '';
@@ -45,7 +60,6 @@ export default class TodoForm {
     const registerButton = this.element?.querySelector(
       '.input--register',
     ) as HTMLButtonElement;
-    console.log(this.title, this.content);
 
     if (this.title && this.content) {
       registerButton.disabled = false;
@@ -78,7 +92,7 @@ export default class TodoForm {
   };
 
   handleOnClick = () => {
-    this.element?.addEventListener('click', e => {
+    this.element?.addEventListener('click', async e => {
       const target = e.target as HTMLInputElement;
       if (target.classList.contains('input--cancel')) {
         this.element?.remove();
@@ -86,32 +100,41 @@ export default class TodoForm {
         // set TodoCard
         const columnElement = $(`[data-column-status=${this.status}]`);
 
-        const newCard = new TodoCard({
+        const cardData = {
           id: this.id,
+          uuid: this.uuid,
+          columnId: this.columnId,
           title: this.title,
           content: this.content,
           status: this.status,
           date: new Date().toString(),
-        });
+        };
 
-        // Column 뒤에 붙이기
-        columnElement
-          ?.querySelector('.column')
-          ?.insertAdjacentHTML('afterend', newCard.render());
-        newCard.registerEventListener();
-        // TodoForm remove
+        const todoId = this.type === 'modify' ? this.id : 0;
+        const responseStatus = await api.postOrPatchFetch(todoId, cardData);
 
-        this.element?.remove();
-        // set Action
+        if (responseStatus === 200) {
+          const newCard = new TodoCard(cardData);
 
-        // add count
-        this.addCount?.();
+          // Column 뒤에 붙이기
+          columnElement
+            ?.querySelector('.column')
+            ?.insertAdjacentHTML('afterend', newCard.render());
+          newCard.registerEventListener();
+          // TodoForm remove
+
+          this.element?.remove();
+          // set Action
+
+          // add count
+          this.addCount?.();
+        }
       }
     });
   };
 
   registerEventListener = () => {
-    this.element = $$(this.id);
+    this.element = $$(this.uuid);
     this.setInitValue();
     this.checkValue();
     this.handleOnChangeValue();
@@ -120,7 +143,7 @@ export default class TodoForm {
 
   render = () => {
     return /* html */ `
-        <article class="input-wrapper todo-border" id="${this.id}">
+        <article class="input-wrapper todo-border" id="${this.uuid}">
             <input class="input-title" placeholder="제목을 입력하세요"
             value=${this.title}>
             <textarea class="input-content" placeholder="내용을 입력하세요" maxlength ='500'></textarea>

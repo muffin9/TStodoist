@@ -1,15 +1,8 @@
 import express from "express";
-import connection from '../config/database.js';
+import { getData } from "../controllers/rootController.js";
 
 const rootRoter = express.Router();
 
-rootRoter.get("/", () => {
-    connection.query("SELECT * FROM columns", function (err, results, fields) { 
-        if (err) {
-            console.log(err);
-        }
-        console.log(results);
-      });
-});
+rootRoter.get("/", getData);
 
 export default rootRoter;

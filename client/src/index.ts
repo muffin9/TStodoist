@@ -1,51 +1,66 @@
 import './style/index.scss';
 
 import TodoCard from './components/TodoCard';
-import { dummyColumns } from './mocks/column';
-import { dummyTodos } from './mocks/todos';
 
 import TodoColumn from '@/components/TodoColumn';
 import TodoHeader from '@/components/TodoHeader';
-import IColumn from '@/interface/IColumn';
+import api from '@/helpers/api';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
-import { newID } from '@/utils/util';
 
-type Todo = 'todo' | 'doing' | 'done';
-
+const columnMap = new Map();
 const root = $$('root')!;
 
 const createTodos = (column: any, todos: ITodo[]) => {
-  todos.forEach((todo: ITodo) => {
+  todos.forEach((todo: any) => {
     const newTodo = new TodoCard({
-      id: newID(),
+      id: todo.id,
+      uuid: `todo-${todo.id}`,
+      columnId: column.id,
       title: todo.title,
       content: todo.content,
       status: todo.status,
       date: todo.date,
     });
-    $$(column.id)!.insertAdjacentHTML('beforeend', newTodo.render());
+    $$(column.uuid)!.insertAdjacentHTML('beforeend', newTodo.render());
     newTodo.registerEventListener();
   });
 };
 
-const createColumns = () => {
+const setTodos = (datas: ITodo[]) => {
+  datas.forEach((data: any) => {
+    const status = data.status;
+    const values = columnMap.get(status);
+    if (values) {
+      const newValues = { id: values.id, data: [...values.data, data] };
+      columnMap.set(status, newValues);
+    } else {
+      const newValues = { id: data.id, data: [data] };
+      columnMap.set(status, newValues);
+    }
+  });
+};
+
+const createColumns = async () => {
   const columnWrapperElement = document.createElement('article');
   columnWrapperElement.classList.add('column-wrapper');
   root.appendChild(columnWrapperElement);
 
-  dummyColumns.forEach((data: IColumn) => {
+  const datas = await api.fetch();
+  setTodos(datas);
+
+  for (const [key, values] of columnMap.entries()) {
     const column = new TodoColumn({
-      id: newID(),
-      title: data.title,
-      isDeleted: data.isDeleted,
+      id: values.id,
+      uuid: `column-${values.id}`,
+      title: key,
     });
-    const todoData = dummyTodos[data.title as Todo];
+    const todoData = values.data;
     column.setCount(todoData.length);
     columnWrapperElement.insertAdjacentHTML('beforeend', column.render());
     column.registerEventListener();
     createTodos(column, todoData);
-  });
+  }
 };
 
 const app = () => {
