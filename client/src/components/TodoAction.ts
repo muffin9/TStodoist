@@ -1,29 +1,50 @@
-import { $ } from '@/utils/dom';
+import { todoColumnMap } from '@/constants/todo';
 
 export default class TodoAction {
-  handleEventListener = () => {
-    $('.action--close')!.addEventListener('click', () => {
-      $('.action-wrapper')?.remove();
-    });
+  title: string;
+
+  content: string;
+
+  status: string;
+
+  type: string;
+
+  constructor(state: any) {
+    this.title = state.title;
+    this.content = state.content;
+    this.status = state.status;
+    this.type = state.type;
+  }
+
+  setContent = () => {
+    const columnValue = todoColumnMap.get(this.status);
+    switch (this.type) {
+      case 'add':
+        return `${columnValue}에 ${this.title}을 등록하였습니다.`;
+      case 'modify':
+        return `${columnValue}의 ${this.title}와 ${this.content}로 수정되었습니다.`;
+      case 'delete':
+        return `${columnValue}의 ${this.title}이 삭제되었습니다.`;
+      case 'drag':
+        return '';
+
+      default:
+        return 'error';
+    }
   };
 
   render = () => {
     return /* html */ `
-        <article class="action-wrapper">
-          <button class="action--close">X</button>
-          <div class="action">
-            <div class="action__inner">
-              <div class="action__icon">😀</div>
-              <div class="action__contents">
-                  <p class="action__writer">Muffin</p>
-                  <p class="action__content">
-                    HTML/CSS공부하기를 해야할 일에서 하고있는 일로 이동하였습니다.
-                  </p>
-                  <p class="action__time">1시간 전</p>
-              </div>
+        <div class="action__inner">
+            <div class="action__icon">😀</div>
+            <div class="action__contents">
+                <p class="action__writer">Muffin</p>
+                <p class="action__content">
+                  ${this.setContent()}
+                </p>
+                <p class="action__time">방금전</p>
             </div>
-          </div>
-        </article>
+        </div>
     `;
   };
 }

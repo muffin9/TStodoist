@@ -1,5 +1,6 @@
 import TodoForm from './TodoForm';
 
+import actionStore, { ADD_ACTION } from '@/actionStore';
 import GlobalModal from '@/components/GlobalModal';
 import api from '@/helpers/api';
 import ITodo from '@/interface/ITodo';
@@ -20,7 +21,7 @@ export default class TodoCard {
 
   status: string;
 
-  date: string;
+  date: Date;
 
   constructor(state: ITodo) {
     this.id = state.id;
@@ -64,6 +65,11 @@ export default class TodoCard {
   };
 
   handleDeleteTodo = async () => {
+    actionStore.dispatch({
+      type: ADD_ACTION,
+      payload: { title: this.title, status: this.status, type: 'delete' },
+    });
+
     // data 삭제는 실제 데이터 사용할때.. 적용
     const responseStatus = await api.deleteFetch(this.id);
     // view 에서 해당 카드 삭제

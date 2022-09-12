@@ -1,3 +1,4 @@
+import actionStore, { ADD_ACTION } from '@/actionStore';
 import TodoAction from '@/components/TodoAction';
 import { $ } from '@/utils/dom';
 
@@ -6,17 +7,44 @@ export default class TodoHeader {
 
   constructor() {
     this.clicked = false;
+    actionStore.subscribe(ADD_ACTION, () => {
+      this.addAction();
+    });
   }
 
-  handleEventListener = () => {
-    $('.header__menu')!.addEventListener('click', () => {
-      this.clicked = true;
-      if (this.clicked) {
-        const todoAction = new TodoAction();
-        $('.header__main')?.insertAdjacentHTML('afterend', todoAction.render());
-        todoAction.handleEventListener();
+  addAction = () => {
+    const lastValue = actionStore.getState().slice(-1)[0];
+    const todoAction = new TodoAction(lastValue);
+    $('.action')?.insertAdjacentHTML('afterend', todoAction.render());
+  };
+
+  handleOnCancel = () => {
+    $('.action--close')?.addEventListener('click', () => {
+      this.clicked = false;
+      const actionElement = $('.action-wrapper') as HTMLElement;
+
+      if (actionElement) {
+        actionElement.classList.toggle('action-translated');
       }
     });
+  };
+
+  handleOnClick = () => {
+    $('.header__menu')?.addEventListener('click', () => {
+      this.clicked = true;
+      if (this.clicked) {
+        const actionElement = $('.action-wrapper') as HTMLElement;
+
+        if (actionElement) {
+          actionElement.classList.toggle('action-translated');
+        }
+      }
+    });
+  };
+
+  registerEventListener = () => {
+    this.handleOnClick();
+    this.handleOnCancel();
   };
 
   render = () => {
@@ -29,6 +57,10 @@ export default class TodoHeader {
               <div></div>
             </nav>
         </header>
+        <article class="action-wrapper action-translated">
+          <button class="action--close">X</button>
+          <div class="action"></div>
+        </article>
     `;
   };
 }
