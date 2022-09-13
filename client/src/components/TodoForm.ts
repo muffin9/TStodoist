@@ -2,17 +2,17 @@ import TodoCard from './TodoCard';
 
 import actionStore, { ADD_ACTION } from '@/actionStore';
 import api from '@/helpers/api';
+import IForm from '@/interface/IForm';
+import ITodo from '@/interface/ITodo';
 import { $, $$ } from '@/utils/dom';
 import { newID } from '@/utils/util';
 
 export default class TodoForm {
-  id: number;
+  id: number | undefined;
 
   uuid: string;
 
   columnId: number;
-
-  element: HTMLElement | null;
 
   title: string;
 
@@ -22,118 +22,150 @@ export default class TodoForm {
 
   type: string;
 
-  addCount?: () => void;
+  element: HTMLElement | null;
+
+  previousCard?: {
+    element: HTMLElement | null;
+    registerEventListener: () => void;
+  };
 
   constructor(
-    state: {
-      id?: any;
-      uuid?: string;
-      columnId: number;
-      title?: string;
-      content?: string;
-      status: string;
-      type: string;
+    state: IForm,
+    previousCard?: {
+      element: HTMLElement | null;
+      registerEventListener: () => void;
     },
-    addCount?: () => void,
   ) {
     this.id = state.id;
     this.uuid = state.uuid || newID();
     this.columnId = state.columnId;
-    this.element = null;
     this.title = state.title || '';
     this.content = state.content || '';
     this.status = state.status;
     this.type = state.type;
-    this.addCount = addCount;
+    this.element = null;
+    this.previousCard = previousCard;
   }
 
   setInitValue = () => {
-    if (this.content) {
-      const $textArea = this.element?.querySelector(
+    if (this.element && this.content) {
+      const $textArea = this.element.querySelector(
         '.input-content',
       ) as HTMLTextAreaElement;
 
-      $textArea!.value = this.content;
+      $textArea.value = this.content;
     }
   };
 
   checkValue = () => {
-    const registerButton = this.element?.querySelector(
-      '.input--register',
-    ) as HTMLButtonElement;
+    if (this.element) {
+      const $registerButton = this.element.querySelector(
+        '.input--register',
+      ) as HTMLButtonElement;
 
-    if (this.title && this.content) {
-      registerButton.disabled = false;
-      registerButton.classList.remove('bg-sky-blue');
-      registerButton.classList.add('bg-dark-blue');
-    } else {
-      registerButton.disabled = true;
-      registerButton.classList.remove('bg-dark-blue');
-      registerButton.classList.add('bg-sky-blue');
+      if (this.title && this.content) {
+        $registerButton.disabled = false;
+        $registerButton.classList.remove('bg-sky-blue');
+        $registerButton.classList.add('bg-dark-blue');
+      } else {
+        $registerButton.disabled = true;
+        $registerButton.classList.remove('bg-dark-blue');
+        $registerButton.classList.add('bg-sky-blue');
+      }
     }
   };
 
   heightResize = () => {
-    const target = this.element?.querySelector('.input-content') as HTMLElement;
-    target.style.height = 'auto';
-    target.style.height = `${target.scrollHeight + 6}px`;
+    if (this.element) {
+      const $inputContent = this.element.querySelector(
+        '.input-content',
+      ) as HTMLTextAreaElement;
+
+      $inputContent.style.height = 'auto';
+      $inputContent.style.height = `${$inputContent.scrollHeight + 6}px`;
+    }
   };
 
   handleOnChangeValue = () => {
-    this.element?.addEventListener('keyup', e => {
-      const target = e.target as HTMLInputElement;
-      if (target.classList.contains('input-title')) {
-        this.title = target.value;
-      } else if (target.classList.contains('input-content')) {
-        this.content = target.value;
-        this.heightResize();
-      }
-      this.checkValue();
-    });
+    if (this.element) {
+      this.element.addEventListener('keyup', e => {
+        const target = e.target as HTMLInputElement;
+        if (target.classList.contains('input-title')) {
+          this.title = target.value;
+        } else if (target.classList.contains('input-content')) {
+          this.content = target.value;
+          this.heightResize();
+        }
+        this.checkValue();
+      });
+    }
   };
 
-  handleOnClick = () => {
-    this.element?.addEventListener('click', async e => {
-      const target = e.target as HTMLInputElement;
-      if (target.classList.contains('input--cancel')) {
-        this.element?.remove();
-      } else if (target.classList.contains('input--register')) {
-        // set TodoCard
-        const columnElement = $(`[data-column-status=${this.status}]`);
-
-        const cardData = {
-          id: this.id,
-          uuid: this.uuid,
-          columnId: this.columnId,
-          title: this.title,
-          content: this.content,
-          status: this.status,
-          type: this.type,
-          date: new Date(),
-        };
-
-        // set Action
-        actionStore.dispatch({ type: ADD_ACTION, payload: cardData });
-
-        const todoId = this.type === 'modify' ? this.id : 0;
-        const responseStatus = await api.postOrPatchFetch(todoId, cardData);
-
-        if (responseStatus === 200) {
-          const newCard = new TodoCard(cardData);
-
-          // Column 뒤에 붙이기
-          columnElement
-            ?.querySelector('.column')
-            ?.insertAdjacentHTML('afterend', newCard.render());
-          newCard.registerEventListener();
-          // TodoForm remove
-
-          this.element?.remove();
-          // add count
-          this.addCount?.();
-        }
+  handleCancelClick = () => {
+    if (this.element) {
+      const $cancelButton = this.element.querySelector('.input--cancel');
+      const $formElement = this.element;
+      if ($cancelButton) {
+        $cancelButton.addEventListener('click', () => {
+          if (this.type === 'modify' && this.previousCard?.element) {
+            $formElement.outerHTML = this.previousCard.element.outerHTML;
+            this.previousCard.registerEventListener();
+            return;
+          } else {
+            $formElement.remove();
+          }
+        });
       }
-    });
+    }
+  };
+
+  handleRegisterClick = () => {
+    if (this.element) {
+      const $registerButton = this.element.querySelector('.input--register');
+      const $formElement = this.element;
+      if ($registerButton) {
+        $registerButton.addEventListener('click', async () => {
+          const $columnElement = $(`[data-column-status=${this.status}]`);
+
+          const cardData = {
+            id: this.id,
+            uuid: this.uuid,
+            columnId: this.columnId,
+            title: this.title,
+            content: this.content,
+            status: this.status,
+            type: this.type,
+            date: new Date(),
+          };
+
+          // set Action
+          actionStore.dispatch({ type: ADD_ACTION, payload: cardData });
+
+          let todoId = 0;
+          if (this.type === 'modify') {
+            todoId = this.id ?? 0;
+          }
+
+          const responseStatus = await api.postOrPatchFetch(
+            todoId,
+            cardData as ITodo,
+          );
+
+          if (responseStatus === 200) {
+            const newCard = new TodoCard(cardData as ITodo);
+
+            // Column 뒤에 붙이기
+            $columnElement
+              ?.querySelector('.column')
+              ?.insertAdjacentHTML('afterend', newCard.render());
+            newCard.registerEventListener();
+            // TodoForm remove
+            $formElement.remove();
+            // add count
+          }
+        });
+      }
+    }
   };
 
   registerEventListener = () => {
@@ -141,7 +173,8 @@ export default class TodoForm {
     this.setInitValue();
     this.checkValue();
     this.handleOnChangeValue();
-    this.handleOnClick();
+    this.handleCancelClick();
+    this.handleRegisterClick();
   };
 
   render = () => {

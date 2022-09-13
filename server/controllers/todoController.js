@@ -31,7 +31,7 @@ export const patchTodo = (req, res) => {
             content: req.body.content,
         }
 
-        connection.query(`UPDATE todos SET title='${newTodo.title}', content='${newTodo.content}' WHERE id='${newTodo.id}' `, (err, todo, fileds) => {
+        connection.query(`UPDATE todos SET title='${newTodo.title}', content='${newTodo.content}' WHERE id='${id}' `, (err, todo, fileds) => {
             if(err) {
                 console.log(`query Error is ${err}...`);
                 return;

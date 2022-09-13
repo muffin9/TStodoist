@@ -1,4 +1,5 @@
 import { todoColumnMap } from '@/constants/todo';
+import IAction from '@/interface/IAction';
 
 export default class TodoAction {
   title: string;
@@ -9,7 +10,7 @@ export default class TodoAction {
 
   type: string;
 
-  constructor(state: any) {
+  constructor(state: IAction) {
     this.title = state.title;
     this.content = state.content;
     this.status = state.status;

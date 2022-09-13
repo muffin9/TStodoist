@@ -6,14 +6,14 @@ import TodoColumn from '@/components/TodoColumn';
 import TodoHeader from '@/components/TodoHeader';
 import { todoColumnMap } from '@/constants/todo';
 import api from '@/helpers/api';
+import IColumn from '@/interface/IColumn';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
 
-const columnMap = new Map();
 const root = $$('root') as HTMLElement;
 
-const createTodos = (column: any, todos: ITodo[]) => {
-  todos.forEach((todo: any) => {
+const createTodos = (column: IColumn, todos: ITodo[]) => {
+  todos.forEach((todo: ITodo) => {
     const newTodo = new TodoCard({
       id: todo.id,
       uuid: `todo-${todo.id}`,
@@ -28,41 +28,31 @@ const createTodos = (column: any, todos: ITodo[]) => {
   });
 };
 
-const setTodos = (datas: ITodo[]) => {
-  datas.forEach((data: any) => {
-    const status = data.status;
-    const values = columnMap.get(status);
-    if (values) {
-      const newValues = { id: values.id, data: [...values.data, data] };
-      columnMap.set(status, newValues);
-    } else {
-      const newValues = { id: data.id, data: [data] };
-      columnMap.set(status, newValues);
-    }
-  });
-};
-
 const createColumns = async () => {
   const columnWrapperElement = document.createElement('article');
   columnWrapperElement.classList.add('column-wrapper');
   root.appendChild(columnWrapperElement);
 
-  const datas = await api.fetch();
-  setTodos(datas);
+  const response = await api.fetch();
 
-  for (const [key, values] of columnMap.entries()) {
-    const column = new TodoColumn({
-      id: values.id,
-      uuid: `column-${values.id}`,
-      status: key,
-      title: todoColumnMap.get(key),
+  response.columns.forEach((column: { id: number; title: string }) => {
+    const todoColumn = new TodoColumn({
+      id: column.id,
+      uuid: `column-${column.id}`,
+      status: column.title,
+      title: todoColumnMap.get(column.title),
+      date: new Date(),
     });
-    const todoData = values.data;
-    column.setCount(todoData.length);
-    columnWrapperElement.insertAdjacentHTML('beforeend', column.render());
-    column.registerEventListener();
-    createTodos(column, todoData);
-  }
+
+    const todoData = response.todos.filter(
+      (todo: ITodo) => todo.status === column.title,
+    );
+
+    todoColumn.setCount(todoData.length);
+    columnWrapperElement.insertAdjacentHTML('beforeend', todoColumn.render());
+    todoColumn.registerEventListener();
+    createTodos(todoColumn, todoData);
+  });
 };
 
 const app = () => {

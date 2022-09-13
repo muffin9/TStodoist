@@ -1,4 +1,5 @@
 const API_END_POINT = 'http://127.0.0.1:3000';
+import ITodo from '@/interface/ITodo';
 
 const request = async () => {
   try {
@@ -13,7 +14,7 @@ const request = async () => {
   }
 };
 
-const postOrPatchRequest = async (id: number, data: any) => {
+const postOrPatchRequest = async (id: number, data: ITodo) => {
   const method = id ? 'PATCH' : 'POST';
   const url = `${API_END_POINT}/todo/${id ? id : ''}`;
 
@@ -57,7 +58,7 @@ const api = {
     return request();
   },
 
-  postOrPatchFetch(id: number, data: any) {
+  postOrPatchFetch(id: number, data: ITodo) {
     return postOrPatchRequest(id, data);
   },
 
