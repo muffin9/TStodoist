@@ -15,36 +15,47 @@ export default class TodoHeader {
   addAction = () => {
     const lastValue = actionStore.getState().slice(-1)[0];
     const todoAction = new TodoAction(lastValue);
-    $('.action')?.insertAdjacentHTML('afterend', todoAction.render());
+    const $action = $('.action');
+
+    if ($action) {
+      $action.insertAdjacentHTML('afterend', todoAction.render());
+    }
   };
 
-  handleOnCancel = () => {
-    $('.action--close')?.addEventListener('click', () => {
-      this.clicked = false;
-      const actionElement = $('.action-wrapper') as HTMLElement;
+  handleCancelClick = () => {
+    const $actionClose = $('.action--close');
 
-      if (actionElement) {
-        actionElement.classList.toggle('action-translated');
-      }
-    });
-  };
+    if ($actionClose) {
+      $actionClose.addEventListener('click', () => {
+        this.clicked = false;
+        const $actionWrapper = $('.action-wrapper');
 
-  handleOnClick = () => {
-    $('.header__menu')?.addEventListener('click', () => {
-      this.clicked = true;
-      if (this.clicked) {
-        const actionElement = $('.action-wrapper') as HTMLElement;
-
-        if (actionElement) {
-          actionElement.classList.toggle('action-translated');
+        if ($actionWrapper) {
+          $actionWrapper.classList.toggle('action-translated');
         }
-      }
-    });
+      });
+    }
+  };
+
+  handleMenuClick = () => {
+    const $headerMenu = $('.header__menu');
+    if ($headerMenu) {
+      $headerMenu.addEventListener('click', () => {
+        this.clicked = true;
+        if (this.clicked) {
+          const $actionWrapper = $('.action-wrapper') as HTMLElement;
+
+          if ($actionWrapper) {
+            $actionWrapper.classList.toggle('action-translated');
+          }
+        }
+      });
+    }
   };
 
   registerEventListener = () => {
-    this.handleOnClick();
-    this.handleOnCancel();
+    this.handleMenuClick();
+    this.handleCancelClick();
   };
 
   render = () => {
