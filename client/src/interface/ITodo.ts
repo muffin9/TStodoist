@@ -1,10 +1,9 @@
 export default interface ITodo {
-  id: any;
+  id: number;
   uuid: string;
   columnId: number;
   title: string;
   content: string;
   status: string;
-  userId?: number;
-  date: string;
+  date: Date;
 }

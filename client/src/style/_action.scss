@@ -1,20 +1,21 @@
 .action-wrapper {
-  width: 28.25rem;
+  width: 25.25rem;
   height: 100vh;
   padding: 5rem 2.5rem;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   background-color: $color-white;
   z-index: 99;
+  transition: 0.5s;
   overflow-y: auto;
 
   .action--close {
     width: 0.65rem;
     height: 0.65rem;
     position: absolute;
-    top: 3.125rem;
-    right: 5.32rem;
+    top: 3rem;
+    right: 3rem;
     cursor: pointer;
   }
 
@@ -23,6 +24,10 @@
 
     &__inner {
       @include flexbox();
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border: 1px solid $color-blue-light;
+      border-radius: 1rem;
     }
 
     &__icon {
@@ -40,4 +45,8 @@
       color: $color-grey-dark;
     }
   }
+}
+
+.action-translated {
+  transform: translateX(100%);
 }

@@ -142,7 +142,8 @@ button {
   right: 0;
   display: flex;
   justify-content: space-between;
-  box-shadow: 0px 4px 10px rgba(51, 51, 51, 0.1), 0px 0px 4px rgba(51, 51, 51, 0.05); }
+  box-shadow: 0px 4px 10px rgba(51, 51, 51, 0.1), 0px 0px 4px rgba(51, 51, 51, 0.05);
+  background-color: #fff; }
   .header__main .header__logo {
     font-size: 2rem;
     font-weight: 400; }
@@ -156,26 +157,31 @@ button {
       margin: 0.3125rem 0; }
 
 .action-wrapper {
-  width: 28.25rem;
+  width: 25.25rem;
   height: 100vh;
   padding: 5rem 2.5rem;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   background-color: #fff;
   z-index: 99;
+  transition: 0.5s;
   overflow-y: auto; }
   .action-wrapper .action--close {
     width: 0.65rem;
     height: 0.65rem;
     position: absolute;
-    top: 3.125rem;
-    right: 5.32rem;
+    top: 3rem;
+    right: 3rem;
     cursor: pointer; }
   .action-wrapper .action {
     padding: 1rem; }
     .action-wrapper .action__inner {
-      display: flex; }
+      display: flex;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border: 1px solid #86c6ff;
+      border-radius: 1rem; }
     .action-wrapper .action__icon {
       margin-right: 1rem; }
     .action-wrapper .action__content {
@@ -185,6 +191,9 @@ button {
       font-size: 0.875rem;
       font-weight: 400;
       color: #828282; }
+
+.action-translated {
+  transform: translateX(100%); }
 
 .column-wrapper {
   display: flex;
@@ -312,20 +321,24 @@ button {
   left: 0;
   z-index: 999;
   background-color: #010101;
-  opacity: 0.6; }
+  opacity: 0.5; }
 
 .modal-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  width: 20rem;
-  height: 25rem;
+  align-items: center;
+  width: 17.5rem;
+  height: 10rem;
+  padding: 1rem;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #fff;
   z-index: 1000;
-  border-radius: 2rem; }
+  border-radius: 2rem;
+  text-align: center; }
 
 .modal-header--close {
   position: absolute;
@@ -335,6 +348,49 @@ button {
   background: transparent;
   z-index: 1000;
   cursor: pointer; }
+
+.modal-button {
+  display: flex;
+  justify-content: center;
+  gap: 1rem; }
+  .modal-button button {
+    border-radius: 1rem;
+    width: 5rem;
+    height: 2rem;
+    cursor: pointer; }
+  .modal-button--ok {
+    background-color: #0075de; }
+  .modal-button--cancel {
+    background-color: #ff4343; }
+
+.todo-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; }
+  .todo-login__box {
+    gap: 2rem;
+    align-items: center; }
+  .todo-login__title {
+    font-size: 2rem;
+    text-align: center;
+    line-height: 3rem;
+    margin-bottom: 2rem; }
+    .todo-login__title strong {
+      color: #86c6ff; }
+  .todo-login__form {
+    text-align: center; }
+    .todo-login__form #google_login_btn {
+      background: url("../assets/googleNormalImage.png") no-repeat;
+      background-size: 100% 100%;
+      width: 20rem;
+      height: 4rem;
+      outline: none;
+      border: none;
+      cursor: pointer; }
+      .todo-login__form #google_login_btn:hover {
+        background: url("../assets/googleFocusImage.png") no-repeat;
+        background-size: 100% 100%; }
 
 .bg-sky-blue {
   background-color: #86C6FF; }

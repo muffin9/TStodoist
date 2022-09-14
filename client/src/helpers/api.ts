@@ -1,4 +1,7 @@
 const API_END_POINT = 'http://127.0.0.1:3000';
+import IAction from '@/interface/IAction';
+import ITodo from '@/interface/ITodo';
+import { getErrorMessage } from '@/utils/util';
 
 const request = async () => {
   try {
@@ -8,12 +11,12 @@ const request = async () => {
       throw new Error('HTTP Error');
     }
     return await response.json();
-  } catch (error: any) {
-    throw new Error(error.message);
+  } catch (err: unknown) {
+    reportError({ message: getErrorMessage(err) });
   }
 };
 
-const postOrPatchRequest = async (id: number, data: any) => {
+const postOrPatchTodoRequest = async (id: number, data: ITodo) => {
   const method = id ? 'PATCH' : 'POST';
   const url = `${API_END_POINT}/todo/${id ? id : ''}`;
 
@@ -31,12 +34,12 @@ const postOrPatchRequest = async (id: number, data: any) => {
     }
 
     return response.status;
-  } catch (error: any) {
-    throw new Error(error.message);
+  } catch (err: unknown) {
+    reportError({ message: getErrorMessage(err) });
   }
 };
 
-const deleteRequest = async (id: number) => {
+const deleteTodoRequest = async (id: number) => {
   try {
     const response = await fetch(`${API_END_POINT}/todo/${id}`, {
       method: 'DELETE',
@@ -47,8 +50,28 @@ const deleteRequest = async (id: number) => {
     }
 
     return response.status;
-  } catch (error: any) {
-    throw new Error(error.message);
+  } catch (err: unknown) {
+    reportError({ message: getErrorMessage(err) });
+  }
+};
+
+const postActionRequest = async (data: IAction) => {
+  try {
+    const response = await fetch(`${API_END_POINT}/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('HTTP Error');
+    }
+
+    return response.status;
+  } catch (err: unknown) {
+    reportError({ message: getErrorMessage(err) });
   }
 };
 
@@ -57,12 +80,16 @@ const api = {
     return request();
   },
 
-  postOrPatchFetch(id: number, data: any) {
-    return postOrPatchRequest(id, data);
+  postOrPatchTodoFetch(id: number, data: ITodo) {
+    return postOrPatchTodoRequest(id, data);
   },
 
-  deleteFetch(id: number) {
-    return deleteRequest(id);
+  deleteTodoFetch(id: number) {
+    return deleteTodoRequest(id);
+  },
+
+  postActionFetch(data: IAction) {
+    return postActionRequest(data);
   },
 };
 
