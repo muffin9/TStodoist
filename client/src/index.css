@@ -363,6 +363,35 @@ button {
   .modal-button--cancel {
     background-color: #ff4343; }
 
+.todo-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; }
+  .todo-login__box {
+    gap: 2rem;
+    align-items: center; }
+  .todo-login__title {
+    font-size: 2rem;
+    text-align: center;
+    line-height: 3rem;
+    margin-bottom: 2rem; }
+    .todo-login__title strong {
+      color: #86c6ff; }
+  .todo-login__form {
+    text-align: center; }
+    .todo-login__form #google_login_btn {
+      background: url("../assets/googleNormalImage.png") no-repeat;
+      background-size: 100% 100%;
+      width: 20rem;
+      height: 4rem;
+      outline: none;
+      border: none;
+      cursor: pointer; }
+      .todo-login__form #google_login_btn:hover {
+        background: url("../assets/googleFocusImage.png") no-repeat;
+        background-size: 100% 100%; }
+
 .bg-sky-blue {
   background-color: #86C6FF; }
 
