@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import rootRouter from './routers/index.js';
 import columnRouter from './routers/columnRouter.js';
 import todoRouter from './routers/todoRouter.js';
+import actionRouter from './routers/actionRouter.js';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -24,3 +25,4 @@ app.listen(PORT, () => {
 app.use('/', rootRouter);
 app.use("/column", columnRouter);
 app.use("/todo", todoRouter);
+app.use("/action", actionRouter);

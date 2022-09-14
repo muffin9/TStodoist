@@ -146,7 +146,7 @@ export default class TodoForm {
             todoId = this.id ?? 0;
           }
 
-          const responseStatus = await api.postOrPatchFetch(
+          const responseStatus = await api.postOrPatchTodoFetch(
             todoId,
             cardData as ITodo,
           );

@@ -4,9 +4,11 @@ import IAction from '@/interface/IAction';
 export default class TodoAction {
   title: string;
 
-  content: string;
+  content?: string;
 
   status: string;
+
+  endStatus?: string;
 
   type: string;
 
@@ -14,6 +16,7 @@ export default class TodoAction {
     this.title = state.title;
     this.content = state.content;
     this.status = state.status;
+    this.endStatus = state.endStatus;
     this.type = state.type;
   }
 

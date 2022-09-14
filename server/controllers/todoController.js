@@ -1,6 +1,6 @@
 import connection from '../config/database.js';
 
-export const createTodo = (req, res) => {
+export const postTodo = (req, res) => {
     try {
         const todo = {
             title: req.body.title,

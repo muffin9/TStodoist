@@ -77,15 +77,24 @@ export default class TodoCard {
   };
 
   handleDeleteTodo = async () => {
+    const actionData = {
+      title: this.title,
+      status: this.status,
+      type: 'delete',
+    };
+
     actionStore.dispatch({
       type: ADD_ACTION,
-      payload: { title: this.title, status: this.status, type: 'delete' },
+      payload: actionData,
     });
 
-    // data 삭제는 실제 데이터 사용할때.. 적용
-    const responseStatus = await api.deleteFetch(this.id);
+    const responseStatus = await Promise.all([
+      api.postActionFetch(actionData),
+      api.deleteTodoFetch(this.id),
+    ]);
+
     // view 에서 해당 카드 삭제
-    if (responseStatus) {
+    if (responseStatus.every(status => status === 200)) {
       this.element?.remove();
     }
   };

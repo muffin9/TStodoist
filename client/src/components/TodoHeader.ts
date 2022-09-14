@@ -12,7 +12,7 @@ export default class TodoHeader {
     });
   }
 
-  addAction = () => {
+  addAction = async () => {
     const lastValue = actionStore.getState().slice(-1)[0];
     const todoAction = new TodoAction(lastValue);
     const $action = $('.action');
