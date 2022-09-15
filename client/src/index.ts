@@ -1,6 +1,5 @@
 import './style/index.scss';
 
-import LoginComponent from './components/LoginComponent';
 import TodoCard from './components/TodoCard';
 
 import TodoColumn from '@/components/TodoColumn';
@@ -60,16 +59,10 @@ const app = () => {
   // 로그인 뷰 보여주기 ? 투두 뷰 보여주기 ?
   // 세션 체킹 -> 로그인 정보가 있으면 투두 보여주기.
   // 로그인 정보가 없으면 로그인 뷰 보여주기.
-  const isLoggedIn = false; // 임시 로그인 처리 변수.
-  if (isLoggedIn) {
-    const header = new TodoHeader();
-    root.insertAdjacentHTML('afterend', header.render());
-    header.registerEventListener();
-    createColumns();
-  } else {
-    const loginComponent = new LoginComponent();
-    root.insertAdjacentHTML('afterend', loginComponent.render());
-  }
+  const header = new TodoHeader();
+  root.insertAdjacentHTML('afterend', header.render());
+  header.registerEventListener();
+  createColumns();
 };
 
 app();

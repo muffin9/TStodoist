@@ -5,7 +5,7 @@ import { getErrorMessage } from '@/utils/util';
 
 const request = async () => {
   try {
-    const response = await fetch(`${API_END_POINT}`);
+    const response = await fetch(`${API_END_POINT}/datas`);
 
     if (!response.ok) {
       throw new Error('HTTP Error');

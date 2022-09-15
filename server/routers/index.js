@@ -1,8 +1,10 @@
 import express from "express";
-import { getData } from "../controllers/rootController.js";
+import { getData, home, login } from "../controllers/rootController.js";
 
-const rootRoter = express.Router();
+const rootRouter = express.Router();
 
-rootRoter.get("/", getData);
+rootRouter.get('/', home)
+rootRouter.get("/datas", getData);
+rootRouter.get("/login", login);
 
-export default rootRoter;
+export default rootRouter;
