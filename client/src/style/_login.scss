@@ -1,0 +1,39 @@
+.todo-login {
+    @include flexbox($justify-content: center, $align-items: center);
+    height: 100vh;
+    
+
+    &__box {
+        gap: 2rem;
+        align-items: center;
+    }
+    &__title {
+        font-size: $font-32;
+        text-align: center;
+        line-height: 3rem;
+        margin-bottom: 2rem;
+
+        strong {
+            color: $color-blue-light;
+        }
+    }
+
+    &__form {
+        text-align: center;
+
+        #google_login_btn {
+            background: url('../assets/googleNormalImage.png') no-repeat;
+            background-size: 100% 100%;
+            width: 20rem;
+            height: 4rem;
+            outline: none;
+            border: none;
+            cursor: pointer;
+
+            &:hover {
+                background: url('../assets/googleFocusImage.png') no-repeat;
+                background-size: 100% 100%;
+            }
+        }
+    }
+}

@@ -11,28 +11,39 @@ export default class GlobalModal {
   }
 
   handleOnClick = () => {
-    $('.modal-wrapper')?.addEventListener('click', e => {
-      const target = e.target as HTMLButtonElement;
-      if (target.classList.contains('modal-button--ok')) {
-        this.handleOk();
-        this.handleRemoveModal();
-      } else if (target.classList.contains('modal-button--cancel')) {
-        this.handleRemoveModal();
-      }
-    });
+    const $modalWrapper = $('.modal-wrapper');
+    if ($modalWrapper) {
+      $modalWrapper.addEventListener('click', e => {
+        const target = e.target as HTMLButtonElement;
+        if (target.classList.contains('modal-button--ok')) {
+          this.handleOk();
+          this.handleRemoveModal();
+        } else if (target.classList.contains('modal-button--cancel')) {
+          this.handleRemoveModal();
+        }
+      });
+    }
   };
 
   handleRemoveModal = () => {
-    $('.overlay')?.remove();
-    $('.modal-wrapper')?.remove();
+    const $overlay = $('.overlay');
+    const $modalWrapper = $('.modal-wrapper');
+    if ($overlay && $modalWrapper) {
+      $overlay.remove();
+      $modalWrapper.remove();
+    }
   };
 
   registerEventListener = () => {
     this.handleOnClick();
   };
 
+  addBody = () => {
+    document.body.insertAdjacentHTML('afterend', this.render());
+  };
+
   render() {
-    const globalModalHTML = /* html */ `
+    return /* html */ `
         <div class="overlay"></div>
         <div class="modal-wrapper">
             <header class="modal-header">
@@ -45,8 +56,6 @@ export default class GlobalModal {
                 <button class="modal-button--cancel">취소</button>
             </div>
         </div>
-        
     `;
-    document.body.insertAdjacentHTML('afterend', globalModalHTML);
   }
 }

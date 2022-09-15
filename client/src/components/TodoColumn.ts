@@ -7,13 +7,15 @@ export default class TodoColumn {
 
   uuid: string;
 
-  element: HTMLElement | null;
-
   title: string;
 
-  changeTitle: string;
+  status: string;
 
-  date?: string;
+  date: Date;
+
+  element: HTMLElement | null;
+
+  changeTitle: string;
 
   count: number;
 
@@ -24,13 +26,14 @@ export default class TodoColumn {
   constructor(state: IColumn) {
     this.id = state.id;
     this.uuid = state.uuid;
-    this.element = null;
     this.title = state.title;
+    this.status = state.status;
+    this.date = state.date;
+    this.element = null;
     this.changeTitle = this.title;
-    this.date = new Date().toString();
+    this.count = 0;
     this.onModify = false;
     this.onAddForm = false;
-    this.count = 0;
   }
 
   setCount = (count: number) => {
@@ -39,84 +42,108 @@ export default class TodoColumn {
 
   addCount = () => {
     this.count += 1;
-    this.element!.querySelector('.column__count')!.innerHTML =
-      this.count.toString();
+    if (this.element) {
+      const countElement = this.element.querySelector('.column__count');
+      if (countElement) {
+        countElement.innerHTML = this.count.toString();
+      }
+    }
   };
 
   toggleModifyValue = () => {
     this.onModify = !this.onModify;
   };
 
-  handleOnClick = () => {
-    this.element?.addEventListener('click', e => {
-      const target = e.target as HTMLElement;
-      if (target.classList.contains('column__add')) {
-        const addForm = this.element?.querySelector('.input-wrapper');
-        if (addForm) {
-          addForm.remove();
-          return;
+  handleColumnClick = () => {
+    if (this.element) {
+      this.element.addEventListener('click', e => {
+        if (e.target instanceof HTMLElement) {
+          if (e.target.classList.contains('column__add')) {
+            const addForm = this.element?.querySelector('.input-wrapper');
+            if (addForm) {
+              addForm.remove();
+              return;
+            }
+
+            const newAddForm = new TodoForm({
+              columnId: this.id,
+              status: this.status,
+              type: 'add',
+            });
+
+            this.element
+              ?.querySelector('.column')!
+              .insertAdjacentHTML('afterend', newAddForm.render());
+
+            newAddForm.registerEventListener();
+          }
         }
-
-        const newAddForm = new TodoForm(
-          { columnId: this.id, status: this.title, type: 'add' },
-          this.addCount,
-        );
-        this.element
-          ?.querySelector('.column')!
-          .insertAdjacentHTML('afterend', newAddForm.render());
-
-        newAddForm.registerEventListener();
-      }
-    });
+      });
+    }
   };
 
-  handleOnClickOutside = (e: any) => {
-    const target = e.target as HTMLElement;
-    if (target.id === `${this.title}`) return;
-    this.toggleModifyValue();
-    this.changeTitleElement();
+  handleOnClickOutside = (e: Event) => {
+    if (e.target instanceof HTMLElement) {
+      if (e.target.id === `${this.title}`) return;
+      this.toggleModifyValue();
+      this.changeTitleElement();
+    }
   };
 
-  handleOnDbClick = () => {
-    this.element?.addEventListener('dblclick', e => {
-      const targetElement = e.target as HTMLDivElement | HTMLInputElement;
-      if (targetElement.classList.contains('column__title')) {
-        this.toggleModifyValue();
-        this.changeTitleElement();
-      }
-    });
+  handleColumnDbClick = () => {
+    if (this.element) {
+      this.element.addEventListener('dblclick', e => {
+        if (e.target instanceof Element) {
+          if (e.target.classList.contains('column__title')) {
+            this.toggleModifyValue();
+            this.changeTitleElement();
+          }
+        }
+      });
+    }
   };
 
   handleOnChange = () => {
-    this.element?.addEventListener('change', e => {
-      const target = e.target as HTMLInputElement;
-      this.changeTitle = target.value;
-    });
+    if (this.element) {
+      this.element.addEventListener('change', e => {
+        if (e.target instanceof HTMLInputElement) {
+          this.changeTitle = e.target.value;
+        }
+      });
+    }
   };
 
   changeTitleElement = () => {
-    const titleElement = this.element?.querySelector('.column__title');
+    if (this.element) {
+      const titleElement = this.element.querySelector('.column__title');
 
-    if (this.onModify) {
-      titleElement!.outerHTML = `<input id="${this.title}" class="column__title" type="input" maxlength="50" />`;
-      document.addEventListener('click', this.handleOnClickOutside, true);
-      this.handleOnChange();
-    } else {
-      titleElement!.outerHTML = `<div class="column__title" type="input" maxlength="50">${this.changeTitle}</div>`;
-      document.removeEventListener('click', this.handleOnClickOutside, true);
-      this.handleOnDbClick();
+      if (titleElement) {
+        if (this.onModify) {
+          titleElement.outerHTML = `<input id="${this.title}" class="column__title" type="input" maxlength="50" />`;
+          document.addEventListener('click', this.handleOnClickOutside, true);
+          this.handleOnChange();
+        } else {
+          titleElement.outerHTML = `<div class="column__title" type="input" maxlength="50">${this.changeTitle}</div>`;
+          document.removeEventListener(
+            'click',
+            this.handleOnClickOutside,
+            true,
+          );
+          this.handleColumnDbClick();
+        }
+      }
     }
   };
 
   registerEventListener = () => {
     this.element = $$(this.uuid);
-    this.handleOnDbClick();
-    this.handleOnClick();
+    this.handleColumnDbClick();
+    this.handleColumnClick();
   };
 
   render = () => {
     return /* html */ `
-    <div class="column-list" id="${this.uuid}" data-column-status="${this.title}">
+    <div class="column-list" id="${this.uuid}" data-column-status="${this.status}">
       <nav class="column">
           <div class="column__left">
               <div class="column__title">${this.title}</div>

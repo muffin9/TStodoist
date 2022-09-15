@@ -8,6 +8,7 @@ const databaseConfig = {
     user     : 'muffin',
     password : process.env.DATABASE_PASSWORD,
     database : 'todoist',
+    multipleStatements: true
 };
 
 const connection = mysql.createConnection(databaseConfig);

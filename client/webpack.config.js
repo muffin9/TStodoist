@@ -8,7 +8,7 @@ module.exports = {
   entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name]_bundle.js',
   },
   resolve: {
     alias: {
@@ -30,15 +30,20 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
-        test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
-        use: ['file-loader'],
-      },
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset",
+        parser:{
+          dataUrlCondition:{
+            maxSize: 30 * 1024,
+          }
+        },
+      }
     ],
   },
   devtool: 'inline-source-map',
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './index.html',
       filename: 'index.html',
     }),
   ],
