@@ -17,8 +17,10 @@ passport.use(
 
             findUser(user, (findRes) => {
                 if(findRes === 0) {
+                    // 쿼리 에러발생시
                     return done(false);
                 } else if(findRes === -1) {
+                    // 유저가 존재하지 않을시.
                     const newUser = {
                         nickname: profile.displayName,
                         email: profile.email,
@@ -30,8 +32,6 @@ passport.use(
                         if(createRes === 0) return done(false);
                         else return done(null, newUser)
                     });
-
-                    // create default columns
                 } else {
                     return done(null, user);
                 }
