@@ -3,28 +3,34 @@ import path from "path";
 import connection from '../config/database.js';
 
 export const home = (req, res) => {
-    // req.session 이 없으면 로그인 화면으로 리다이렉트 시키기.
-    fs.readFile(path.join(path.resolve(), "../client/index.html"), (err, data) => {
+    fs.readFile(path.join(path.resolve(), "../client/index.html"), (err, html) => {
         if (err) {
             console.log(err);
             return res.status(500).end(`<h1>ERROR</h1>`);
         }
-        return res.status(200).end(data);
+        if(!req.session.passport) return res.redirect('/login');
+        return res.status(200).end(html);
     });
 }
 
 export const getData = (req, res) => {
+    if(!req.session.passport) return;
+    const userEmail = req.session.passport.user;
     try {
-        const userId = 1;
-        const columnsQuery = `SELECT id, title FROM columns where user_id=${userId};`;
-        const todosQuery = `SELECT * FROM todos where column_id in (select id from columns where user_id=${userId});`
-        connection.query(columnsQuery + todosQuery, (err, datas, fileds) => {
-            if(err) {
-                console.log(`query Error is ${err}...`);
-                return;
-            }
-            return res.json({columns: datas[0], todos: datas[1]});
-        });
+        // findBy userEmail...
+        connection.query(`SELECT id FROM users where email='${userEmail}'`, (err, user, fields) => {
+            if(!user[0]) throw new Error(`user is not Found.`);
+            const userId = user[0].id;
+            const columnsQuery = `SELECT id, title FROM columns where user_id='${userId}';`;
+            const todosQuery = `SELECT * FROM todos where column_id in (select id from columns where user_id='${userId}');`
+            connection.query(columnsQuery + todosQuery, (err, datas, fileds) => {
+                if(err) {
+                    console.log(`query Error is ${err}...`);
+                    return;
+                }
+                return res.json({columns: datas[0], todos: datas[1]});
+            });
+            })
     } catch (err) {
         throw new Error(err);
     }
@@ -36,6 +42,18 @@ export const login = (req,res) => {
             console.log(err);
             return res.status(500).end(`<h1>ERROR</h1>`);
         }
-        return res.status(200).end(data);
+        if (req.session.passport) return res.redirect('/');
+        else return res.status(200).end(data);
+    });
+}
+
+export const logout = (req,res) => {
+    //passport 정보 삭제
+    req.logout();
+    //서버측 세션 삭제
+    req.session.destroy(()=>{
+        //클라이언트 측 세션 암호화 쿠키 삭제
+        res.cookie('connect.sid','',{ maxAge:0 });
+        res.redirect('/');
     });
 }
