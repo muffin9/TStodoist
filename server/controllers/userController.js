@@ -19,9 +19,22 @@ export const createUser = (newUser, callback) => {
     connection.query(`INSERT INTO users (nickname, oauthProvider, email, avatarurl) VALUES ('${newUser.nickname}', '${newUser.oauthProvider}', '${newUser.email}', '${newUser.avatarurl}')`, (err, user, fields) => {
         if(err) {
             console.log(`query Error is ${err}...`);
-            callback(0);
-            return;
+            return callback(0);
         }
+
+        // create set default columns(todo, doing, done)
+        const userId = user.insertId;
+        const columnValues = [
+            ['todo', userId],
+            ['doing', userId],
+            ['done', userId]
+        ];
+        connection.query(`INSERT INTO columns (title, user_id) VALUES ?;`, [columnValues], (err, columns, fields) => {
+            if(err) {
+                console.log(`query Error is ${err}...`);
+                return callback(0);
+            }
+        });
         callback();
     })
 }
