@@ -28,14 +28,12 @@ const createTodos = (column: IColumn, todos: ITodo[]) => {
   });
 };
 
-const createColumns = async () => {
+const createColumns = async (columns: IColumn[], todos: ITodo[]) => {
   const columnWrapperElement = document.createElement('article');
   columnWrapperElement.classList.add('column-wrapper');
   root.appendChild(columnWrapperElement);
 
-  const response = await api.fetch();
-
-  response.columns.forEach((column: { id: number; title: string }) => {
+  columns.forEach((column: { id: number; title: string }) => {
     const todoColumn = new TodoColumn({
       id: column.id,
       uuid: `column-${column.id}`,
@@ -44,7 +42,7 @@ const createColumns = async () => {
       date: new Date(),
     });
 
-    const todoData = response.todos.filter(
+    const todoData = todos.filter(
       (todo: ITodo) => todo.status === column.title,
     );
 
@@ -55,14 +53,15 @@ const createColumns = async () => {
   });
 };
 
-const app = () => {
-  // 로그인 뷰 보여주기 ? 투두 뷰 보여주기 ?
-  // 세션 체킹 -> 로그인 정보가 있으면 투두 보여주기.
-  // 로그인 정보가 없으면 로그인 뷰 보여주기.
-  const header = new TodoHeader();
+const app = async () => {
+  const response = await api.fetch();
+  const header = new TodoHeader({
+    email: response.email,
+    avatarurl: response.avatarurl,
+  });
   root.insertAdjacentHTML('afterend', header.render());
   header.registerEventListener();
-  createColumns();
+  createColumns(response.columns, response.todos);
 };
 
 app();

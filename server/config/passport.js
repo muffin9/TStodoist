@@ -12,7 +12,8 @@ passport.use(
         async (request, accessToken, refreshToken, profile, done) => {
             const user = {
                 provider: profile.provider,
-                email: profile.email
+                email: profile.email,
+                avatarurl: profile.picture
             }
 
             findUser(user, (findRes) => {
@@ -43,7 +44,7 @@ passport.use(
 // login이 최초로 성공했을 때만 호출되는 함수
 // done(null, user.id)로 세션을 초기화 한다.
 passport.serializeUser((user, done) => {
-    done(null, user.email);
+    done(null, user);
 });
 
 // 사용자가 페이지를 방문할 때마다 호출되는 함수

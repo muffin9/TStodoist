@@ -1,12 +1,19 @@
 import actionStore, { ADD_ACTION } from '@/actionStore';
 import TodoAction from '@/components/TodoAction';
+import IUser from '@/interface/IUser';
 import { $ } from '@/utils/dom';
 
 export default class TodoHeader {
   clicked: boolean;
 
-  constructor() {
+  email: string;
+
+  avatarurl: string;
+
+  constructor({ email, avatarurl }: IUser) {
     this.clicked = false;
+    this.email = email;
+    this.avatarurl = avatarurl;
     actionStore.subscribe(ADD_ACTION, () => {
       this.addAction();
     });
@@ -62,6 +69,13 @@ export default class TodoHeader {
     return /* html */ `
         <header class="header__main">
             <h1 class="header__logo">TO-DO-LIST</h1>
+            <div class="header__user">
+              <img src="${this.avatarurl}" class="header__avatar" alt="프로필 이미지" />
+              <h3 class="header__email">${this.email}</h3>
+              <a href="/logout">
+                <button class="header__logout-btn">로그아웃</button>
+              </a>
+            </div>
             <nav class="header__menu">
               <div></div>
               <div></div>
