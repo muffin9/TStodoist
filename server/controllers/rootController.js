@@ -8,17 +8,18 @@ export const home = (req, res) => {
             console.log(err);
             return res.status(500).end(`<h1>ERROR</h1>`);
         }
-        if(!req.user) return res.redirect('/login');
         return res.status(200).end(html);
     });
 }
 
 export const getData = (req, res) => {
-    if(!req.user) return;
     const { email, avatarurl } = req.user;
-
     try {
         // findBy userEmail...
+        // const email = 'jinlog9@gmail.com';
+        // const avatarurl = '';
+
+        // Action 조회도 여기서..?
         connection.query(`SELECT id FROM users where email='${email}'`, (err, user, fields) => {
             if(!user[0]) throw new Error(`user is not Found.`);
             const userId = user[0].id;
@@ -47,8 +48,7 @@ export const login = (req,res) => {
             console.log(err);
             return res.status(500).end(`<h1>ERROR</h1>`);
         }
-        if (req.user) return res.redirect('/');
-        else return res.status(200).end(html);
+        return res.status(200).end(html);
     });
 }
 

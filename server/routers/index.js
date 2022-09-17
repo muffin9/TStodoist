@@ -1,11 +1,12 @@
 import express from "express";
 import { getData, home, login, logout } from "../controllers/rootController.js";
+import { isAuthenticated } from '../util/common.js';
 
 const rootRouter = express.Router();
 
-rootRouter.get('/', home);
-rootRouter.get("/datas", getData);
+rootRouter.get('/', isAuthenticated, home);
+rootRouter.get("/datas", isAuthenticated, getData);
 rootRouter.get("/login", login);
-rootRouter.get("/logout", logout);
+rootRouter.get("/logout", isAuthenticated, logout);
 
 export default rootRouter;
