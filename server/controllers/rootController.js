@@ -8,17 +8,19 @@ export const home = (req, res) => {
             console.log(err);
             return res.status(500).end(`<h1>ERROR</h1>`);
         }
-        if(!req.session.passport) return res.redirect('/login');
         return res.status(200).end(html);
     });
 }
 
 export const getData = (req, res) => {
-    if(!req.session.passport) return;
-    const userEmail = req.session.passport.user;
+    const { email, avatarurl } = req.user;
     try {
         // findBy userEmail...
-        connection.query(`SELECT id FROM users where email='${userEmail}'`, (err, user, fields) => {
+        // const email = 'jinlog9@gmail.com';
+        // const avatarurl = '';
+
+        // Action 조회도 여기서..?
+        connection.query(`SELECT id FROM users where email='${email}'`, (err, user, fields) => {
             if(!user[0]) throw new Error(`user is not Found.`);
             const userId = user[0].id;
             const columnsQuery = `SELECT id, title FROM columns where user_id='${userId}';`;
@@ -28,8 +30,12 @@ export const getData = (req, res) => {
                     console.log(`query Error is ${err}...`);
                     return;
                 }
-                return res.json({columns: datas[0], todos: datas[1]});
-            });
+                return res.json({
+                    email: email,
+                    avatarurl: avatarurl,
+                    columns: datas[0],
+                    todos: datas[1]});
+                });
             })
     } catch (err) {
         throw new Error(err);
@@ -37,20 +43,16 @@ export const getData = (req, res) => {
 }
 
 export const login = (req,res) => {
-    fs.readFile(path.join(path.resolve(), "../client/src/login.html"), (err, data) => {
+    fs.readFile(path.join(path.resolve(), "../client/src/login.html"), (err, html) => {
         if (err) {
             console.log(err);
             return res.status(500).end(`<h1>ERROR</h1>`);
         }
-        if (req.session.passport) return res.redirect('/');
-        else return res.status(200).end(data);
+        return res.status(200).end(html);
     });
 }
 
 export const logout = (req,res) => {
-    //passport 정보 삭제
-    req.logout();
-    //서버측 세션 삭제
     req.session.destroy(()=>{
         //클라이언트 측 세션 암호화 쿠키 삭제
         res.cookie('connect.sid','',{ maxAge:0 });

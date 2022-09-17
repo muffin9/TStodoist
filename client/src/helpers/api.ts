@@ -7,9 +7,14 @@ const request = async () => {
   try {
     const response = await fetch(`${API_END_POINT}/datas`);
 
+    if (response.status === 504) {
+      window.location.href = '/login';
+    }
+
     if (!response.ok) {
       throw new Error('HTTP Error');
     }
+
     return await response.json();
   } catch (err: unknown) {
     reportError({ message: getErrorMessage(err) });
@@ -29,6 +34,10 @@ const postOrPatchTodoRequest = async (id: number, data: ITodo) => {
       body: JSON.stringify(data),
     });
 
+    if (response.status === 504) {
+      window.location.href = '/login';
+    }
+
     if (!response.ok) {
       throw new Error('HTTP Error');
     }
@@ -44,6 +53,10 @@ const deleteTodoRequest = async (id: number) => {
     const response = await fetch(`${API_END_POINT}/todo/${id}`, {
       method: 'DELETE',
     });
+
+    if (response.status === 504) {
+      window.location.href = '/login';
+    }
 
     if (!response.ok) {
       throw new Error('HTTP Error');
@@ -64,6 +77,10 @@ const postActionRequest = async (data: IAction) => {
       },
       body: JSON.stringify(data),
     });
+
+    if (response.status === 504) {
+      window.location.href = '/login';
+    }
 
     if (!response.ok) {
       throw new Error('HTTP Error');
