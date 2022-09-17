@@ -15,6 +15,31 @@
     font-size: $font-32;
     font-weight: 400;
   }
+
+  .header__user {
+    @include flexbox($align-items: center);
+    gap: 1rem;
+    margin-right: 1rem;
+  }
+
+  .header__avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+  }
+
+  .header__email {
+    font-size: $font-16;
+    color: $color-grey;
+  }
+
+  .header__logout-btn {
+    font-size: $font-14;
+    border-radius: 1rem;
+    border: 1px solid $color-black;
+    cursor: pointer;
+  }
+
   .header__menu {
     cursor: pointer;
     z-index: 99;
