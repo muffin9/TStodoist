@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
-import connection from '../config/database.js';
+import pool from '../config/database.js';
+import { findIdByUser } from "./userController.js";
 
 export const home = (req, res) => {
     fs.readFile(path.join(path.resolve(), "../client/index.html"), (err, html) => {
@@ -12,35 +13,31 @@ export const home = (req, res) => {
     });
 }
 
-export const getData = (req, res) => {
-    const { email, avatarurl } = req.user;
-    try {
-        // findBy userEmail...
-        // const email = 'jinlog9@gmail.com';
-        // const avatarurl = '';
+    export const getData = async (req, res) => {
+        const { email, oauthProvider, avatarurl } = req.user;
+        const connection = await pool.getConnection(async conn => conn);
+        try {
+            // findBy userEmail...
+            // const email = 'jinlog9@gmail.com';
+            // const avatarurl = '';
 
-        // Action 조회도 여기서..?
-        connection.query(`SELECT id FROM users where email='${email}'`, (err, user, fields) => {
-            if(!user[0]) throw new Error(`user is not Found.`);
-            const userId = user[0].id;
-            const columnsQuery = `SELECT id, title FROM columns where user_id='${userId}';`;
-            const todosQuery = `SELECT * FROM todos where column_id in (select id from columns where user_id='${userId}');`
-            connection.query(columnsQuery + todosQuery, (err, datas, fileds) => {
-                if(err) {
-                    console.log(`query Error is ${err}...`);
-                    return;
-                }
-                return res.json({
-                    email: email,
-                    avatarurl: avatarurl,
-                    columns: datas[0],
-                    todos: datas[1]});
-                });
-            })
-    } catch (err) {
-        throw new Error(err);
+            const userId = await findIdByUser({provider: oauthProvider, email});
+            const [ columns ] = await connection.query(`SELECT id, title FROM columns where user_id='${userId}';`);
+            const [ todos ] = await connection.query(`SELECT * FROM todos where column_id in (select id from columns where user_id='${userId}');`);
+            const [ actions ] = await connection.query(`SELECT * FROM actions where user_id='${userId}'`)
+            return res.json({
+                email: email,
+                avatarurl: avatarurl,
+                columns: columns,
+                todos: todos,
+                actions: actions
+            });
+        } catch (err) {
+            console.log(`query Error is ${err}...`);
+        } finally {
+            connection.release();
+        }
     }
-}
 
 export const login = (req,res) => {
     fs.readFile(path.join(path.resolve(), "../client/src/login.html"), (err, html) => {
