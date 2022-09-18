@@ -1,6 +1,8 @@
-import connection from '../config/database.js';
+import pool from '../config/database.js';
 
-export const postTodo = (req, res) => {
+export const postTodo = async (req, res) => {
+    const connection = await pool.getConnection(async conn => conn);
+
     try {
         const todo = {
             title: req.body.title,
@@ -10,19 +12,19 @@ export const postTodo = (req, res) => {
             column_id: req.body.columnId
         }
 
-        connection.query(`INSERT INTO todos (title, content, status, column_id) VALUES('${todo.title}', '${todo.content}', '${todo.status}', '${todo.column_id}')`, (err, todo, fields) => {
-            if(err) {
-                console.log(`query Error is ${err}...`);
-                return;
-            }
-            return res.sendStatus(200);
-        })
+        await connection.beginTransaction();
+        await connection.query(`INSERT INTO todos (title, content, status, column_id) VALUES('${todo.title}', '${todo.content}', '${todo.status}', '${todo.column_id}')`);
+        await connection.commit();
+        return res.sendStatus(200);
     } catch (err) {
-        throw new Error(err);
+        console.log(`query Error is ${err}...`);
+    } finally {
+        connection.release();
     }
 }
 
-export const patchTodo = (req, res) => {
+export const patchTodo = async (req, res) => {
+    const connection = await pool.getConnection(async conn => conn);
     try {
         const id = req.params.id;
         // 해당 id를 가지고 있는 todo가 있는지 체킹.
@@ -30,33 +32,29 @@ export const patchTodo = (req, res) => {
             title: req.body.title,
             content: req.body.content,
         }
-
-        connection.query(`UPDATE todos SET title='${newTodo.title}', content='${newTodo.content}' WHERE id='${id}' `, (err, todo, fileds) => {
-            if(err) {
-                console.log(`query Error is ${err}...`);
-                return;
-            }
-            return res.sendStatus(200);
-        })
+        await connection.beginTransaction();
+        await connection.query(`UPDATE todos SET title='${newTodo.title}', content='${newTodo.content}' WHERE id='${id}' `);
+        await connection.commit();
+        return res.sendStatus(200);
     } catch (err) {
-        throw new Error(err);
+        console.log(`query Error is ${err}...`);
+    } finally {
+        connection.release();
     }
 }
 
-export const deleteTodo = (req, res) => {
+export const deleteTodo = async (req, res) => {
+    const connection = await pool.getConnection(async conn => conn);
     try {
         const id = req.params.id;
-        if(!id) {
-            return res.sendStatus(500);
-        }
-        connection.query(`DELETE FROM todos WHERE id=${id}`, (err, todo, fileds) => {
-            if(err) {
-                console.log(`query Error is ${err}...`);
-                return;
-            }
-            return res.sendStatus(200);
-        })
+        if(!id) return res.sendStatus(500);
+        await connection.beginTransaction();
+        await connection.query(`DELETE FROM todos WHERE id=${id}`);
+        await connection.commit();
+        return res.sendStatus(200);
     } catch (err) {
-        throw new Error(err);
+        console.log(`query Error is ${err}...`);
+    } finally {
+        connection.release();
     }
 }

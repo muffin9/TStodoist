@@ -10,33 +10,23 @@ passport.use(
             callbackURL: '/auth/google/callback',
         },
         async (request, accessToken, refreshToken, profile, done) => {
-            const user = {
+            const user = await findUser({
                 provider: profile.provider,
                 email: profile.email,
                 avatarurl: profile.picture
-            }
-
-            findUser(user, (findRes) => {
-                if(findRes === 0) {
-                    // 쿼리 에러발생시
-                    return done(false);
-                } else if(findRes === -1) {
-                    // 유저가 존재하지 않을시.
-                    const newUser = {
-                        nickname: profile.displayName,
-                        email: profile.email,
-                        avatarurl: profile.picture,
-                        oauthProvider: profile.provider
-                    }
-                    // create User
-                    createUser(newUser, (createRes) => {
-                        if(createRes === 0) return done(false);
-                        else return done(null, newUser)
-                    });
-                } else {
-                    return done(null, user);
-                }
             });
+
+            if(!user) {
+                const newUser = {
+                    nickname: profile.displayName,
+                    email: profile.email,
+                    avatarurl: profile.picture,
+                    oauthProvider: profile.provider
+                }
+                await createUser(newUser);
+                return done(null, newUser);
+            }
+            return done(null, user);
         })
 )
 

@@ -1,4 +1,4 @@
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -11,13 +11,6 @@ const databaseConfig = {
     multipleStatements: true
 };
 
-const connection = mysql.createConnection(databaseConfig);
-connection.connect((error) => {
-    if(error){
-      console.log(error);
-    } else{
-      console.log('Connected:)');
-    }
-});
+const pool = mysql.createPool(databaseConfig);
 
-export default connection;
+export default pool;
