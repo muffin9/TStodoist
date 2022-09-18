@@ -1,8 +1,11 @@
-import connection from '../config/database.js';
+import pool from '../config/database.js';
+import { findIdByUser } from "./userController.js";
 
-export const postAction = (req, res) => {
+export const postAction = async (req, res) => {
+    const { email, oauthProvider } = req.user;
+    const connection = await pool.getConnection(async conn => conn);
     try {
-        const userId = 1;
+        const userId = await findIdByUser({ provider: oauthProvider, email });
 
         const action = {
             title: req.body.title,
@@ -13,15 +16,14 @@ export const postAction = (req, res) => {
             date: new Date().toISOString().slice(0, 19).replace('T', ' '),
             user_id: userId
         }
-
-        connection.query(`INSERT INTO actions (title, content, status, endStatus, type, date, user_id) VALUES('${action.title}', '${action.content}', '${action.status}', '${action.endStatus}', '${action.type}', '${action.date}', '${action.user_id}')`, (err, todo, fields) => {
-            if(err) {
-                console.log(`query Error is ${err}...`);
-                return;
-            }
-            return res.sendStatus(200);
-        })
+        await connection.beginTransaction();
+        const [ newAction ] = await connection.query(`INSERT INTO actions (title, content, status, endStatus, type, date, user_id) VALUES('${action.title}', '${action.content}', '${action.status}', '${action.endStatus}', '${action.type}', '${action.date}', '${action.user_id}')`);
+        console.log(newAction);
+        await connection.commit();
+        return res.json({ newAction });
     } catch (err) {
-        throw new Error(err);
+        console.log(`query Error is ${err}...`);
+    } finally {
+        connection.release();
     }
 }
