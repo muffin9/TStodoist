@@ -138,6 +138,13 @@ export default class TodoForm {
             date: new Date(),
           };
 
+          const actionData = {
+            title: this.title,
+            content: this.content,
+            status: this.status,
+            type: this.type,
+          };
+
           // set Action
           actionStore.dispatch({ type: ADD_ACTION, payload: cardData });
 
@@ -146,12 +153,12 @@ export default class TodoForm {
             todoId = this.id ?? 0;
           }
 
-          const responseStatus = await api.postOrPatchTodoFetch(
-            todoId,
-            cardData as ITodo,
-          );
+          const responseStatus = await Promise.all([
+            api.postOrPatchTodoFetch(todoId, cardData as ITodo),
+            api.postActionFetch(actionData),
+          ]);
 
-          if (responseStatus === 200) {
+          if (responseStatus.every(status => status === 200)) {
             const newCard = new TodoCard(cardData as ITodo);
 
             // Column 뒤에 붙이기
