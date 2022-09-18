@@ -4,10 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const databaseConfig = {
-    host     : '127.0.0.1',
-    user     : 'muffin',
+    host     : process.env.DATABASE_HOST,
+    port: process.env.DATABASE_PORT,
+    user     : process.env.DATABASE_USER,
     password : process.env.DATABASE_PASSWORD,
-    database : 'todoist',
+    database : process.env.DATABASE_NAME,
     multipleStatements: true
 };
 

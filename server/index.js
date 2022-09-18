@@ -13,7 +13,7 @@ import passport from "passport";
 
 import { createClient }  from "redis";
 
-const redisClient = createClient({ legacyMode: true })
+const redisClient = createClient({ socket: { host: process.env.REDISCLOUD_URL || '127.0.0.1' }, legacyMode: true })
 redisClient.connect().catch(console.error);
 redisClient.on('connect', () => {
   console.log(`🚧 redis Connected!: ${process.env.REDIS_PORT}`)
