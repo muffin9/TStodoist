@@ -8,6 +8,7 @@ export const postAction = async (req, res) => {
         const userId = await findIdByUser({ provider: oauthProvider, email });
 
         const action = {
+            uuid: req.body.uuid,
             title: req.body.title,
             content: req.body.content || '',
             status: req.body.status,
@@ -17,7 +18,7 @@ export const postAction = async (req, res) => {
             user_id: userId
         }
         await connection.beginTransaction();
-        const [ newAction ] = await connection.query(`INSERT INTO actions (title, content, status, endStatus, type, date, user_id) VALUES('${action.title}', '${action.content}', '${action.status}', '${action.endStatus}', '${action.type}', '${action.date}', '${action.user_id}')`);
+        const [ newAction ] = await connection.query(`INSERT INTO actions (uuid, title, content, status, endStatus, type, date, user_id) VALUES('${action.uuid}', '${action.title}', '${action.content}', '${action.status}', '${action.endStatus}', '${action.type}', '${action.date}', '${action.user_id}')`);
         console.log(newAction);
         await connection.commit();
         return res.json({ newAction });
