@@ -139,6 +139,7 @@ export default class TodoForm {
           };
 
           const actionData = {
+            uuid: newID(),
             title: this.title,
             content: this.content,
             status: this.status,

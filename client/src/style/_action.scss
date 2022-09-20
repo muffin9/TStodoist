@@ -30,6 +30,17 @@
       border-radius: 1rem;
     }
 
+    &__header {
+      @include flexbox($justify-content: space-between);
+
+      img {
+        cursor: pointer;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+
     &__icon {
       margin-right: 1rem;
     }
