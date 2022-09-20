@@ -149,9 +149,9 @@ export default class TodoForm {
           // set Action
           actionStore.dispatch({ type: ADD_ACTION, payload: cardData });
 
-          let todoId = 0;
+          let todoId = '';
           if (this.type === 'modify') {
-            todoId = this.id ?? 0;
+            todoId = this.uuid;
           }
 
           const responseStatus = await Promise.all([
