@@ -1,7 +1,14 @@
+import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/actionStore';
+import { Trash } from '@/assets';
+import GlobalModal from '@/components/GlobalModal';
 import { todoColumnMap } from '@/constants/todo';
+import api from '@/helpers/api';
 import IAction from '@/interface/IAction';
+import { $$ } from '@/utils/dom';
 
 export default class TodoAction {
+  uuid: string;
+
   title: string;
 
   content?: string;
@@ -12,12 +19,16 @@ export default class TodoAction {
 
   type: string;
 
+  element: HTMLElement | null;
+
   constructor(state: IAction) {
+    this.uuid = state.uuid;
     this.title = state.title;
     this.content = state.content;
     this.status = state.status;
     this.endStatus = state.endStatus;
     this.type = state.type;
+    this.element = null;
   }
 
   setContent = () => {
@@ -37,18 +48,59 @@ export default class TodoAction {
     }
   };
 
+  handleTrashIconClick = () => {
+    if (this.element) {
+      const $trashIcon = this.element.querySelector('.action--trash');
+      if ($trashIcon) {
+        $trashIcon.addEventListener('click', () => {
+          const modalContent = '액션을 삭제 하시겠습니까?';
+          const globalModal = new GlobalModal(
+            modalContent,
+            this.handleDeleteAction,
+          );
+          globalModal.addBody();
+          globalModal.registerEventListener();
+        });
+      }
+    }
+  };
+
+  handleDeleteAction = async () => {
+    const newActions = actionStore.getState().filter((action: IAction) => {
+      return action.uuid !== this.uuid;
+    });
+
+    actionStore.dispatch({ type: SET_ACTIONS, newActions });
+    actionStore.dispatch({
+      type: DRAW_ACTION,
+    });
+
+    const responseStatus = await api.deleteActionFetch(this.uuid);
+    if (responseStatus === 200) {
+      this.element?.remove();
+    }
+  };
+
+  registerEventListener = () => {
+    this.element = $$(this.uuid);
+    this.handleTrashIconClick();
+  };
+
   render = () => {
     return /* html */ `
-        <div class="action__inner">
+        <article class="action__inner" id="${this.uuid}">
             <div class="action__icon">😀</div>
             <div class="action__contents">
-                <p class="action__writer">Muffin</p>
+                <header class="action__header">
+                  <p class="action__writer">Muffin</p>
+                  <img src=${Trash} alt="trash icon" class="action--trash" />
+                </header>
                 <p class="action__content">
                   ${this.setContent()}
                 </p>
                 <p class="action__time">방금전</p>
             </div>
-        </div>
+        </article>
     `;
   };
 }

@@ -5,6 +5,7 @@ import GlobalModal from '@/components/GlobalModal';
 import api from '@/helpers/api';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
+import { newID } from '@/utils/util';
 
 export default class TodoCard {
   id: number;
@@ -78,6 +79,7 @@ export default class TodoCard {
 
   handleDeleteTodo = async () => {
     const actionData = {
+      uuid: newID(),
       title: this.title,
       status: this.status,
       type: 'delete',
@@ -90,7 +92,7 @@ export default class TodoCard {
 
     const responseStatus = await Promise.all([
       api.postActionFetch(actionData),
-      api.deleteTodoFetch(this.id),
+      api.deleteTodoFetch(this.uuid),
     ]);
 
     // view 에서 해당 카드 삭제

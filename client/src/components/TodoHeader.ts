@@ -1,4 +1,8 @@
-import actionStore, { ADD_ACTION, DRAW_ACTION } from '@/actionStore';
+import actionStore, {
+  ADD_ACTION,
+  SET_ACTIONS,
+  DRAW_ACTION,
+} from '@/actionStore';
 import TodoAction from '@/components/TodoAction';
 import IAction from '@/interface/IAction';
 import IUser from '@/interface/IUser';
@@ -11,13 +15,14 @@ export default class TodoHeader {
 
   avatarurl: string;
 
-  actions: IAction[];
-
-  constructor({ email, avatarurl }: IUser, actions: IAction[]) {
+  constructor({ email, avatarurl }: IUser) {
     this.clicked = false;
     this.email = email;
     this.avatarurl = avatarurl;
-    this.actions = actions;
+
+    actionStore.subscribe(SET_ACTIONS, (newActions: IAction[]) => {
+      return newActions;
+    });
     actionStore.subscribe(DRAW_ACTION, () => {
       this.drawAction();
     });
@@ -28,10 +33,14 @@ export default class TodoHeader {
 
   drawAction = async () => {
     const $action = $('.action');
-    this.actions.forEach((action: IAction) => {
+    const actions = actionStore.getState();
+    if ($action) $action.innerHTML = '';
+
+    actions.forEach((action: IAction) => {
       const todoAction = new TodoAction(action);
       if ($action) {
-        $action.insertAdjacentHTML('afterend', todoAction.render());
+        $action.insertAdjacentHTML('beforeend', todoAction.render());
+        todoAction.registerEventListener();
       }
     });
   };

@@ -21,9 +21,9 @@ const request = async () => {
   }
 };
 
-const postOrPatchTodoRequest = async (id: number, data: ITodo) => {
-  const method = id ? 'PATCH' : 'POST';
-  const url = `${API_END_POINT}/todo/${id ? id : ''}`;
+const postOrPatchTodoRequest = async (uuid: string, data: ITodo) => {
+  const method = uuid ? 'PATCH' : 'POST';
+  const url = `${API_END_POINT}/todo/${uuid ? uuid : ''}`;
 
   try {
     const response = await fetch(url, {
@@ -48,9 +48,9 @@ const postOrPatchTodoRequest = async (id: number, data: ITodo) => {
   }
 };
 
-const deleteTodoRequest = async (id: number) => {
+const deleteTodoRequest = async (uuid: string) => {
   try {
-    const response = await fetch(`${API_END_POINT}/todo/${id}`, {
+    const response = await fetch(`${API_END_POINT}/todo/${uuid}`, {
       method: 'DELETE',
     });
 
@@ -92,21 +92,47 @@ const postActionRequest = async (data: IAction) => {
   }
 };
 
+const deleteActionRequest = async (uuid: string) => {
+  try {
+    const response = await fetch(`${API_END_POINT}/action/${uuid}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status === 504) {
+      window.location.href = '/login';
+    }
+
+    if (!response.ok) {
+      throw new Error('HTTP Error');
+    }
+    return response.status;
+  } catch (err: unknown) {
+    reportError({ message: getErrorMessage(err) });
+  }
+};
+
 const api = {
   fetch() {
     return request();
   },
 
-  postOrPatchTodoFetch(id: number, data: ITodo) {
-    return postOrPatchTodoRequest(id, data);
+  postOrPatchTodoFetch(uuid: string, data: ITodo) {
+    return postOrPatchTodoRequest(uuid, data);
   },
 
-  deleteTodoFetch(id: number) {
-    return deleteTodoRequest(id);
+  deleteTodoFetch(uuid: string) {
+    return deleteTodoRequest(uuid);
   },
 
   postActionFetch(data: IAction) {
     return postActionRequest(data);
+  },
+
+  deleteActionFetch(uuid: string) {
+    return deleteActionRequest(uuid);
   },
 };
 

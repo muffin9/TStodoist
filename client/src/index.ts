@@ -2,7 +2,7 @@ import './style/index.scss';
 
 import TodoCard from './components/TodoCard';
 
-import actionStore, { DRAW_ACTION } from '@/actionStore';
+import actionStore, { DRAW_ACTION, SET_ACTIONS } from '@/actionStore';
 import TodoColumn from '@/components/TodoColumn';
 import TodoHeader from '@/components/TodoHeader';
 import { todoColumnMap } from '@/constants/todo';
@@ -17,7 +17,7 @@ const createTodos = (column: IColumn, todos: ITodo[]) => {
   todos.forEach((todo: ITodo) => {
     const newTodo = new TodoCard({
       id: todo.id,
-      uuid: `todo-${todo.id}`,
+      uuid: todo.uuid,
       columnId: column.id,
       title: todo.title,
       content: todo.content,
@@ -56,16 +56,14 @@ const createColumns = async (columns: IColumn[], todos: ITodo[]) => {
 
 const app = async () => {
   const response = await api.fetch();
-  const header = new TodoHeader(
-    {
-      email: response.email,
-      avatarurl: response.avatarurl,
-    },
-    response.actions,
-  );
+  const header = new TodoHeader({
+    email: response.email,
+    avatarurl: response.avatarurl,
+  });
 
   root.insertAdjacentHTML('afterend', header.render());
   header.registerEventListener();
+  actionStore.dispatch({ type: SET_ACTIONS, newActions: response.actions });
   actionStore.dispatch({ type: DRAW_ACTION });
   createColumns(response.columns, response.todos);
 };
