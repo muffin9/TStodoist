@@ -17,7 +17,7 @@ const createTodos = (column: IColumn, todos: ITodo[]) => {
   todos.forEach((todo: ITodo) => {
     const newTodo = new TodoCard({
       id: todo.id,
-      uuid: `todo-${todo.id}`,
+      uuid: todo.uuid,
       columnId: column.id,
       title: todo.title,
       content: todo.content,
