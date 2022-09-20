@@ -27,3 +27,20 @@ export const postAction = async (req, res) => {
         connection.release();
     }
 }
+
+export const deleteAction = async (req, res) => {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+        const uuid = req.params.uuid;
+        if(!uuid) return res.sendStatus(500);
+
+        await connection.beginTransaction();
+        await connection.query(`UPDATE actions SET is_deleted=true WHERE uuid='${uuid}'`);
+        await connection.commit();
+        return res.sendStatus(200);
+    } catch (err) {
+        console.log(`query Error is ${err}...`);
+    } finally {
+        connection.release();
+    }
+}

@@ -92,6 +92,28 @@ const postActionRequest = async (data: IAction) => {
   }
 };
 
+const deleteActionRequest = async (uuid: string) => {
+  try {
+    const response = await fetch(`${API_END_POINT}/action/${uuid}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status === 504) {
+      window.location.href = '/login';
+    }
+
+    if (!response.ok) {
+      throw new Error('HTTP Error');
+    }
+    return response.status;
+  } catch (err: unknown) {
+    reportError({ message: getErrorMessage(err) });
+  }
+};
+
 const api = {
   fetch() {
     return request();
@@ -107,6 +129,10 @@ const api = {
 
   postActionFetch(data: IAction) {
     return postActionRequest(data);
+  },
+
+  deleteActionFetch(uuid: string) {
+    return deleteActionRequest(uuid);
   },
 };
 
