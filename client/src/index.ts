@@ -1,9 +1,9 @@
 import './style/index.scss';
 
-import TodoCard from './components/TodoCard';
-
 import actionStore, { DRAW_ACTION, SET_ACTIONS } from '@/actionStore';
+import TodoCard from '@/components/TodoCard';
 import TodoColumn from '@/components/TodoColumn';
+import TodoColumnFab from '@/components/TodoColumnFab';
 import TodoHeader from '@/components/TodoHeader';
 import { todoColumnMap } from '@/constants/todo';
 import api from '@/helpers/api';
@@ -60,8 +60,11 @@ const app = async () => {
     email: response.email,
     avatarurl: response.avatarurl,
   });
+  const todoColumnFab = new TodoColumnFab();
 
+  root.insertAdjacentHTML('afterend', todoColumnFab.render());
   root.insertAdjacentHTML('afterend', header.render());
+  todoColumnFab.registerEventListener();
   header.registerEventListener();
   actionStore.dispatch({ type: SET_ACTIONS, newActions: response.actions });
   actionStore.dispatch({ type: DRAW_ACTION });
