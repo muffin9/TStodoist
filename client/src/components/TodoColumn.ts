@@ -1,7 +1,6 @@
 import TodoForm from '@/components/TodoForm';
 import IColumn from '@/interface/IColumn';
 import { $$ } from '@/utils/dom';
-import { newID } from '@/utils/util';
 
 export default class TodoColumn {
   id: number;
@@ -67,7 +66,6 @@ export default class TodoColumn {
             }
 
             const newAddForm = new TodoForm({
-              uuid: newID(),
               columnId: this.id,
               status: this.status,
               type: 'add',

@@ -1,5 +1,6 @@
 import pool from '../config/database.js';
 import { findIdByUser } from "./userController.js";
+import { createuuid } from '../util/uuid.js';
 
 export const postAction = async (req, res) => {
     const { email, oauthProvider } = req.user;
@@ -8,7 +9,7 @@ export const postAction = async (req, res) => {
         const userId = await findIdByUser({ provider: oauthProvider, email });
 
         const action = {
-            uuid: req.body.uuid,
+            uuid: createuuid(),
             title: req.body.title,
             content: req.body.content || '',
             status: req.body.status,
@@ -19,7 +20,6 @@ export const postAction = async (req, res) => {
         }
         await connection.beginTransaction();
         const [ newAction ] = await connection.query(`INSERT INTO actions (uuid, title, content, status, endStatus, type, date, user_id) VALUES('${action.uuid}', '${action.title}', '${action.content}', '${action.status}', '${action.endStatus}', '${action.type}', '${action.date}', '${action.user_id}')`);
-        console.log(newAction);
         await connection.commit();
         return res.json({ newAction });
     } catch (err) {

@@ -1,6 +1,7 @@
 import GoogleStrategy from "passport-google-oauth2";
 import passport from "passport"
 import { findUser, createUser } from '../controllers/userController.js';
+import { createuuid } from "../util/uuid.js";
 
 passport.use(
     new GoogleStrategy.Strategy(
@@ -18,6 +19,7 @@ passport.use(
 
             if(!user) {
                 const newUser = {
+                    uuid: createuuid(),
                     nickname: profile.displayName,
                     email: profile.email,
                     avatarurl: profile.picture,

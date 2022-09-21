@@ -3,9 +3,7 @@ import TodoCard from './TodoCard';
 import actionStore, { ADD_ACTION } from '@/actionStore';
 import api from '@/helpers/api';
 import IForm from '@/interface/IForm';
-import ITodo from '@/interface/ITodo';
 import { $, $$ } from '@/utils/dom';
-import { newID } from '@/utils/util';
 
 export default class TodoForm {
   id: number | undefined;
@@ -37,7 +35,7 @@ export default class TodoForm {
     },
   ) {
     this.id = state.id;
-    this.uuid = state.uuid || newID();
+    this.uuid = state.uuid || `todoForm-${this.id}`;
     this.columnId = state.columnId;
     this.title = state.title || '';
     this.content = state.content || '';
@@ -128,8 +126,6 @@ export default class TodoForm {
           const $columnElement = $(`[data-column-status=${this.status}]`);
 
           const cardData = {
-            id: this.id,
-            uuid: this.uuid,
             columnId: this.columnId,
             title: this.title,
             content: this.content,
@@ -139,7 +135,6 @@ export default class TodoForm {
           };
 
           const actionData = {
-            uuid: newID(),
             title: this.title,
             content: this.content,
             status: this.status,
@@ -154,13 +149,12 @@ export default class TodoForm {
             todoId = this.uuid;
           }
 
-          const responseStatus = await Promise.all([
-            api.postOrPatchTodoFetch(todoId, cardData as ITodo),
-            api.postActionFetch(actionData),
-          ]);
+          const newAction = await api.postActionFetch(actionData);
+          const newTodo = await api.postOrPatchTodoFetch(todoId, cardData);
 
-          if (responseStatus.every(status => status === 200)) {
-            const newCard = new TodoCard(cardData as ITodo);
+          if (newTodo.data && newAction) {
+            // response todo
+            const newCard = new TodoCard(newTodo.data);
 
             // Column 뒤에 붙이기
             $columnElement
