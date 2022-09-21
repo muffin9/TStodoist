@@ -1,4 +1,5 @@
 import GlobalModal from '@/components/GlobalModal';
+import api from '@/helpers/api';
 import { $ } from '@/utils/dom';
 
 export default class TodoColumnFab {
@@ -15,9 +16,10 @@ export default class TodoColumnFab {
     });
   };
 
-  handleAddColumn = () => {
-    // column View Add
+  handleAddColumn = async () => {
     // column add api
+    await api.postOrPatchColumnFetch('', { title: this.title });
+    // response status 200 ? => column View Add
   };
 
   handleFabClick = () => {

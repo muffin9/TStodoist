@@ -4,7 +4,7 @@ import { isAuthenticated } from '../util/common.js';
 
 const actionRouter = express.Router();
 
-actionRouter.post('/', isAuthenticated, postAction);
+actionRouter.post('/', postAction);
 actionRouter.delete('/:uuid', isAuthenticated, deleteAction);
 
 export default actionRouter;

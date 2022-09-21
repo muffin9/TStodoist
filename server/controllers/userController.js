@@ -1,4 +1,5 @@
 import pool from '../config/database.js';
+import { createuuid } from "../util/uuid.js";
 
 export const findUser = async (user) => {
     const { provider, email } = user;
@@ -34,19 +35,19 @@ export const createUser = async (newUser) => {
     const connection = await pool.getConnection(async conn => conn);
 
     try {
-        const { nickname, oauthProvider, email, avatarurl} = newUser;
+        const { uuid, nickname, oauthProvider, email, avatarurl} = newUser;
         await connection.beginTransaction();
-        const [ user ] = await connection.query(`INSERT INTO users (nickname, oauthProvider, email, avatarurl) VALUES ('${nickname}', '${oauthProvider}', '${email}', '${avatarurl}')`);
+        const [ user ] = await connection.query(`INSERT INTO users (uuid, nickname, oauthProvider, email, avatarurl) VALUES ('${uuid}', '${nickname}', '${oauthProvider}', '${email}', '${avatarurl}')`);
         const id = user.insertId;
 
         const columnValues = [
-            ['todo', id],
-            ['doing', id],
-            ['done', id]
+            [createuuid(), 'todo', id],
+            [createuuid(), 'doing', id],
+            [createuuid(), 'done', id]
         ];
 
         // create set default columns(todo, doing, done)
-        await connection.query(`INSERT INTO columns (title, user_id) VALUES ?;`, [columnValues]);
+        await connection.query(`INSERT INTO columns (uuid, title, user_id) VALUES ?;`, [columnValues]);
         return await connection.commit();
     } catch(err) {
         console.log(`query Error is ${err}...`);
