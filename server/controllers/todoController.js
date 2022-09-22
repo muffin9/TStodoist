@@ -1,5 +1,6 @@
 import pool from '../config/database.js';
 import { createuuid } from '../util/uuid.js';
+import { findColumnIdByuuid } from './columnController.js';
 
 export const findTodoByuuid = async (uuid) => {
     const connection = await pool.getConnection(async conn => conn);
@@ -28,8 +29,10 @@ export const postTodo = async (req, res) => {
             column_id: req.body.columnId
         }
 
+        const columnId = await findColumnIdByuuid(todo.column_id);
+
         await connection.beginTransaction();
-        await connection.query(`INSERT INTO todos (uuid, title, content, status, column_id) VALUES('${todo.uuid}', '${todo.title}', '${todo.content}', '${todo.status}', '${todo.column_id}')`);
+        await connection.query(`INSERT INTO todos (uuid, title, content, status, column_id) VALUES('${todo.uuid}', '${todo.title}', '${todo.content}', '${todo.status}', '${columnId}')`);
         await connection.commit();
         const newTodo = await findTodoByuuid(todo.uuid);
         return res.json({ data: newTodo[0] });
@@ -79,3 +82,5 @@ export const deleteTodo = async (req, res) => {
         connection.release();
     }
 }
+
+export const patchTodoStatusByColumnId = () => {}

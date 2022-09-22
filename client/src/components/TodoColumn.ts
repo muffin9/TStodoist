@@ -1,10 +1,9 @@
 import TodoForm from '@/components/TodoForm';
+import api from '@/helpers/api';
 import IColumn from '@/interface/IColumn';
 import { $$ } from '@/utils/dom';
 
 export default class TodoColumn {
-  id: number;
-
   uuid: string;
 
   title: string;
@@ -24,7 +23,6 @@ export default class TodoColumn {
   onAddForm: boolean;
 
   constructor(state: IColumn) {
-    this.id = state.id;
     this.uuid = state.uuid;
     this.title = state.title;
     this.status = state.status;
@@ -66,7 +64,8 @@ export default class TodoColumn {
             }
 
             const newAddForm = new TodoForm({
-              columnId: this.id,
+              uuid: `todoForm-${this.uuid}`,
+              columnId: this.uuid,
               status: this.status,
               type: 'add',
             });
@@ -129,6 +128,7 @@ export default class TodoColumn {
             this.handleOnClickOutside,
             true,
           );
+          api.postOrPatchColumnFetch(this.uuid, { title: this.changeTitle });
           this.handleColumnDbClick();
         }
       }

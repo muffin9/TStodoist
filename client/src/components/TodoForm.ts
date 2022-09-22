@@ -6,11 +6,9 @@ import IForm from '@/interface/IForm';
 import { $, $$ } from '@/utils/dom';
 
 export default class TodoForm {
-  id: number | undefined;
-
   uuid: string;
 
-  columnId: number;
+  columnId: string;
 
   title: string;
 
@@ -34,8 +32,7 @@ export default class TodoForm {
       registerEventListener: () => void;
     },
   ) {
-    this.id = state.id;
-    this.uuid = state.uuid || `todoForm-${this.id}`;
+    this.uuid = state.uuid;
     this.columnId = state.columnId;
     this.title = state.title || '';
     this.content = state.content || '';

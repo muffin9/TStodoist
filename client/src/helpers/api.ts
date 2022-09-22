@@ -1,5 +1,6 @@
 const API_END_POINT = 'http://127.0.0.1:3000';
 import { ActionPostParams } from '@/types/action';
+import { ColumnPostParams } from '@/types/column';
 import { TodoPostParams } from '@/types/todo';
 import { getErrorMessage } from '@/utils/util';
 
@@ -114,7 +115,10 @@ const deleteActionRequest = async (uuid: string) => {
   }
 };
 
-const postOrPatchColumnRequest = async (uuid: string, data: any) => {
+const postOrPatchColumnRequest = async (
+  uuid: string,
+  data: ColumnPostParams,
+) => {
   const method = uuid ? 'PATCH' : 'POST';
   const url = `${API_END_POINT}/column/${uuid ? uuid : ''}`;
 
@@ -162,7 +166,7 @@ const api = {
     return deleteActionRequest(uuid);
   },
 
-  postOrPatchColumnFetch(uuid: string, data: any) {
+  postOrPatchColumnFetch(uuid: string, data: ColumnPostParams) {
     return postOrPatchColumnRequest(uuid, data);
   },
 };

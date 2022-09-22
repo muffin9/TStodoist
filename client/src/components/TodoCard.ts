@@ -7,11 +7,9 @@ import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
 
 export default class TodoCard {
-  id: number;
-
   uuid: string;
 
-  columnId: number;
+  columnId: string;
 
   title: string;
 
@@ -24,7 +22,6 @@ export default class TodoCard {
   element: HTMLElement | null;
 
   constructor(state: ITodo) {
-    this.id = state.id;
     this.uuid = state.uuid;
     this.columnId = state.columnId;
     this.title = state.title;
@@ -56,7 +53,6 @@ export default class TodoCard {
       const $todoCard = this.element;
       this.element.addEventListener('dblclick', () => {
         const cardData = {
-          id: this.id,
           uuid: this.uuid,
           columnId: this.columnId,
           title: this.title,

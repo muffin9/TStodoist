@@ -1,7 +1,6 @@
 import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/actionStore';
 import { Trash } from '@/assets';
 import GlobalModal from '@/components/GlobalModal';
-import { todoColumnMap } from '@/constants/todo';
 import api from '@/helpers/api';
 import IAction from '@/interface/IAction';
 import { $$ } from '@/utils/dom';
@@ -32,14 +31,13 @@ export default class TodoAction {
   }
 
   setContent = () => {
-    const columnValue = todoColumnMap.get(this.status);
     switch (this.type) {
       case 'add':
-        return `${columnValue}에 ${this.title}을 등록하였습니다.`;
+        return `${this.status}에 ${this.title}을 등록하였습니다.`;
       case 'modify':
-        return `${columnValue}의 ${this.title}와 ${this.content}로 수정되었습니다.`;
+        return `${this.status}의 ${this.title}와 ${this.content}로 수정되었습니다.`;
       case 'delete':
-        return `${columnValue}의 ${this.title}이 삭제되었습니다.`;
+        return `${this.status}의 ${this.title}이 삭제되었습니다.`;
       case 'drag':
         return '';
 
