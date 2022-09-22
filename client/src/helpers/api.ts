@@ -135,7 +135,7 @@ const postOrPatchColumnRequest = async (uuid: string, data: any) => {
       throw new Error('HTTP Error');
     }
 
-    return response.status;
+    return await response.json();
   } catch (err: unknown) {
     reportError({ message: getErrorMessage(err) });
   }

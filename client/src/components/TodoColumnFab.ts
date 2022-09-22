@@ -1,6 +1,8 @@
+import TodoColumn from './TodoColumn';
+
 import GlobalModal from '@/components/GlobalModal';
 import api from '@/helpers/api';
-import { $ } from '@/utils/dom';
+import { $, $$ } from '@/utils/dom';
 
 export default class TodoColumnFab {
   title: string;
@@ -17,8 +19,17 @@ export default class TodoColumnFab {
   };
 
   handleAddColumn = async () => {
-    await api.postOrPatchColumnFetch('', { title: this.title });
-    // response status 200 ? => column View Add
+    const newColumn = await api.postOrPatchColumnFetch('', {
+      title: this.title,
+    });
+
+    if (newColumn.data) {
+      const column = new TodoColumn(newColumn.data);
+      $$('root')
+        ?.querySelector('.column-wrapper')
+        ?.insertAdjacentHTML('beforeend', column.render());
+      column.registerEventListener();
+    }
   };
 
   handleFabClick = () => {
@@ -43,7 +54,7 @@ export default class TodoColumnFab {
 
   render = () => {
     return /*html*/ `
-        <div class="fab"><butotn class="fab__add-button">+</button></div>
+        <div class="fab"><button class="fab__add-button">+</button></div>
     `;
   };
 }
