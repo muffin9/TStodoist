@@ -5,7 +5,7 @@ import TodoCard from '@/components/TodoCard';
 import TodoColumn from '@/components/TodoColumn';
 import TodoColumnFab from '@/components/TodoColumnFab';
 import TodoHeader from '@/components/TodoHeader';
-import { todoColumnMap } from '@/constants/todo';
+import { getColumnMap, setColumnMap } from '@/constants/todo';
 import api from '@/helpers/api';
 import IColumn from '@/interface/IColumn';
 import ITodo from '@/interface/ITodo';
@@ -35,11 +35,12 @@ const createColumns = async (columns: IColumn[], todos: ITodo[]) => {
   root.appendChild(columnWrapperElement);
 
   columns.forEach((column: { id: number; title: string }) => {
+    setColumnMap(column.title);
     const todoColumn = new TodoColumn({
       id: column.id,
       uuid: `column-${column.id}`,
       status: column.title,
-      title: todoColumnMap.get(column.title),
+      title: getColumnMap(column.title),
       date: new Date(),
     });
 
