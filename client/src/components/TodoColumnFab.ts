@@ -17,7 +17,6 @@ export default class TodoColumnFab {
   };
 
   handleAddColumn = async () => {
-    // column add api
     await api.postOrPatchColumnFetch('', { title: this.title });
     // response status 200 ? => column View Add
   };
