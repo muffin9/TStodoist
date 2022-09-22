@@ -23,7 +23,7 @@ export const home = (req, res) => {
             // const avatarurl = '';
 
             const userId = await findIdByUser({provider: oauthProvider, email});
-            const [ columns ] = await connection.query(`SELECT id, title FROM columns where user_id='${userId}';`);
+            const [ columns ] = await connection.query(`SELECT * FROM columns where user_id='${userId}';`);
             const [ todos ] = await connection.query(`SELECT * FROM todos where column_id in (select id from columns where user_id='${userId}');`);
             const [ actions ] = await connection.query(`SELECT * FROM actions where user_id='${userId}' and is_deleted=false`)
             return res.json({

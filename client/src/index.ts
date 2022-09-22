@@ -5,7 +5,6 @@ import TodoCard from '@/components/TodoCard';
 import TodoColumn from '@/components/TodoColumn';
 import TodoColumnFab from '@/components/TodoColumnFab';
 import TodoHeader from '@/components/TodoHeader';
-import { getColumnMap, setColumnMap } from '@/constants/todo';
 import api from '@/helpers/api';
 import IColumn from '@/interface/IColumn';
 import ITodo from '@/interface/ITodo';
@@ -13,18 +12,17 @@ import { $$ } from '@/utils/dom';
 
 const root = $$('root') as HTMLElement;
 
-const createTodos = (column: IColumn, todos: ITodo[]) => {
+const createTodos = (columnId: string, todos: ITodo[]) => {
   todos.forEach((todo: ITodo) => {
     const newTodo = new TodoCard({
-      id: todo.id,
       uuid: todo.uuid,
-      columnId: column.id,
+      columnId: columnId,
       title: todo.title,
       content: todo.content,
       status: todo.status,
       date: todo.date,
     });
-    $$(column.uuid)!.insertAdjacentHTML('beforeend', newTodo.render());
+    $$(columnId)?.insertAdjacentHTML('beforeend', newTodo.render());
     newTodo.registerEventListener();
   });
 };
@@ -34,13 +32,11 @@ const createColumns = async (columns: IColumn[], todos: ITodo[]) => {
   columnWrapperElement.classList.add('column-wrapper');
   root.appendChild(columnWrapperElement);
 
-  columns.forEach((column: { id: number; title: string }) => {
-    setColumnMap(column.title);
+  columns.forEach((column: { uuid: string; title: string }) => {
     const todoColumn = new TodoColumn({
-      id: column.id,
-      uuid: `column-${column.id}`,
+      uuid: column.uuid,
       status: column.title,
-      title: getColumnMap(column.title),
+      title: column.title,
       date: new Date(),
     });
 
@@ -51,7 +47,7 @@ const createColumns = async (columns: IColumn[], todos: ITodo[]) => {
     todoColumn.setCount(todoData.length);
     columnWrapperElement.insertAdjacentHTML('beforeend', todoColumn.render());
     todoColumn.registerEventListener();
-    createTodos(todoColumn, todoData);
+    createTodos(todoColumn.uuid, todoData);
   });
 };
 

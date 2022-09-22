@@ -41,9 +41,9 @@ export const createUser = async (newUser) => {
         const id = user.insertId;
 
         const columnValues = [
-            [createuuid(), 'todo', id],
-            [createuuid(), 'doing', id],
-            [createuuid(), 'done', id]
+            [createuuid(), '해야할 일', id],
+            [createuuid(), '하고있는 일', id],
+            [createuuid(), '완료한 일', id]
         ];
 
         // create set default columns(todo, doing, done)

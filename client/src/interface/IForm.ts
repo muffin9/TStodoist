@@ -1,9 +1,7 @@
 export default interface IForm {
-  id?: number;
+  columnId: string;
 
-  columnId: number;
-
-  uuid?: string;
+  uuid: string;
 
   title?: string;
 
