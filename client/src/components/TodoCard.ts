@@ -5,7 +5,6 @@ import GlobalModal from '@/components/GlobalModal';
 import api from '@/helpers/api';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
-import { newID } from '@/utils/util';
 
 export default class TodoCard {
   id: number;
@@ -79,7 +78,6 @@ export default class TodoCard {
 
   handleDeleteTodo = async () => {
     const actionData = {
-      uuid: newID(),
       title: this.title,
       status: this.status,
       type: 'delete',
