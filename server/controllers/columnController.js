@@ -17,7 +17,9 @@ export const findColumnByuuid = async (uuid) => {
 }
 
 export const postColumn = async (req, res) => {
-    const { email, oauthProvider } = req.user;
+    // const { email, oauthProvider } = req.user;
+    const email = 'jinlog9@gmail.com';
+    const oauthProvider = 'google';
     const connection = await pool.getConnection(async conn => conn);
 
     try {
