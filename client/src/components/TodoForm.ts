@@ -149,9 +149,9 @@ export default class TodoForm {
           const newAction = await api.postActionFetch(actionData);
           const newTodo = await api.postOrPatchTodoFetch(todoId, cardData);
 
-          if (newTodo.data && newAction) {
+          if (newTodo && newAction) {
             // response todo
-            const newCard = new TodoCard(newTodo.data);
+            const newCard = new TodoCard(newTodo);
 
             // Column 뒤에 붙이기
             $columnElement

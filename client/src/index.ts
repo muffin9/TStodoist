@@ -53,6 +53,7 @@ const createColumns = async (columns: IColumn[], todos: ITodo[]) => {
 
 const app = async () => {
   const response = await api.fetch();
+  if (!response) return;
   const header = new TodoHeader({
     email: response.email,
     avatarurl: response.avatarurl,
