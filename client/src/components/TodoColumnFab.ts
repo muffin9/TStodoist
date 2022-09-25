@@ -23,8 +23,8 @@ export default class TodoColumnFab {
       title: this.title,
     });
 
-    if (newColumn.data) {
-      const column = new TodoColumn(newColumn.data);
+    if (newColumn.id) {
+      const column = new TodoColumn(newColumn);
       $$('root')
         ?.querySelector('.column-wrapper')
         ?.insertAdjacentHTML('beforeend', column.render());
