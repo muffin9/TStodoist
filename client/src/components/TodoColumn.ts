@@ -1,5 +1,6 @@
 import GlobalModal from '@/components/GlobalModal';
 import TodoForm from '@/components/TodoForm';
+import { DUPLICATE_COLUMN_TEXT } from '@/constants/modal';
 import api from '@/helpers/api';
 import IColumn from '@/interface/IColumn';
 import { $, $$ } from '@/utils/dom';
@@ -125,8 +126,7 @@ export default class TodoColumn {
         } else {
           const modalElement = $('.modal-wrapper');
           if (!modalElement && this.title === this.changeTitle) {
-            const modalContent =
-              '이전 칼럼명과 동일하거나 또는 중복된 칼럼명 입니다.';
+            const modalContent = DUPLICATE_COLUMN_TEXT;
             const globalModal = new GlobalModal(modalContent, () => {});
             globalModal.addBody();
             globalModal.registerEventListener();

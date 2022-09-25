@@ -1,6 +1,8 @@
 import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/actionStore';
 import { Trash } from '@/assets';
 import GlobalModal from '@/components/GlobalModal';
+import { DELETE_ACTION_TEXT } from '@/constants/modal';
+import { API_SUCCESS_CODE } from '@/constants/statusCode';
 import api from '@/helpers/api';
 import IAction from '@/interface/IAction';
 import { $$ } from '@/utils/dom';
@@ -51,7 +53,7 @@ export default class TodoAction {
       const $trashIcon = this.element.querySelector('.action--trash');
       if ($trashIcon) {
         $trashIcon.addEventListener('click', () => {
-          const modalContent = '액션을 삭제 하시겠습니까?';
+          const modalContent = DELETE_ACTION_TEXT;
           const globalModal = new GlobalModal(
             modalContent,
             this.handleDeleteAction,
@@ -74,7 +76,7 @@ export default class TodoAction {
     });
 
     const responseStatus = await api.deleteActionFetch(this.uuid);
-    if (responseStatus === 200) {
+    if (responseStatus === API_SUCCESS_CODE) {
       this.element?.remove();
     }
   };

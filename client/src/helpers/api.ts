@@ -1,4 +1,5 @@
 const API_END_POINT = 'http://127.0.0.1:3000';
+import { API_AUTH_DENINED } from '@/constants/statusCode';
 import { ActionPostParams } from '@/types/action';
 import { ColumnPostParams } from '@/types/column';
 import { TodoPostParams } from '@/types/todo';
@@ -8,8 +9,9 @@ const request = async () => {
   try {
     const response = await fetch(`${API_END_POINT}/datas`);
 
-    if (response.status === 504) {
+    if (response.status === API_AUTH_DENINED) {
       window.location.href = '/login';
+      return;
     }
 
     if (!response.ok) {
@@ -35,8 +37,9 @@ const postOrPatchTodoRequest = async (uuid: string, data: TodoPostParams) => {
       body: JSON.stringify(data),
     });
 
-    if (response.status === 504) {
+    if (response.status === API_AUTH_DENINED) {
       window.location.href = '/login';
+      return;
     }
 
     if (!response.ok) {
@@ -55,8 +58,9 @@ const deleteTodoRequest = async (uuid: string) => {
       method: 'DELETE',
     });
 
-    if (response.status === 504) {
+    if (response.status === API_AUTH_DENINED) {
       window.location.href = '/login';
+      return;
     }
 
     if (!response.ok) {
@@ -79,15 +83,16 @@ const postActionRequest = async (data: ActionPostParams) => {
       body: JSON.stringify(data),
     });
 
-    if (response.status === 504) {
+    if (response.status === API_AUTH_DENINED) {
       window.location.href = '/login';
+      return;
     }
 
     if (!response.ok) {
       throw new Error('HTTP Error');
     }
 
-    return response.status;
+    return await response.json();
   } catch (err: unknown) {
     reportError({ message: getErrorMessage(err) });
   }
@@ -102,13 +107,15 @@ const deleteActionRequest = async (uuid: string) => {
       },
     });
 
-    if (response.status === 504) {
+    if (response.status === API_AUTH_DENINED) {
       window.location.href = '/login';
+      return;
     }
 
     if (!response.ok) {
       throw new Error('HTTP Error');
     }
+
     return response.status;
   } catch (err: unknown) {
     reportError({ message: getErrorMessage(err) });
@@ -131,8 +138,9 @@ const postOrPatchColumnRequest = async (
       body: JSON.stringify(data),
     });
 
-    if (response.status === 504) {
+    if (response.status === API_AUTH_DENINED) {
       window.location.href = '/login';
+      return;
     }
 
     if (!response.ok) {

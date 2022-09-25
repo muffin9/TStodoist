@@ -2,6 +2,7 @@ import TodoForm from './TodoForm';
 
 import actionStore, { ADD_ACTION } from '@/actionStore';
 import GlobalModal from '@/components/GlobalModal';
+import { API_SUCCESS_CODE } from '@/constants/statusCode';
 import api from '@/helpers/api';
 import ITodo from '@/interface/ITodo';
 import { $$ } from '@/utils/dom';
@@ -90,7 +91,7 @@ export default class TodoCard {
     ]);
 
     // view 에서 해당 카드 삭제
-    if (responseStatus.every(status => status === 200)) {
+    if (responseStatus.every(status => status === API_SUCCESS_CODE)) {
       this.element?.remove();
     }
   };
