@@ -1,5 +1,7 @@
 import './style/index.scss';
 
+import countStore, { SET_COUNTS } from './store/todoCountStore';
+
 import actionStore, { DRAW_ACTION, SET_ACTIONS } from '@/actionStore';
 import TodoCard from '@/components/TodoCard';
 import TodoColumn from '@/components/TodoColumn';
@@ -44,7 +46,14 @@ const createColumns = async (columns: IColumn[], todos: ITodo[]) => {
       (todo: ITodo) => todo.status === column.title,
     );
 
-    todoColumn.setCount(todoData.length);
+    countStore.dispatch({
+      type: SET_COUNTS,
+      newCounts: {
+        uuid: column.uuid,
+        title: column.title,
+        count: todoData.length,
+      },
+    });
     columnWrapperElement.insertAdjacentHTML('beforeend', todoColumn.render());
     todoColumn.registerEventListener();
     createTodos(todoColumn.uuid, todoData);

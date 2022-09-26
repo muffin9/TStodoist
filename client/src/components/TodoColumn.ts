@@ -4,6 +4,11 @@ import { DUPLICATE_COLUMN_TEXT } from '@/constants/modal';
 import { API_SUCCESS_CODE } from '@/constants/statusCode';
 import api from '@/helpers/api';
 import IColumn from '@/interface/IColumn';
+import countStore, {
+  ADD_COUNT,
+  MINUS_COUNT,
+  SET_COUNTS,
+} from '@/store/todoCountStore';
 import { $, $$ } from '@/utils/dom';
 
 export default class TodoColumn {
@@ -32,22 +37,34 @@ export default class TodoColumn {
     this.date = state.date;
     this.element = null;
     this.changeTitle = '';
-    this.count = 0;
     this.onModify = false;
     this.onAddForm = false;
+    this.count = 0;
+
+    countStore.subscribe(SET_COUNTS, (todoCount: number) => {
+      return todoCount;
+    });
+    countStore.subscribe(MINUS_COUNT, () => {
+      this.minusCount();
+    });
+    countStore.subscribe(ADD_COUNT, () => {
+      this.addCount();
+    });
   }
 
-  setCount = (count: number) => {
-    this.count = count;
+  minusCount = () => {
+    // 해당 칼럼에 맞는 객체 찾기.
+    // 해당 객체의 count - 1
+    // draw
+    if (this.element) {
+    }
   };
 
   addCount = () => {
-    this.count += 1;
+    // 해당 칼럼에 맞는 객체 찾기.
+    // 해당 객체의 count + 1
+    // draw
     if (this.element) {
-      const countElement = this.element.querySelector('.column__count');
-      if (countElement) {
-        countElement.innerHTML = this.count.toString();
-      }
     }
   };
 
