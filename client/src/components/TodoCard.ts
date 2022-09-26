@@ -132,7 +132,7 @@ export default class TodoCard {
     return /* html */ `
       <article class="card-wrapper" id="${this.uuid}">
         <div class="card__delete">
-          <img class="card__delete--img" />
+          <div class="card__delete--img"></div>
         </div>
         <h1 class="card__title">
         ${this.title}

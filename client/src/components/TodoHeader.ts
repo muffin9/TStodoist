@@ -64,6 +64,8 @@ export default class TodoHeader {
         const $actionWrapper = $('.action-wrapper');
 
         if ($actionWrapper) {
+          const $actionContainer = $('.action-container');
+          $actionContainer?.classList.remove('action-overlay');
           $actionWrapper.classList.toggle('action-translated');
         }
       });
@@ -79,6 +81,8 @@ export default class TodoHeader {
           const $actionWrapper = $('.action-wrapper') as HTMLElement;
 
           if ($actionWrapper) {
+            const $actionContainer = $('.action-container');
+            $actionContainer?.classList.add('action-overlay');
             $actionWrapper.classList.toggle('action-translated');
           }
         }
@@ -110,10 +114,12 @@ export default class TodoHeader {
               </nav>
             </div>
         </header>
-        <article class="action-wrapper action-translated">
-          <button class="action--close">X</button>
-          <div class="action"></div>
-        </article>
+        <div class="action-container">
+          <article class="action-wrapper action-translated">
+            <div class="action--close"></div>
+            <div class="action"></div>
+          </article>
+        </div>
     `;
   };
 }
