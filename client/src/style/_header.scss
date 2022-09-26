@@ -6,7 +6,7 @@
   top: 0;
   left: 0;
   right: 0;
-  @include flexbox($justify-content: space-between);
+  @include flexbox($justify-content: space-between, $align-items: center);
   box-shadow: 0px 4px 10px rgba(51, 51, 51, 0.1),
     0px 0px 4px rgba(51, 51, 51, 0.05);
   background-color: $color-white;
@@ -16,10 +16,14 @@
     font-weight: 400;
   }
 
+  .header__infos {
+    @include flexbox($align-items: center);
+    gap: 5rem;
+  }
+
   .header__user {
     @include flexbox($align-items: center);
     gap: 1rem;
-    margin-right: 1rem;
   }
 
   .header__avatar {
@@ -34,10 +38,14 @@
   }
 
   .header__logout-btn {
-    font-size: $font-14;
     border-radius: 1rem;
     border: 1px solid $color-black;
+    color: $color-black;
     cursor: pointer;
+
+    &:hover {
+      opacity: 0.6;
+    }
   }
 
   .header__menu {

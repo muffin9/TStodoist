@@ -23,12 +23,14 @@
     }
 
     &__count {
+      @include flexbox($justify-content: center, $align-items: center);
       width: 1.625rem;
       height: 1.625rem;
       background: $color-grey;
       border-radius: 50%;
-      text-align: center;
-      line-height: 1.625rem;
+      overflow: hidden;
+      color: $color-white;
+      font-size: $font-14;
     }
 
     &__right {
