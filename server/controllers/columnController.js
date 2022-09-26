@@ -7,7 +7,7 @@ export const findColumnByuuid = async (uuid) => {
 
     try {
         const [ column ] = await connection.query(`SELECT * FROM columns WHERE uuid='${uuid}'`);
-        if(!column.length) return res.sendStats(500);
+        if(!column.length) return res.sendStatus(500);
         return column;
     } catch(err) {
         console.log(`query Error is ${err}...`);
@@ -64,7 +64,7 @@ export const patchColumn = async (req, res) => {
     const connection = await pool.getConnection(async conn => conn);
     try {
         const uuid = req.params.uuid;
-        if(!uuid) return res.sendStats(500);
+        if(!uuid) return res.sendStatus(500);
 
         const column = {
             title: req.body.title
@@ -81,6 +81,24 @@ export const patchColumn = async (req, res) => {
         await connection.commit();
         const newColumn = await findColumnByuuid(uuid);
         return res.json(newColumn[0]);
+    } catch (err) {
+        console.log(`query Error is ${err}...`);
+    } finally {
+        connection.release();
+    }
+}
+
+export const deleteColumn = async (req, res) => {
+    const connection = await pool.getConnection(async conn => conn);
+    try {
+        const uuid = req.params.uuid;
+        if(!uuid) return res.sendStatus(500);
+        await connection.beginTransaction();
+        await connection.query(`UPDATE columns SET is_deleted=1 WHERE uuid='${uuid}'`);
+        const columnId = await findColumnIdByuuid(uuid);
+        await connection.query(`UPDATE todos SET is_deleted=1 WHERE column_id='${columnId}'`);
+        await connection.commit();
+        return res.sendStatus(200);
     } catch (err) {
         console.log(`query Error is ${err}...`);
     } finally {

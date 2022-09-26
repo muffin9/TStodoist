@@ -1,6 +1,7 @@
 import GlobalModal from '@/components/GlobalModal';
 import TodoForm from '@/components/TodoForm';
 import { DUPLICATE_COLUMN_TEXT } from '@/constants/modal';
+import { API_SUCCESS_CODE } from '@/constants/statusCode';
 import api from '@/helpers/api';
 import IColumn from '@/interface/IColumn';
 import { $, $$ } from '@/utils/dom';
@@ -170,10 +171,36 @@ export default class TodoColumn {
     }
   };
 
+  handleDeleteColumn = async () => {
+    const responseStatus = await api.deleteColumnFetch(this.uuid);
+
+    if (responseStatus === API_SUCCESS_CODE) {
+      this.element?.remove();
+    }
+  };
+
+  handleDeleteIconClick = () => {
+    if (this.element) {
+      const $deleteIcon = this.element.querySelector('.column__delete');
+      if ($deleteIcon) {
+        $deleteIcon.addEventListener('click', () => {
+          const modalContent = `<div>${this.title} 컬럼을 삭제하시겠습니까? <br /> ⚠️ 연관된 Todo들이 모두 삭제됩니다.</div>`;
+          const globalModal = new GlobalModal(
+            modalContent,
+            this.handleDeleteColumn,
+          );
+          globalModal.addBody();
+          globalModal.registerEventListener();
+        });
+      }
+    }
+  };
+
   registerEventListener = () => {
     this.element = $$(this.uuid);
     this.handleColumnDbClick();
     this.handleColumnClick();
+    this.handleDeleteIconClick();
   };
 
   render = () => {

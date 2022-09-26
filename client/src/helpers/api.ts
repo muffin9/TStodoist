@@ -153,6 +153,27 @@ const postOrPatchColumnRequest = async (
   }
 };
 
+const deleteColumnRequest = async (uuid: string) => {
+  try {
+    const response = await fetch(`${API_END_POINT}/column/${uuid}`, {
+      method: 'DELETE',
+    });
+
+    if (response.status === API_AUTH_DENINED) {
+      window.location.href = '/login';
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error('HTTP Error');
+    }
+
+    return response.status;
+  } catch (err: unknown) {
+    reportError({ message: getErrorMessage(err) });
+  }
+};
+
 const api = {
   fetch() {
     return request();
@@ -176,6 +197,10 @@ const api = {
 
   postOrPatchColumnFetch(uuid: string, data: ColumnPostParams) {
     return postOrPatchColumnRequest(uuid, data);
+  },
+
+  deleteColumnFetch(uuid: string) {
+    return deleteColumnRequest(uuid);
   },
 };
 

@@ -73,7 +73,7 @@ export const deleteTodo = async (req, res) => {
         const uuid = req.params.uuid;
         if(!uuid) return res.sendStatus(500);
         await connection.beginTransaction();
-        await connection.query(`DELETE FROM todos WHERE uuid='${uuid}'`);
+        await connection.query(`UPDATE todos SET is_deleted=1 WHERE uuid='${uuid}'`);
         await connection.commit();
         return res.sendStatus(200);
     } catch (err) {
