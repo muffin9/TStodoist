@@ -17,12 +17,7 @@ export const home = (req, res) => {
         const { email, oauthProvider, avatarurl } = req.user;
         const connection = await pool.getConnection(async conn => conn);
         try {
-            // findBy userEmail...
-            // const email = 'jinlog9@gmail.com';
-            // const oauthProvider = 'google';
-            // const avatarurl = '';
-
-            const userId = await findIdByUser({provider: oauthProvider, email});
+            const userId = await findIdByUser({ provider: oauthProvider, email });
             const [ columns ] = await connection.query(`SELECT * FROM columns where user_id='${userId}' and is_deleted = false;`);
             const [ todos ] = await connection.query(`SELECT * FROM todos where column_id in (select id from columns where user_id='${userId}' and is_deleted=false);`);
             const [ actions ] = await connection.query(`SELECT * FROM actions where user_id='${userId}' and is_deleted=false`)

@@ -13,8 +13,7 @@ passport.use(
         async (request, accessToken, refreshToken, profile, done) => {
             const user = await findUser({
                 provider: profile.provider,
-                email: profile.email,
-                avatarurl: profile.picture
+                email: profile.email
             });
 
             if(!user) {
@@ -34,7 +33,6 @@ passport.use(
 
 
 // login이 최초로 성공했을 때만 호출되는 함수
-// done(null, user.id)로 세션을 초기화 한다.
 passport.serializeUser((user, done) => {
     done(null, user);
 });

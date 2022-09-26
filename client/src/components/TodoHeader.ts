@@ -64,6 +64,8 @@ export default class TodoHeader {
         const $actionWrapper = $('.action-wrapper');
 
         if ($actionWrapper) {
+          const $actionContainer = $('.action-container');
+          $actionContainer?.classList.remove('action-overlay');
           $actionWrapper.classList.toggle('action-translated');
         }
       });
@@ -79,6 +81,8 @@ export default class TodoHeader {
           const $actionWrapper = $('.action-wrapper') as HTMLElement;
 
           if ($actionWrapper) {
+            const $actionContainer = $('.action-container');
+            $actionContainer?.classList.add('action-overlay');
             $actionWrapper.classList.toggle('action-translated');
           }
         }
@@ -95,23 +99,27 @@ export default class TodoHeader {
     return /* html */ `
         <header class="header__main">
             <h1 class="header__logo">TO-DO-LIST</h1>
-            <div class="header__user">
-              <img src="${this.avatarurl}" class="header__avatar" alt="프로필 이미지" />
-              <h3 class="header__email">${this.email}</h3>
-              <a href="/logout">
-                <button class="header__logout-btn">로그아웃</button>
-              </a>
+            <div class="header__infos">
+              <div class="header__user">
+                <img src="${this.avatarurl}" class="header__avatar" alt="프로필 이미지" />
+                <h3 class="header__email">${this.email}</h3>
+                <a href="/logout">
+                  <button class="header__logout-btn">로그아웃</button>
+                </a>
+              </div>
+              <nav class="header__menu">
+                <div></div>
+                <div></div>
+                <div></div>
+              </nav>
             </div>
-            <nav class="header__menu">
-              <div></div>
-              <div></div>
-              <div></div>
-            </nav>
         </header>
-        <article class="action-wrapper action-translated">
-          <button class="action--close">X</button>
-          <div class="action"></div>
-        </article>
+        <div class="action-container">
+          <article class="action-wrapper action-translated">
+            <div class="action--close"></div>
+            <div class="action"></div>
+          </article>
+        </div>
     `;
   };
 }

@@ -11,6 +11,7 @@
     width: 19.25rem;
     height: 2.625rem;
     @include flexbox($justify-content: space-between);
+    margin-bottom: 1.5rem;
 
     &__left {
       gap: 0.3125rem;
@@ -23,34 +24,46 @@
     }
 
     &__count {
+      @include flexbox($justify-content: center, $align-items: center);
       width: 1.625rem;
       height: 1.625rem;
       background: $color-grey;
       border-radius: 50%;
-      text-align: center;
-      line-height: 1.625rem;
+      overflow: hidden;
+      color: $color-white;
+      font-size: $font-14;
     }
 
     &__right {
-      gap: 0.3125rem;
+      gap: 1rem;
       @include flexbox($align-items: center);
     }
 
     &__add {
       color: $color-grey;
       cursor: pointer;
+      width: 1rem;
+      height: 1rem;
       font-size: $font-18;
+      background: url("../assets/plus.svg") no-repeat;
+      background-size: 100% 100%;
       &:hover {
-        color: $color-blue;
+        background: url('../assets/plus_hover.svg') no-repeat;
+        background-size: 100% 100%;
       }
     }
 
     &__delete {
       color: $color-grey;
       cursor: pointer;
-      font-size: $font-18;
+      width: 1rem;
+      height: 1rem;
+      background: url("../assets/close.svg") no-repeat;
+      background-size: 100% 100%;
+
       &:hover {
-        color: $color-red;
+        background: url('../assets/close_hover.svg') no-repeat;
+        background-size: 100% 100%;
       }
     }
   }

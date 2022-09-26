@@ -184,7 +184,7 @@ export default class TodoColumn {
       const $deleteIcon = this.element.querySelector('.column__delete');
       if ($deleteIcon) {
         $deleteIcon.addEventListener('click', () => {
-          const modalContent = `<div>${this.title} 컬럼을 삭제하시겠습니까? <br /> ⚠️ 연관된 Todo들이 모두 삭제됩니다.</div>`;
+          const modalContent = `<div>${this.title} 컬럼을 삭제하시겠습니까?<p class="modal-sub-title">⚠️ 연관된 Todo들이 모두 삭제됩니다.</p></div>`;
           const globalModal = new GlobalModal(
             modalContent,
             this.handleDeleteColumn,
@@ -212,8 +212,8 @@ export default class TodoColumn {
               <div class="column__count">${this.count}</div>
           </div>
           <div class="column__right">
-            <button type="button" class="column__add">+</button>
-            <button type="button" class="column__delete">x</button>
+            <button type="button" class="column__add"></button>
+            <button type="button" class="column__delete"></button>
           </div>
       </nav>
     </div>

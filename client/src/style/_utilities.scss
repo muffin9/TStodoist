@@ -1,9 +1,9 @@
 .bg-sky-blue {
-    background-color: #86C6FF;
+    background-color: $color-blue-light;
 }
 
 .bg-dark-blue {
-    background-color: #584CF4;
+    background-color: $color-blue-dark;
 }
 
 .todo-border {
@@ -12,4 +12,13 @@
 
 .todo-delete-border {
     border: 1px solid $color-red;
+}
+
+.modal-sub-title {
+    color: $color-grey-dark;
+    font-size: $font-14;
+}
+
+.display-none {
+    display: none;
 }

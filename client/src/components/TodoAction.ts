@@ -1,5 +1,4 @@
 import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/actionStore';
-import { Trash } from '@/assets';
 import GlobalModal from '@/components/GlobalModal';
 import { DELETE_ACTION_TEXT } from '@/constants/modal';
 import { API_SUCCESS_CODE } from '@/constants/statusCode';
@@ -50,7 +49,8 @@ export default class TodoAction {
 
   handleTrashIconClick = () => {
     if (this.element) {
-      const $trashIcon = this.element.querySelector('.action--trash');
+      const $trashIcon = this.element.querySelector('.action__header--trash');
+
       if ($trashIcon) {
         $trashIcon.addEventListener('click', () => {
           const modalContent = DELETE_ACTION_TEXT;
@@ -93,7 +93,7 @@ export default class TodoAction {
             <div class="action__contents">
                 <header class="action__header">
                   <p class="action__writer">Muffin</p>
-                  <img src=${Trash} alt="trash icon" class="action--trash" />
+                  <div class="action__header--trash"></div>
                 </header>
                 <p class="action__content">
                   ${this.setContent()}

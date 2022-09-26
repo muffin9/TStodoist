@@ -84,6 +84,7 @@ time,
 mark,
 audio,
 video {
+  font-family: 'Cafe24Oneprettynight', 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
   border: 0;
@@ -109,7 +110,7 @@ section {
 }
 
 body {
-  line-height: 1;
+  font-family: 'Cafe24Oneprettynight', 'Roboto', sans-serif;
 }
 
 ol,
@@ -147,4 +148,9 @@ button {
   border: none;
   outline: none;
   background: transparent;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-family: 'Cafe24Oneprettynight', 'Roboto', sans-serif;
 }

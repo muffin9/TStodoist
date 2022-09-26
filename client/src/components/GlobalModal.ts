@@ -27,10 +27,8 @@ export default class GlobalModal {
 
   handleRemoveModal = () => {
     const $overlay = $('.overlay');
-    const $modalWrapper = $('.modal-wrapper');
-    if ($overlay && $modalWrapper) {
+    if ($overlay) {
       $overlay.remove();
-      $modalWrapper.remove();
     }
   };
 
@@ -44,7 +42,7 @@ export default class GlobalModal {
 
   render() {
     return /* html */ `
-        <div class="overlay"></div>
+      <div class="overlay">
         <div class="modal-wrapper">
             <header class="modal-header">
                 <img class="modal-header--close">
@@ -56,6 +54,7 @@ export default class GlobalModal {
                 <button class="modal-button--cancel">취소</button>
             </div>
         </div>
+      </div>
     `;
   }
 }
