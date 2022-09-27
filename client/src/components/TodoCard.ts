@@ -1,10 +1,11 @@
 import TodoForm from './TodoForm';
 
-import actionStore, { ADD_ACTION } from '@/actionStore';
 import GlobalModal from '@/components/GlobalModal';
 import { API_SUCCESS_CODE } from '@/constants/statusCode';
 import api from '@/helpers/api';
 import ITodo from '@/interface/ITodo';
+import actionStore, { ADD_ACTION } from '@/store/actionStore';
+import countStore, { MINUS_COUNT } from '@/store/todoCountStore';
 import { $$ } from '@/utils/dom';
 
 export default class TodoCard {
@@ -85,14 +86,15 @@ export default class TodoCard {
       payload: actionData,
     });
 
-    const responseStatus = await Promise.all([
-      api.postActionFetch(actionData),
-      api.deleteTodoFetch(this.uuid),
-    ]);
+    const newAction = await api.postActionFetch(actionData);
+    const status = await api.deleteTodoFetch(this.uuid);
 
-    // view 에서 해당 카드 삭제
-    if (responseStatus.every(status => status === API_SUCCESS_CODE)) {
-      this.element?.remove();
+    if (newAction && status === API_SUCCESS_CODE) {
+      countStore.dispatch({ type: MINUS_COUNT, payload: this.columnId });
+
+      if (this.element) {
+        this.element.remove();
+      }
     }
   };
 

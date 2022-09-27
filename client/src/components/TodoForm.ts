@@ -1,8 +1,9 @@
 import TodoCard from './TodoCard';
 
-import actionStore, { ADD_ACTION } from '@/actionStore';
 import api from '@/helpers/api';
 import IForm from '@/interface/IForm';
+import actionStore, { ADD_ACTION } from '@/store/actionStore';
+import countStore, { ADD_COUNT } from '@/store/todoCountStore';
 import { $, $$ } from '@/utils/dom';
 
 export default class TodoForm {
@@ -158,9 +159,10 @@ export default class TodoForm {
               ?.querySelector('.column')
               ?.insertAdjacentHTML('afterend', newCard.render());
             newCard.registerEventListener();
-            // TodoForm remove
+
+            countStore.dispatch({ type: ADD_COUNT, payload: this.columnId });
+
             $formElement.remove();
-            // add count
           }
         });
       }

@@ -1,9 +1,9 @@
-import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/actionStore';
 import GlobalModal from '@/components/GlobalModal';
 import { DELETE_ACTION_TEXT } from '@/constants/modal';
 import { API_SUCCESS_CODE } from '@/constants/statusCode';
 import api from '@/helpers/api';
 import IAction from '@/interface/IAction';
+import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/store/actionStore';
 import { $$ } from '@/utils/dom';
 
 export default class TodoAction {
