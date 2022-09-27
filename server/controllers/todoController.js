@@ -1,13 +1,13 @@
 import pool from '../config/database.js';
 import { createuuid } from '../util/uuid.js';
-import { findColumnIdByuuid } from './columnController.js';
+import { findColumnIdByuuid, findColumnuuidById } from './columnController.js';
 
 export const findTodoByuuid = async (uuid) => {
     const connection = await pool.getConnection(async conn => conn);
 
     try {
         const [ todo ] = await connection.query(`SELECT * FROM todos WHERE uuid='${uuid}'`);
-        if(!todo.length) return res.sendStats(500);
+        if(!todo.length) return res.sendStatus(500);
         return todo;
     } catch(err) {
         console.log(`query Error is ${err}...`);
@@ -35,7 +35,14 @@ export const postTodo = async (req, res) => {
         await connection.query(`INSERT INTO todos (uuid, title, content, status, column_id) VALUES('${todo.uuid}', '${todo.title}', '${todo.content}', '${todo.status}', '${columnId}')`);
         await connection.commit();
         const newTodo = await findTodoByuuid(todo.uuid);
-        return res.json({ data: newTodo[0] });
+        return res.json({
+            uuid: newTodo[0].uuid,
+            columnId: todo.column_id,
+            title: newTodo[0].title,
+            content: newTodo[0].content,
+            status: newTodo[0].status,
+            date: newTodo[0].date,
+        });
     } catch (err) {
         console.log(`query Error is ${err}...`);
     } finally {
@@ -59,7 +66,16 @@ export const patchTodo = async (req, res) => {
         await connection.query(`UPDATE todos SET title='${todo.title}', content='${todo.content}' WHERE uuid='${uuid}' `);
         await connection.commit();
         const newTodo = await findTodoByuuid(uuid);
-        return res.json({ data: newTodo[0] });
+        const columnuuid = await findColumnuuidById(newTodo[0].column_id);
+        
+        return res.json({
+            uuid: newTodo[0].uuid,
+            columnId: columnuuid,
+            title: newTodo[0].title,
+            content: newTodo[0].content,
+            status: newTodo[0].status,
+            date: newTodo[0].date,
+        });
     } catch (err) {
         console.log(`query Error is ${err}...`);
     } finally {

@@ -1,11 +1,11 @@
+import TodoAction from '@/components/TodoAction';
+import IAction from '@/interface/IAction';
+import IUser from '@/interface/IUser';
 import actionStore, {
   ADD_ACTION,
   SET_ACTIONS,
   DRAW_ACTION,
-} from '@/actionStore';
-import TodoAction from '@/components/TodoAction';
-import IAction from '@/interface/IAction';
-import IUser from '@/interface/IUser';
+} from '@/store/actionStore';
 import { $ } from '@/utils/dom';
 
 export default class TodoHeader {
@@ -20,9 +20,7 @@ export default class TodoHeader {
     this.email = email;
     this.avatarurl = avatarurl;
 
-    actionStore.subscribe(SET_ACTIONS, (newActions: IAction[]) => {
-      return newActions;
-    });
+    actionStore.subscribe(SET_ACTIONS, () => {});
     actionStore.subscribe(DRAW_ACTION, () => {
       this.drawAction();
     });
@@ -31,7 +29,7 @@ export default class TodoHeader {
     });
   }
 
-  drawAction = async () => {
+  drawAction = () => {
     const $action = $('.action');
     const actions = actionStore.getState();
     if ($action) $action.innerHTML = '';
@@ -45,7 +43,7 @@ export default class TodoHeader {
     });
   };
 
-  addAction = async () => {
+  addAction = () => {
     const lastValue = actionStore.getState().slice(-1)[0];
     const todoAction = new TodoAction(lastValue);
     const $action = $('.action');
@@ -98,7 +96,9 @@ export default class TodoHeader {
   render = () => {
     return /* html */ `
         <header class="header__main">
-            <h1 class="header__logo">TO-DO-LIST</h1>
+            <h1 class="header__logo">
+              <a class="header__link" href="/">TO-DO-LIST</a>
+            </h1>
             <div class="header__infos">
               <div class="header__user">
                 <img src="${this.avatarurl}" class="header__avatar" alt="프로필 이미지" />

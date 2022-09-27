@@ -29,10 +29,21 @@ export const findColumnIdByuuid = async (uuid) => {
     }
 }
 
+export const findColumnuuidById = async (id) => {
+    const connection = await pool.getConnection(async conn => conn);
+
+    try {
+        const [ column ] = await connection.query(`SELECT uuid FROM columns WHERE id='${id}'`);
+        return column[0] ? column[0].uuid : '';
+    } catch(err) {
+        console.log(`query Error is ${err}...`);
+    } finally {
+        connection.release();
+    }
+}
+
 export const postColumn = async (req, res) => {
-    // const { email, oauthProvider } = req.user;
-    const email = 'jinlog9@gmail.com';
-    const oauthProvider = 'google';
+    const { email, oauthProvider } = req.user;
     const connection = await pool.getConnection(async conn => conn);
 
     try {

@@ -32,24 +32,10 @@ export default class TodoColumn {
     this.date = state.date;
     this.element = null;
     this.changeTitle = '';
-    this.count = 0;
     this.onModify = false;
     this.onAddForm = false;
+    this.count = state.count || 0;
   }
-
-  setCount = (count: number) => {
-    this.count = count;
-  };
-
-  addCount = () => {
-    this.count += 1;
-    if (this.element) {
-      const countElement = this.element.querySelector('.column__count');
-      if (countElement) {
-        countElement.innerHTML = this.count.toString();
-      }
-    }
-  };
 
   toggleModifyValue = () => {
     this.onModify = !this.onModify;
