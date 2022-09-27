@@ -1,10 +1,11 @@
+import IAction from '@/interface/IAction';
 import createStore from '@/store';
 
 export const ADD_ACTION = 'ADD_ACTION';
 export const DRAW_ACTION = 'DRAW_ACTION';
 export const SET_ACTIONS = 'SET_ACTIONS';
 
-const reducer = (state, action) => {
+const reducer = (state: IAction[], action: any) => {
   switch (action.type) {
     case ADD_ACTION:
       return [...state, action.payload];
@@ -17,7 +18,7 @@ const reducer = (state, action) => {
   }
 };
 
-const initialState = [];
+const initialState: Array<IAction> = [];
 
 const actionStore = createStore(initialState, reducer);
 

@@ -35,7 +35,7 @@ export const postTodo = async (req, res) => {
         await connection.query(`INSERT INTO todos (uuid, title, content, status, column_id) VALUES('${todo.uuid}', '${todo.title}', '${todo.content}', '${todo.status}', '${columnId}')`);
         await connection.commit();
         const newTodo = await findTodoByuuid(todo.uuid);
-        return res.json({ data: newTodo[0] });
+        return res.json(newTodo[0]);
     } catch (err) {
         console.log(`query Error is ${err}...`);
     } finally {
@@ -59,7 +59,7 @@ export const patchTodo = async (req, res) => {
         await connection.query(`UPDATE todos SET title='${todo.title}', content='${todo.content}' WHERE uuid='${uuid}' `);
         await connection.commit();
         const newTodo = await findTodoByuuid(uuid);
-        return res.json({ data: newTodo[0] });
+        return res.json(newTodo[0]);
     } catch (err) {
         console.log(`query Error is ${err}...`);
     } finally {

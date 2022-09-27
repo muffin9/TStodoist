@@ -3,4 +3,5 @@ export default interface IColumn {
   title: string;
   status: string;
   date: Date;
+  count?: number;
 }
