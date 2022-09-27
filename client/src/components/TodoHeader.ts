@@ -9,14 +9,11 @@ import actionStore, {
 import { $ } from '@/utils/dom';
 
 export default class TodoHeader {
-  clicked: boolean;
-
   email: string;
 
   avatarurl: string;
 
   constructor({ email, avatarurl }: IUser) {
-    this.clicked = false;
     this.email = email;
     this.avatarurl = avatarurl;
 
@@ -53,12 +50,23 @@ export default class TodoHeader {
     }
   };
 
+  handleOutSideClick = () => {
+    const $actionContainer = $('.action-container');
+    $actionContainer?.addEventListener('click', (e: any) => {
+      const $actionWrapper = $('.action-wrapper');
+
+      if ($actionWrapper && e.target.classList.contains('action-overlay')) {
+        $actionContainer?.classList.remove('action-overlay');
+        $actionWrapper.classList.toggle('action-translated');
+      }
+    });
+  };
+
   handleCancelClick = () => {
     const $actionClose = $('.action--close');
 
     if ($actionClose) {
       $actionClose.addEventListener('click', () => {
-        this.clicked = false;
         const $actionWrapper = $('.action-wrapper');
 
         if ($actionWrapper) {
@@ -74,15 +82,12 @@ export default class TodoHeader {
     const $headerMenu = $('.header__menu');
     if ($headerMenu) {
       $headerMenu.addEventListener('click', () => {
-        this.clicked = true;
-        if (this.clicked) {
-          const $actionWrapper = $('.action-wrapper') as HTMLElement;
+        const $actionWrapper = $('.action-wrapper') as HTMLElement;
 
-          if ($actionWrapper) {
-            const $actionContainer = $('.action-container');
-            $actionContainer?.classList.add('action-overlay');
-            $actionWrapper.classList.toggle('action-translated');
-          }
+        if ($actionWrapper) {
+          const $actionContainer = $('.action-container');
+          $actionContainer?.classList.add('action-overlay');
+          $actionWrapper.classList.toggle('action-translated');
         }
       });
     }
@@ -91,6 +96,7 @@ export default class TodoHeader {
   registerEventListener = () => {
     this.handleMenuClick();
     this.handleCancelClick();
+    this.handleOutSideClick();
   };
 
   render = () => {
