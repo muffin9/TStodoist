@@ -160,7 +160,9 @@ export default class TodoForm {
               ?.insertAdjacentHTML('afterend', newCard.render());
             newCard.registerEventListener();
 
-            countStore.dispatch({ type: ADD_COUNT, payload: this.columnId });
+            if (this.type === 'add') {
+              countStore.dispatch({ type: ADD_COUNT, payload: this.columnId });
+            }
 
             $formElement.remove();
           }
