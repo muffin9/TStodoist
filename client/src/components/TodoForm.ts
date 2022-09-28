@@ -140,9 +140,6 @@ export default class TodoForm {
             subject: 'todo',
           };
 
-          // set Action
-          actionStore.dispatch({ type: ADD_ACTION, payload: actionData });
-
           let todoId = '';
           if (this.type === 'modify') {
             todoId = this.uuid;
@@ -152,6 +149,8 @@ export default class TodoForm {
           const newTodo = await api.postOrPatchTodoFetch(todoId, cardData);
 
           if (newTodo && newAction) {
+            // set Action
+            actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
             // response todo
             const newCard = new TodoCard(newTodo);
 

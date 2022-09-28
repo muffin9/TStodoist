@@ -8,27 +8,24 @@ import { $, $$ } from '@/utils/dom';
 export default class TodoColumnFab {
   title: string;
 
-  changeTitle: string;
-
   constructor() {
     this.title = '';
-    this.changeTitle = '';
   }
 
   handleChangeColumnValue = () => {
     $('.fab__input-header')?.addEventListener('keyup', e => {
       const target = e.target as HTMLInputElement;
-      this.changeTitle = target.value;
+      this.title = target.value;
     });
   };
 
   handleAddColumn = async () => {
     const newColumn = await api.postOrPatchColumnFetch('', {
-      title: this.changeTitle,
+      title: this.title,
     });
 
     const actionData = {
-      title: this.changeTitle,
+      title: this.title,
       status: this.title,
       type: 'add',
       subject: 'column',
@@ -36,10 +33,10 @@ export default class TodoColumnFab {
 
     const newAction = await api.postActionFetch(actionData);
 
-    // set Action
-    actionStore.dispatch({ type: ADD_ACTION, payload: actionData });
-
     if (newColumn && newAction) {
+      // set Action
+      actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
+
       const column = new TodoColumn(newColumn);
       $$('root')
         ?.querySelector('.column-wrapper')

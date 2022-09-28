@@ -46,7 +46,8 @@ export default class TodoHeader {
     const $action = $('.action');
 
     if ($action) {
-      $action.insertAdjacentHTML('afterend', todoAction.render());
+      $action.insertAdjacentHTML('beforeend', todoAction.render());
+      todoAction.registerEventListener();
     }
   };
 
