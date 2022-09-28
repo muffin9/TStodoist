@@ -45,11 +45,11 @@ export default class TodoAction {
   setTodoContent = () => {
     switch (this.type) {
       case 'add':
-        return `📜 ${this.status}에 ${this.title}을 등록하였습니다.`;
+        return `📜 ${this.status}칼럼에 ${this.title}을 등록하였습니다.`;
       case 'modify':
-        return `📜 ${this.status}의 ${this.title}와 ${this.content}로 수정되었습니다.`;
+        return `📜 ${this.status}칼럼의 제목: ${this.title}와 내용: ${this.content}로 수정되었습니다.`;
       case 'delete':
-        return `🗑 ${this.status}의 ${this.title}이 삭제되었습니다.`;
+        return `🗑 ${this.status}칼럼의 ${this.title}이 삭제되었습니다.`;
       case 'drag':
         return '';
 
@@ -61,11 +61,11 @@ export default class TodoAction {
   setColumnContent = () => {
     switch (this.type) {
       case 'add':
-        return `🚧 ${this.status} ${this.title}를 등록하였습니다.`;
+        return `🚧 컬럼${this.title}를 등록하였습니다.`;
       case 'modify':
         return `🚧 ${this.status}컬럼이 ${this.title}로 수정되었습니다.`;
       case 'delete':
-        return `🗑 ${this.status}이 삭제되었습니다.`;
+        return `🗑 컬럼${this.title}이 삭제되었습니다.`;
       case 'drag':
         return '';
 

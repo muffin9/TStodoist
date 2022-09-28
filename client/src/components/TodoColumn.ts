@@ -138,15 +138,15 @@ export default class TodoColumn {
             subject: 'column',
           };
 
-          // set Action
-          actionStore.dispatch({ type: ADD_ACTION, payload: actionData });
-
           const newAction = await api.postActionFetch(actionData);
           const newColumn = await api.postOrPatchColumnFetch(this.uuid, {
             title: this.changeTitle,
           });
 
           if (newColumn.id && newAction) {
+            // set Action
+            actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
+
             document.removeEventListener(
               'click',
               this.handleOnClickOutside,
@@ -177,15 +177,11 @@ export default class TodoColumn {
       subject: 'column',
     };
 
-    actionStore.dispatch({
-      type: ADD_ACTION,
-      payload: actionData,
-    });
-
     const newAction = await api.postActionFetch(actionData);
     const newColumnStatus = await api.deleteColumnFetch(this.uuid);
 
     if (newAction && newColumnStatus === API_SUCCESS_CODE) {
+      actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
       this.element?.remove();
     }
   };

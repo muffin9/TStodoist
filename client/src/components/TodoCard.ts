@@ -82,15 +82,11 @@ export default class TodoCard {
       subject: 'todo',
     };
 
-    actionStore.dispatch({
-      type: ADD_ACTION,
-      payload: actionData,
-    });
-
     const newAction = await api.postActionFetch(actionData);
     const status = await api.deleteTodoFetch(this.uuid);
 
     if (newAction && status === API_SUCCESS_CODE) {
+      actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
       countStore.dispatch({ type: MINUS_COUNT, payload: this.columnId });
 
       if (this.element) {
