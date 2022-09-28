@@ -121,12 +121,10 @@ export default class TodoHeader {
               </nav>
             </div>
         </header>
-        <div class="action-container">
-          <article class="action-wrapper action-translated">
-            <div class="action--close"></div>
-            <div class="action"></div>
-          </article>
-        </div>
+        <article class="action-wrapper action-translated">
+          <div class="action--close"></div>
+          <div class="action"></div>
+        </article>
     `;
   };
 }

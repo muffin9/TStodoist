@@ -1,12 +1,13 @@
 .column-wrapper {
-  @include flexbox();
+  @include flexbox($justify-content: space-between);
+  flex-wrap: wrap;
+  row-gap: 5rem;
   width: 100%;
-  margin-top: 8.5rem;
+  margin-top: 2rem;
+  padding: 0 5rem;
 }
 
 .column-list {
-  margin-right: 1.25rem;
-
   .column {
     width: 19.25rem;
     height: 2.625rem;
