@@ -1,11 +1,13 @@
 import './style/index.scss';
 
+import { subscribeAction } from './helpers/subscribeAction';
+
 import TodoCard from '@/components/TodoCard';
 import TodoColumn from '@/components/TodoColumn';
 import TodoColumnFab from '@/components/TodoColumnFab';
 import TodoHeader from '@/components/TodoHeader';
 import api from '@/helpers/api';
-import { subscribeCountStore } from '@/helpers/subscribe';
+import { subscribeCount } from '@/helpers/subscribeCount';
 import IColumn from '@/interface/IColumn';
 import ICount from '@/interface/ICount';
 import ITodo from '@/interface/ITodo';
@@ -73,11 +75,12 @@ const app = async () => {
     avatarurl: response.avatarurl,
   });
 
-  subscribeCountStore();
+  subscribeAction();
+  subscribeCount();
 
   root.insertAdjacentHTML('beforeend', header.render());
-
   header.registerEventListener();
+
   actionStore.dispatch({ type: SET_ACTIONS, newActions: response.actions });
   actionStore.dispatch({ type: DRAW_ACTION });
   createColumns(response.columns, response.todos);

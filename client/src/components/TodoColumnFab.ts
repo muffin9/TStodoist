@@ -37,7 +37,7 @@ export default class TodoColumnFab {
       // set Action
       actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
 
-      const column = new TodoColumn(newColumn);
+      const column = new TodoColumn({ ...newColumn, status: newColumn.title });
       $$('root')
         ?.querySelector('.column-wrapper')
         ?.insertAdjacentHTML('beforeend', column.render());

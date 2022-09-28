@@ -1,11 +1,4 @@
-import TodoAction from '@/components/TodoAction';
-import IAction from '@/interface/IAction';
 import IUser from '@/interface/IUser';
-import actionStore, {
-  ADD_ACTION,
-  SET_ACTIONS,
-  DRAW_ACTION,
-} from '@/store/actionStore';
 import { $ } from '@/utils/dom';
 
 export default class TodoHeader {
@@ -16,40 +9,7 @@ export default class TodoHeader {
   constructor({ email, avatarurl }: IUser) {
     this.email = email;
     this.avatarurl = avatarurl;
-
-    actionStore.subscribe(SET_ACTIONS, () => {});
-    actionStore.subscribe(DRAW_ACTION, () => {
-      this.drawAction();
-    });
-    actionStore.subscribe(ADD_ACTION, () => {
-      this.addAction();
-    });
   }
-
-  drawAction = () => {
-    const $action = $('.action');
-    const actions = actionStore.getState();
-    if ($action) $action.innerHTML = '';
-
-    actions.forEach((action: IAction) => {
-      const todoAction = new TodoAction(action);
-      if ($action) {
-        $action.insertAdjacentHTML('beforeend', todoAction.render());
-        todoAction.registerEventListener();
-      }
-    });
-  };
-
-  addAction = () => {
-    const lastValue = actionStore.getState().slice(-1)[0];
-    const todoAction = new TodoAction(lastValue);
-    const $action = $('.action');
-
-    if ($action) {
-      $action.insertAdjacentHTML('beforeend', todoAction.render());
-      todoAction.registerEventListener();
-    }
-  };
 
   handleOutSideClick = () => {
     const $actionContainer = $('.action-container');

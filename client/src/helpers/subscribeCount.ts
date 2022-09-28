@@ -11,7 +11,6 @@ const updateViewColumnCount = () => {
   const changedColumnCount = countStore
     .getState()
     .find((count: ICount) => count.clicked === true);
-
   const columnElement = $$(`${changedColumnCount.uuid}`);
 
   if (columnElement) {
@@ -23,7 +22,7 @@ const updateViewColumnCount = () => {
   }
 };
 
-export const subscribeCountStore = () => {
+export const subscribeCount = () => {
   countStore.subscribe(SET_COUNTS, () => {});
 
   countStore.subscribe(ADD_COUNT, () => {

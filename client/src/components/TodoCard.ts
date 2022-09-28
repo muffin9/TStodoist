@@ -130,17 +130,19 @@ export default class TodoCard {
   render = () => {
     return /* html */ `
       <article class="card-wrapper" id="${this.uuid}">
-        <div class="card__delete">
-          <div class="card__delete--img"></div>
-        </div>
-        <h1 class="card__title">
-        ${this.title}
-        </h1>
-        <div class="card__content">
-        ${this.content}
-        </div>
-        <div class="card__writer">
-        author by web
+        <div class="card-inner">
+            <div class="card__delete">
+              <div class="card__delete--img"></div>
+            </div>
+            <h1 class="card__title">
+            ${this.title}
+            </h1>
+            <div class="card__content">
+            ${this.content}
+            </div>
+            <div class="card__writer">
+            author by web
+            </div>
         </div>
       </article>
     `;
