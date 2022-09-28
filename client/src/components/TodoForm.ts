@@ -137,10 +137,11 @@ export default class TodoForm {
             content: this.content,
             status: this.status,
             type: this.type,
+            subject: 'todo',
           };
 
           // set Action
-          actionStore.dispatch({ type: ADD_ACTION, payload: cardData });
+          actionStore.dispatch({ type: ADD_ACTION, payload: actionData });
 
           let todoId = '';
           if (this.type === 'modify') {

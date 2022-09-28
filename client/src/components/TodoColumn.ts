@@ -4,6 +4,7 @@ import { DUPLICATE_COLUMN_TEXT } from '@/constants/modal';
 import { API_SUCCESS_CODE } from '@/constants/statusCode';
 import api from '@/helpers/api';
 import IColumn from '@/interface/IColumn';
+import actionStore, { ADD_ACTION } from '@/store/actionStore';
 import { $, $$ } from '@/utils/dom';
 
 export default class TodoColumn {
@@ -130,19 +131,30 @@ export default class TodoColumn {
 
           if (this.changeTitle === '') return;
 
-          const response = await api.postOrPatchColumnFetch(this.uuid, {
+          const actionData = {
+            title: this.changeTitle,
+            status: this.status,
+            type: 'modify',
+            subject: 'column',
+          };
+
+          // set Action
+          actionStore.dispatch({ type: ADD_ACTION, payload: actionData });
+
+          const newAction = await api.postActionFetch(actionData);
+          const newColumn = await api.postOrPatchColumnFetch(this.uuid, {
             title: this.changeTitle,
           });
 
-          if (response.id) {
+          if (newColumn.id && newAction) {
             document.removeEventListener(
               'click',
               this.handleOnClickOutside,
               true,
             );
-            this.element.dataset.columnStatus = response.title;
-            this.title = response.title;
-            titleElement.outerHTML = `<div class="column__title">${response.title}</div>`;
+            this.element.dataset.columnStatus = newColumn.title;
+            this.title = newColumn.title;
+            titleElement.outerHTML = `<div class="column__title">${newColumn.title}</div>`;
           } else {
             document.removeEventListener(
               'click',
@@ -158,9 +170,22 @@ export default class TodoColumn {
   };
 
   handleDeleteColumn = async () => {
-    const responseStatus = await api.deleteColumnFetch(this.uuid);
+    const actionData = {
+      title: this.title,
+      status: this.status,
+      type: 'delete',
+      subject: 'column',
+    };
 
-    if (responseStatus === API_SUCCESS_CODE) {
+    actionStore.dispatch({
+      type: ADD_ACTION,
+      payload: actionData,
+    });
+
+    const newAction = await api.postActionFetch(actionData);
+    const newColumnStatus = await api.deleteColumnFetch(this.uuid);
+
+    if (newAction && newColumnStatus === API_SUCCESS_CODE) {
       this.element?.remove();
     }
   };

@@ -5,4 +5,5 @@ export default interface IAction {
   status: string;
   endStatus?: string;
   type: string;
+  subject: string;
 }
