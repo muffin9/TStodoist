@@ -37,7 +37,7 @@ export default class GlobalModal {
   };
 
   addBody = () => {
-    document.body.insertAdjacentHTML('afterend', this.render());
+    document.body.insertAdjacentHTML('beforeend', this.render());
   };
 
   render() {
