@@ -25,6 +25,7 @@ export const postAction = async (req, res) => {
         const action = {
             uuid: createuuid(),
             title: req.body.title,
+            subject: req.body.subject,
             content: req.body.content || '',
             status: req.body.status,
             endStatus: req.body.endStatus || '',
@@ -33,7 +34,7 @@ export const postAction = async (req, res) => {
             user_id: userId
         }
         await connection.beginTransaction();
-        await connection.query(`INSERT INTO actions (uuid, title, content, status, endStatus, type, date, user_id) VALUES('${action.uuid}', '${action.title}', '${action.content}', '${action.status}', '${action.endStatus}', '${action.type}', '${action.date}', '${action.user_id}')`);
+        await connection.query(`INSERT INTO actions (uuid, title, subject, content, status, endStatus, type, date, user_id) VALUES('${action.uuid}', '${action.title}', '${action.subject}', '${action.content}', '${action.status}', '${action.endStatus}', '${action.type}', '${action.date}', '${action.user_id}')`);
         await connection.commit();
         const newAction = await findActionByuuid(action.uuid);
         return res.json(newAction[0]);

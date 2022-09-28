@@ -79,6 +79,7 @@ export default class TodoCard {
       title: this.title,
       status: this.status,
       type: 'delete',
+      subject: 'todo',
     };
 
     actionStore.dispatch({
