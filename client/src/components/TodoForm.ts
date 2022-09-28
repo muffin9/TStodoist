@@ -4,7 +4,7 @@ import api from '@/helpers/api';
 import IForm from '@/interface/IForm';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
 import countStore, { ADD_COUNT } from '@/store/todoCountStore';
-import { $, $$ } from '@/utils/dom';
+import { $$ } from '@/utils/dom';
 
 export default class TodoForm {
   uuid: string;
@@ -121,7 +121,7 @@ export default class TodoForm {
       const $formElement = this.element;
       if ($registerButton) {
         $registerButton.addEventListener('click', async () => {
-          const $columnElement = $(`[data-column-status=${this.status}]`);
+          const $columnElement = $$(this.columnId);
 
           const cardData = {
             columnId: this.columnId,

@@ -1,5 +1,7 @@
 .fab-wrapper {
-  position: sticky;
+  position: absolute;
+  right: 4rem;
+  bottom: 4rem;
   @include flexbox($justify-content: flex-end);
 }
 
