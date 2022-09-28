@@ -67,7 +67,9 @@ export default class TodoColumnFab {
 
   render = () => {
     return /*html*/ `
-        <div class="fab"><button class="fab__add-button">+</button></div>
+        <div class="fab-wrapper">
+          <div class="fab"><button class="fab__add-button">+</button></div>
+        </div>
     `;
   };
 }

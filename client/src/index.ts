@@ -72,17 +72,19 @@ const app = async () => {
     email: response.email,
     avatarurl: response.avatarurl,
   });
-  const todoColumnFab = new TodoColumnFab();
 
   subscribeCountStore();
 
-  root.insertAdjacentHTML('afterend', todoColumnFab.render());
-  root.insertAdjacentHTML('afterend', header.render());
-  todoColumnFab.registerEventListener();
+  root.insertAdjacentHTML('beforeend', header.render());
+
   header.registerEventListener();
   actionStore.dispatch({ type: SET_ACTIONS, newActions: response.actions });
   actionStore.dispatch({ type: DRAW_ACTION });
   createColumns(response.columns, response.todos);
+
+  const todoColumnFab = new TodoColumnFab();
+  root.insertAdjacentHTML('beforeend', todoColumnFab.render());
+  todoColumnFab.registerEventListener();
 };
 
 app();
