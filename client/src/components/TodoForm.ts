@@ -1,5 +1,6 @@
 import TodoCard from './TodoCard';
 
+import { SUBJECT_TODO, TYPE_ADD, TYPE_MODIFY } from '@/constants/actionType';
 import api from '@/helpers/api';
 import IForm from '@/interface/IForm';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
@@ -61,12 +62,10 @@ export default class TodoForm {
 
       if (this.title && this.content) {
         $registerButton.disabled = false;
-        $registerButton.classList.remove('bg-sky-blue');
         $registerButton.classList.add('bg-dark-blue');
       } else {
         $registerButton.disabled = true;
         $registerButton.classList.remove('bg-dark-blue');
-        $registerButton.classList.add('bg-sky-blue');
       }
     }
   };
@@ -101,15 +100,17 @@ export default class TodoForm {
     if (this.element) {
       const $cancelButton = this.element.querySelector('.input--cancel');
       const $formElement = this.element;
+
       if ($cancelButton) {
+        const $previousTodoCard = this.previousCard!;
         $cancelButton.addEventListener('click', () => {
-          if (this.type === 'modify' && this.previousCard?.element) {
-            $formElement.outerHTML = this.previousCard.element.outerHTML;
-            this.previousCard.registerEventListener();
+          if (this.type === TYPE_MODIFY && $previousTodoCard.element) {
+            $formElement.outerHTML = $previousTodoCard.element.outerHTML;
+            $previousTodoCard.registerEventListener();
             return;
-          } else {
-            $formElement.remove();
           }
+
+          $formElement.remove();
         });
       }
     }
@@ -118,7 +119,6 @@ export default class TodoForm {
   handleRegisterClick = () => {
     if (this.element) {
       const $registerButton = this.element.querySelector('.input--register');
-      const $formElement = this.element;
       if ($registerButton) {
         $registerButton.addEventListener('click', async () => {
           const $columnElement = $$(this.columnId);
@@ -133,38 +133,37 @@ export default class TodoForm {
           };
 
           const actionData = {
+            subject: SUBJECT_TODO,
             title: this.title,
             content: this.content,
             status: this.status,
             type: this.type,
-            subject: 'todo',
           };
 
-          let todoId = '';
-          if (this.type === 'modify') {
-            todoId = this.uuid;
-          }
-
           const newAction = await api.postActionFetch(actionData);
-          const newTodo = await api.postOrPatchTodoFetch(todoId, cardData);
+          const newTodo = await api.postOrPatchTodoFetch(
+            this.type === TYPE_MODIFY ? this.uuid : '',
+            cardData,
+          );
 
           if (newTodo && newAction) {
-            // set Action
             actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
-            // response todo
             const newCard = new TodoCard(newTodo);
 
-            // Column 뒤에 붙이기
-            $columnElement
-              ?.querySelector('.column')
-              ?.insertAdjacentHTML('afterend', newCard.render());
-            newCard.registerEventListener();
+            if ($columnElement) {
+              $columnElement
+                .querySelector('.column')
+                ?.insertAdjacentHTML('afterend', newCard.render());
+              newCard.registerEventListener();
+            }
 
-            if (this.type === 'add') {
+            if (this.type === TYPE_ADD) {
               countStore.dispatch({ type: ADD_COUNT, payload: this.columnId });
             }
 
-            $formElement.remove();
+            if (this.element) {
+              this.element.remove();
+            }
           }
         });
       }
@@ -189,7 +188,7 @@ export default class TodoForm {
             <div class="input-button-wrapper">
                 <button class="input__button input--cancel" type="button">취소</button>
                 <button class="input__button input--register bg-sky-blue" type="button" disabled>
-                ${this.type === 'add' ? '등록' : '수정'}</button>
+                ${this.type === TYPE_ADD ? '등록' : '수정'}</button>
             </div>
         </article>
     `;

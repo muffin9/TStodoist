@@ -1,13 +1,15 @@
-import GlobalModal from '@/components/GlobalModal';
 import { DELETE_ACTION_TEXT } from '@/constants/modal';
 import { API_SUCCESS_CODE } from '@/constants/statusCode';
 import api from '@/helpers/api';
+import { createGlobalModal } from '@/helpers/globalModal';
 import IAction from '@/interface/IAction';
 import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/store/actionStore';
 import { $$ } from '@/utils/dom';
 
 export default class TodoAction {
   uuid: string;
+
+  subject: string;
 
   title: string;
 
@@ -19,18 +21,19 @@ export default class TodoAction {
 
   type: string;
 
-  element: HTMLElement | null;
+  date: string;
 
-  subject: string;
+  element: HTMLElement | null;
 
   constructor(state: IAction) {
     this.uuid = state.uuid;
+    this.subject = state.subject;
     this.title = state.title;
     this.content = state.content || '';
     this.status = state.status;
     this.endStatus = state.endStatus || '';
     this.type = state.type;
-    this.subject = state.subject;
+    this.date = state.date;
     this.element = null;
   }
 
@@ -77,16 +80,9 @@ export default class TodoAction {
   handleTrashIconClick = () => {
     if (this.element) {
       const $trashIcon = this.element.querySelector('.action__header--trash');
-
       if ($trashIcon) {
         $trashIcon.addEventListener('click', () => {
-          const modalContent = DELETE_ACTION_TEXT;
-          const globalModal = new GlobalModal(
-            modalContent,
-            this.handleDeleteAction,
-          );
-          globalModal.addBody();
-          globalModal.registerEventListener();
+          createGlobalModal(DELETE_ACTION_TEXT, this.handleDeleteAction);
         });
       }
     }
@@ -97,6 +93,7 @@ export default class TodoAction {
       return action.uuid !== this.uuid;
     });
 
+    // 해당 Action을 삭제 하고 다시 액션 셋팅과 동시에 액션 그려주기.
     actionStore.dispatch({ type: SET_ACTIONS, newActions });
     actionStore.dispatch({
       type: DRAW_ACTION,

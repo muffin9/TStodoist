@@ -5,7 +5,10 @@ export const ADD_ACTION = 'ADD_ACTION';
 export const DRAW_ACTION = 'DRAW_ACTION';
 export const SET_ACTIONS = 'SET_ACTIONS';
 
-const reducer = (state: IAction[], action: any) => {
+const reducer = (
+  state: IAction[],
+  action: { type: string; payload: string; newActions: IAction[] },
+) => {
   switch (action.type) {
     case ADD_ACTION:
       return [...state, action.payload];

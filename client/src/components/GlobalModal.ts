@@ -3,11 +3,11 @@ import { $ } from '@/utils/dom';
 export default class GlobalModal {
   content: string;
 
-  handleOk: () => void;
+  handleSubmit: () => void;
 
-  constructor(content: string, handleOk: () => void) {
+  constructor(content: string, handleSubmit: () => void) {
     this.content = content;
-    this.handleOk = handleOk;
+    this.handleSubmit = handleSubmit;
   }
 
   handleOnClick = () => {
@@ -16,7 +16,7 @@ export default class GlobalModal {
       $modalWrapper.addEventListener('click', e => {
         const target = e.target as HTMLButtonElement;
         if (target.classList.contains('modal-button--ok')) {
-          this.handleOk();
+          this.handleSubmit();
           this.handleRemoveModal();
         } else if (target.classList.contains('modal-button--cancel')) {
           this.handleRemoveModal();
@@ -45,8 +45,7 @@ export default class GlobalModal {
       <div class="overlay">
         <div class="modal-wrapper">
             <header class="modal-header">
-                <img class="modal-header--close">
-                </img>
+                <img class="modal-header--close" />
             </header>
             <div class="modal-content">${this.content}</div>
             <div class="modal-button">

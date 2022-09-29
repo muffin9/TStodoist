@@ -13,14 +13,18 @@ export default class TodoHeader {
 
   handleOutSideClick = () => {
     const $actionContainer = $('.action-container');
-    $actionContainer?.addEventListener('click', (e: any) => {
-      const $actionWrapper = $('.action-wrapper');
 
-      if ($actionWrapper && e.target.classList.contains('action-overlay')) {
-        $actionContainer?.classList.remove('action-overlay');
-        $actionWrapper.classList.toggle('action-translated');
-      }
-    });
+    if ($actionContainer) {
+      $actionContainer.addEventListener('click', e => {
+        const $actionWrapper = $('.action-wrapper');
+        const target = e.target as HTMLDivElement;
+
+        if ($actionWrapper && target.classList.contains('action-overlay')) {
+          $actionContainer.classList.remove('action-overlay');
+          $actionWrapper.classList.toggle('action-translated');
+        }
+      });
+    }
   };
 
   handleCancelClick = () => {
@@ -43,7 +47,7 @@ export default class TodoHeader {
     const $headerMenu = $('.header__menu');
     if ($headerMenu) {
       $headerMenu.addEventListener('click', () => {
-        const $actionWrapper = $('.action-wrapper') as HTMLElement;
+        const $actionWrapper = $('.action-wrapper');
 
         if ($actionWrapper) {
           const $actionContainer = $('.action-container');

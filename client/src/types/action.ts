@@ -1,3 +1,5 @@
 import IAction from '@/interface/IAction';
 
-export type ActionPostParams = Omit<IAction, 'uuid'>;
+type PostParamRemoveFields = 'uuid' | 'content' | 'endStatus' | 'date';
+
+export type ActionPostParams = Omit<IAction, PostParamRemoveFields>;

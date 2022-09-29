@@ -1,6 +1,7 @@
 import TodoColumn from './TodoColumn';
 
 import GlobalModal from '@/components/GlobalModal';
+import { SUBJECT_COLUMN, TYPE_ADD } from '@/constants/actionType';
 import api from '@/helpers/api';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
 import { $, $$ } from '@/utils/dom';
@@ -13,10 +14,13 @@ export default class TodoColumnFab {
   }
 
   handleChangeColumnValue = () => {
-    $('.fab__input-header')?.addEventListener('keyup', e => {
-      const target = e.target as HTMLInputElement;
-      this.title = target.value;
-    });
+    const $ColumnTitleChangeInput = $('.fab__input-header');
+    if ($ColumnTitleChangeInput) {
+      $ColumnTitleChangeInput.addEventListener('keyup', e => {
+        const target = e.target as HTMLInputElement;
+        this.title = target.value;
+      });
+    }
   };
 
   handleAddColumn = async () => {
@@ -25,34 +29,38 @@ export default class TodoColumnFab {
     });
 
     const actionData = {
+      subject: SUBJECT_COLUMN,
       title: this.title,
       status: this.title,
-      type: 'add',
-      subject: 'column',
+      type: TYPE_ADD,
     };
 
     const newAction = await api.postActionFetch(actionData);
 
     if (newColumn && newAction) {
-      // set Action
       actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
 
       const column = new TodoColumn({ ...newColumn, status: newColumn.title });
-      $$('root')
-        ?.querySelector('.column-wrapper')
-        ?.insertAdjacentHTML('beforeend', column.render());
-      column.registerEventListener();
+      const $columnWrapper = $$('root')?.querySelector('.column-wrapper');
+
+      if ($columnWrapper) {
+        $columnWrapper.insertAdjacentHTML('beforeend', column.render());
+        column.registerEventListener();
+      }
     }
   };
 
   handleFabClick = () => {
-    $('.fab')?.addEventListener('click', () => {
-      const modalContent = this.contentRender();
-      const globalModal = new GlobalModal(modalContent, this.handleAddColumn);
-      globalModal.addBody();
-      globalModal.registerEventListener();
-      this.handleChangeColumnValue();
-    });
+    const $columnAddButton = $('.fab');
+    if ($columnAddButton) {
+      $columnAddButton.addEventListener('click', () => {
+        const modalContent = this.contentRender();
+        const globalModal = new GlobalModal(modalContent, this.handleAddColumn);
+        globalModal.addBody();
+        globalModal.registerEventListener();
+        this.handleChangeColumnValue();
+      });
+    }
   };
 
   registerEventListener = () => {
