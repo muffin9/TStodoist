@@ -4,6 +4,7 @@ import api from '@/helpers/api';
 import { createGlobalModal } from '@/helpers/globalModal';
 import IAction from '@/interface/IAction';
 import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/store/actionStore';
+import userStore from '@/store/userStore';
 import { $$ } from '@/utils/dom';
 
 export default class TodoAction {
@@ -82,7 +83,10 @@ export default class TodoAction {
       const $trashIcon = this.element.querySelector('.action__header--trash');
       if ($trashIcon) {
         $trashIcon.addEventListener('click', () => {
-          createGlobalModal(DELETE_ACTION_TEXT, this.handleDeleteAction);
+          createGlobalModal(
+            `${this.title} ${DELETE_ACTION_TEXT}`,
+            this.handleDeleteAction,
+          );
         });
       }
     }
@@ -113,10 +117,10 @@ export default class TodoAction {
   render = () => {
     return /* html */ `
         <article class="action__inner" id="${this.uuid}">
-            <div class="action__icon">😀</div>
+            <img class="action__icon" src="${userStore.getState().avatarurl}" />
             <div class="action__contents">
                 <header class="action__header">
-                  <p class="action__writer">Muffin</p>
+                  <p class="action__writer">${userStore.getState().email}</p>
                   <div class="action__header--trash"></div>
                 </header>
                 <p class="action__content">
