@@ -19,6 +19,9 @@ export const findActionByuuid = async (uuid) => {
 export const postAction = async (req, res) => {
     const { email, oauthProvider } = req.user;
     const connection = await pool.getConnection(async conn => conn);
+    const offset = new Date().getTimezoneOffset() * 60000;
+    const today = new Date(Date.now() - offset);
+
     try {
         const userId = await findIdByUser({ provider: oauthProvider, email });
 
@@ -30,7 +33,7 @@ export const postAction = async (req, res) => {
             status: req.body.status,
             endStatus: req.body.endStatus || '',
             type: req.body.type,
-            date: new Date().toISOString().slice(0, 19).replace('T', ' '),
+            date: today.toISOString().slice(0, 19).replace('T', ' '),
             user_id: userId
         }
         await connection.beginTransaction();
