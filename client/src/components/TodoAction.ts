@@ -117,10 +117,14 @@ export default class TodoAction {
   render = () => {
     return /* html */ `
         <article class="action__inner" id="${this.uuid}">
-            <img class="action__icon" src="${userStore.getState().avatarurl}" />
+            <img class="action__icon" src="${
+              userStore.getState() && userStore.getState().avatarurl
+            }" />
             <div class="action__contents">
                 <header class="action__header">
-                  <p class="action__writer">${userStore.getState().email}</p>
+                  <p class="action__writer">${
+                    userStore.getState() && userStore.getState().email
+                  }</p>
                   <div class="action__header--trash"></div>
                 </header>
                 <p class="action__content">

@@ -64,8 +64,10 @@ export default class TodoHeader {
             </h1>
             <div class="header__infos">
               <div class="header__user">
-                <img src="${avatarurl}" class="header__avatar" alt="프로필 이미지" />
-                <h3 class="header__email">${email}</h3>
+                <img src="${
+                  avatarurl || ''
+                }" class="header__avatar" alt="프로필 이미지" />
+                <h3 class="header__email">${email || ''}</h3>
                 <a href="/logout">
                   <button class="header__logout-btn">로그아웃</button>
                 </a>

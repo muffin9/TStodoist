@@ -7,6 +7,7 @@ import { createGlobalModal } from '@/helpers/globalModal';
 import ITodo from '@/interface/ITodo';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
 import countStore, { MINUS_COUNT } from '@/store/todoCountStore';
+import userStore from '@/store/userStore';
 import { $$ } from '@/utils/dom';
 
 export default class TodoCard {
@@ -129,7 +130,7 @@ export default class TodoCard {
             ${this.content}
             </div>
             <div class="card__writer">
-            author by web
+            author by ${userStore.getState() && userStore.getState().email}
             </div>
         </div>
       </article>
