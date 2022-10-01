@@ -21,7 +21,7 @@ export default class TodoCard {
 
   status: string;
 
-  date: Date;
+  date: string;
 
   element: HTMLElement | null;
 

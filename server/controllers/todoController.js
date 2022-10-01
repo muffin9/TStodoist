@@ -18,8 +18,6 @@ export const findTodoByuuid = async (uuid) => {
 
 export const postTodo = async (req, res) => {
     const connection = await pool.getConnection(async conn => conn);
-    const offset = new Date().getTimezoneOffset() * 60000;
-    const today = new Date(Date.now() - offset);
 
     try {
         const todo = {
@@ -27,7 +25,7 @@ export const postTodo = async (req, res) => {
             title: req.body.title,
             content: req.body.content,
             status: req.body.status,
-            date: today.toISOString().slice(0, 19).replace('T', ' '),
+            date: req.body.date,
             column_id: req.body.columnId
         }
 
