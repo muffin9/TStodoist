@@ -29,7 +29,7 @@ const addAction = () => {
   const $action = $('.action');
 
   if ($action) {
-    $action.insertAdjacentHTML('beforeend', todoAction.render());
+    $action.insertAdjacentHTML('afterbegin', todoAction.render());
     todoAction.registerEventListener();
   }
 };
