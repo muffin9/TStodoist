@@ -4,5 +4,5 @@ export default interface ITodo {
   title: string;
   content: string;
   status: string;
-  date: Date;
+  date: string;
 }

@@ -5,6 +5,7 @@ import { createGlobalModal } from '@/helpers/globalModal';
 import IAction from '@/interface/IAction';
 import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/store/actionStore';
 import userStore from '@/store/userStore';
+import { calculateDate } from '@/utils/date';
 import { $$ } from '@/utils/dom';
 
 export default class TodoAction {
@@ -130,7 +131,7 @@ export default class TodoAction {
                 <p class="action__content">
                   ${this.setContent()}
                 </p>
-                <p class="action__time">방금전</p>
+                <p class="action__time">${calculateDate(this.date)}전</p>
             </div>
         </article>
     `;

@@ -122,6 +122,8 @@ export default class TodoForm {
       if ($registerButton) {
         $registerButton.addEventListener('click', async () => {
           const $columnElement = $$(this.columnId);
+          const offset = new Date().getTimezoneOffset() * 60000;
+          const today = new Date(Date.now() - offset);
 
           const cardData = {
             columnId: this.columnId,
@@ -129,7 +131,7 @@ export default class TodoForm {
             content: this.content,
             status: this.status,
             type: this.type,
-            date: new Date(),
+            date: today.toISOString().slice(0, 19).replace('T', ' '),
           };
 
           const actionData = {
@@ -138,6 +140,7 @@ export default class TodoForm {
             content: this.content,
             status: this.status,
             type: this.type,
+            date: today.toISOString().slice(0, 19).replace('T', ' '),
           };
 
           const newAction = await api.postActionFetch(actionData);
