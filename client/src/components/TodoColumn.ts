@@ -11,6 +11,7 @@ import api from '@/helpers/api';
 import { createGlobalModal } from '@/helpers/globalModal';
 import IColumn from '@/interface/IColumn';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
+import { getToday } from '@/utils/date';
 import { $, $$ } from '@/utils/dom';
 
 export default class TodoColumn {
@@ -150,6 +151,7 @@ export default class TodoColumn {
           title: this.changeTitle,
           status: this.status,
           type: TYPE_MODIFY,
+          date: getToday(),
         };
 
         const newAction = await api.postActionFetch(actionData);
@@ -175,6 +177,7 @@ export default class TodoColumn {
       title: this.title,
       status: this.status,
       type: TYPE_DELETE,
+      date: getToday(),
     };
 
     const newAction = await api.postActionFetch(actionData);

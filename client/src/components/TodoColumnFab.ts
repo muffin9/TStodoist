@@ -4,6 +4,7 @@ import GlobalModal from '@/components/GlobalModal';
 import { SUBJECT_COLUMN, TYPE_ADD } from '@/constants/actionType';
 import api from '@/helpers/api';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
+import { getToday } from '@/utils/date';
 import { $, $$ } from '@/utils/dom';
 
 export default class TodoColumnFab {
@@ -33,6 +34,7 @@ export default class TodoColumnFab {
       title: this.title,
       status: this.title,
       type: TYPE_ADD,
+      date: getToday(),
     };
 
     const newAction = await api.postActionFetch(actionData);

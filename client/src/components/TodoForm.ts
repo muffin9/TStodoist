@@ -5,6 +5,7 @@ import api from '@/helpers/api';
 import IForm from '@/interface/IForm';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
 import countStore, { ADD_COUNT } from '@/store/todoCountStore';
+import { getToday } from '@/utils/date';
 import { $$ } from '@/utils/dom';
 
 export default class TodoForm {
@@ -122,8 +123,6 @@ export default class TodoForm {
       if ($registerButton) {
         $registerButton.addEventListener('click', async () => {
           const $columnElement = $$(this.columnId);
-          const offset = new Date().getTimezoneOffset() * 60000;
-          const today = new Date(Date.now() - offset);
 
           const cardData = {
             columnId: this.columnId,
@@ -131,7 +130,7 @@ export default class TodoForm {
             content: this.content,
             status: this.status,
             type: this.type,
-            date: today.toISOString().slice(0, 19).replace('T', ' '),
+            date: getToday(),
           };
 
           const actionData = {
@@ -140,7 +139,7 @@ export default class TodoForm {
             content: this.content,
             status: this.status,
             type: this.type,
-            date: today.toISOString().slice(0, 19).replace('T', ' '),
+            date: getToday(),
           };
 
           const newAction = await api.postActionFetch(actionData);

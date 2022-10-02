@@ -1,3 +1,12 @@
+const offset = new Date().getTimezoneOffset() * 60000;
+
+export const getToday = () => {
+  return new Date(Date.now() - offset)
+    .toISOString()
+    .slice(0, 19)
+    .replace('T', ' ');
+};
+
 export const calculateDate = (date: any) => {
   const diffDate = new Date().getTime() - new Date(date).getTime();
 

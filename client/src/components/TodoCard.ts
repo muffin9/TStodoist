@@ -8,6 +8,7 @@ import ITodo from '@/interface/ITodo';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
 import countStore, { MINUS_COUNT } from '@/store/todoCountStore';
 import userStore from '@/store/userStore';
+import { getToday } from '@/utils/date';
 import { $$ } from '@/utils/dom';
 
 export default class TodoCard {
@@ -79,6 +80,7 @@ export default class TodoCard {
       title: this.title,
       status: this.status,
       type: TYPE_DELETE,
+      date: getToday(),
     };
 
     const newAction = await api.postActionFetch(actionData);
