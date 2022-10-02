@@ -10,10 +10,12 @@ import { subscribeUser } from '@/helpers/subsribeUser';
 import actionStore, { DRAW_ACTION, SET_ACTIONS } from '@/store/actionStore';
 import userStore, { SET_USER } from '@/store/userStore';
 import { $$ } from '@/utils/dom';
+import { eventDragHandler } from '@/utils/eventDragHandler';
 
 const root = $$('root') as HTMLElement;
 
 const init = async () => {
+  eventDragHandler();
   const response = await api.fetch();
   if (!response) return;
 

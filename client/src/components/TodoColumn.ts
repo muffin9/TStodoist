@@ -215,7 +215,7 @@ export default class TodoColumn {
 
   render = () => {
     return /* html */ `
-    <div class="column-list" id="${this.uuid}">
+    <div class="column-list" id="${this.uuid}" data-status="${this.status}">
       <nav class="column">
           <div class="column__left">
               <div class="column__title">${this.title}</div>

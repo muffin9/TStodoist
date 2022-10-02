@@ -120,7 +120,7 @@ export default class TodoCard {
 
   render = () => {
     return /* html */ `
-      <article class="card-wrapper" id="${this.uuid}">
+      <article class="card-wrapper" id="${this.uuid}" data-drag='true'>
         <div class="card-inner">
             <div class="card__delete">
               <div class="card__delete--img"></div>
