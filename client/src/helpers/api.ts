@@ -73,6 +73,31 @@ const deleteTodoRequest = async (uuid: string) => {
   }
 };
 
+const patchStatusTodoRequest = async (uuid: string, endStatus: string) => {
+  try {
+    const response = await fetch(`${API_END_POINT}/todo/status/${uuid}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ endStatus }),
+    });
+
+    if (response.status === API_AUTH_DENINED) {
+      window.location.href = '/login';
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error('HTTP Error');
+    }
+
+    return await response.json();
+  } catch (err: unknown) {
+    reportError({ message: getErrorMessage(err) });
+  }
+};
+
 const postActionRequest = async (data: ActionPostParams) => {
   try {
     const response = await fetch(`${API_END_POINT}/action`, {
@@ -185,6 +210,10 @@ const api = {
 
   deleteTodoFetch(uuid: string) {
     return deleteTodoRequest(uuid);
+  },
+
+  patchStatusTodoFetch(uuid: string, endStatus: string) {
+    return patchStatusTodoRequest(uuid, endStatus);
   },
 
   postActionFetch(data: ActionPostParams) {

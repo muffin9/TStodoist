@@ -103,9 +103,10 @@ const handleBodyMouseMove = () => {
   });
 };
 
-const handleDataUpdate = async () => {
+const handleDataUpdate = async (uuid, title) => {
   const actionData = {
     subject: SUBJECT_TODO,
+    title,
     status: status,
     endStatus: endStatus,
     type: TYPE_DRAG,
@@ -113,9 +114,11 @@ const handleDataUpdate = async () => {
   };
 
   countStore.dispatch({ type: UPDATE_COUNT, payload: { status, endStatus } });
+
+  const newTodo = await api.patchStatusTodoFetch(uuid, endStatus);
   const newAction = await api.postActionFetch(actionData);
 
-  if (newAction) {
+  if (newAction && newTodo) {
     actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
   }
 };
@@ -133,8 +136,12 @@ const handleBodyMouseUp = () => {
     }
 
     if (copyElement) {
-      // 액션에 데이터 추가, Card status 변경, Count 상태 변경
-      handleDataUpdate();
+      const uuid = copyElement.getAttribute('id');
+      const title = copyElement
+        .querySelector('.card__title')
+        .textContent.trim();
+
+      handleDataUpdate(uuid, title);
 
       copyElement.remove();
       setInitValues();

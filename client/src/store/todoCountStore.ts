@@ -1,5 +1,6 @@
 import ICount from '@/interface/ICount';
 import createStore from '@/store';
+import { DragPayload } from '@/types/count';
 
 export const ADD_COUNT = 'ADD_COUNT';
 export const MINUS_COUNT = 'MINUS_COUNT';
@@ -8,7 +9,11 @@ export const UPDATE_COUNT = 'UPDATE_COUNT';
 
 const reducer = (
   state: ICount[],
-  action: { type: string; payload: any | string; newCounts: ICount[] },
+  action: {
+    type: string;
+    payload: DragPayload | string;
+    newCounts: ICount[];
+  },
 ) => {
   const existCount = state.find(count => count.uuid === action.payload);
 
@@ -31,10 +36,12 @@ const reducer = (
         return { ...countObj, count: countObj.count - 1, clicked: true };
       });
     case UPDATE_COUNT:
+      const { status, endStatus } = action.payload as DragPayload;
+
       return state.map(countObj => {
-        if (countObj.status === action.payload.status)
+        if (countObj.status === status)
           return { ...countObj, count: countObj.count - 1 };
-        else if (countObj.status === action.payload.endStatus)
+        else if (countObj.status === endStatus)
           return { ...countObj, count: countObj.count + 1 };
         else return { ...countObj };
       });
