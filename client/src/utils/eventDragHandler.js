@@ -1,16 +1,21 @@
+import { TYPE_DRAG, SUBJECT_TODO } from '@/constants/actionType';
+import api from '@/helpers/api';
+import actionStore, { ADD_ACTION } from '@/store/actionStore';
+import countStore, { UPDATE_COUNT } from '@/store/todoCountStore';
+import { getToday } from '@/utils/date';
 import { $$ } from '@/utils/dom';
 
 const dragElement = $$('drag');
 let copyElement = null; // 마우스를 따라다니는 복사된 카드
 let shadowElement = null; // 잔상카드
-let firstStatus = '';
 let status = '';
+let endStatus = '';
 
 const setInitValues = () => {
   copyElement = null;
   shadowElement = null;
-  firstStatus = null;
   status = null;
+  endStatus = null;
 };
 
 const isBefore = (element1, element2) => {
@@ -32,8 +37,8 @@ const handleBodyMouseDown = () => {
 
     if (!clickedCardElement) return;
 
-    firstStatus = clickedCardElement.parentNode.getAttribute('data-status');
-    status = firstStatus;
+    status = clickedCardElement.parentNode.getAttribute('data-status');
+    endStatus = status;
 
     if (target.className === 'card__delete--img') {
       return;
@@ -44,7 +49,6 @@ const handleBodyMouseDown = () => {
     copyElement = clickedCardElement.cloneNode(true);
 
     dragElement.appendChild(copyElement);
-    console.log(window.scrollY, clickedCardElement.getBoundingClientRect().y);
     dragElement.style.left =
       clickedCardElement.getBoundingClientRect().x + 'px';
     dragElement.style.top =
@@ -79,7 +83,7 @@ const handleBodyMouseMove = () => {
       window.scrollY + screenY - dragElement.offsetHeight + 'px';
 
     if (columnList) {
-      status = columnList.getAttribute('data-status');
+      endStatus = columnList.getAttribute('data-status');
     } else return;
 
     if (!cardElement) {
@@ -99,19 +103,39 @@ const handleBodyMouseMove = () => {
   });
 };
 
+const handleDataUpdate = async () => {
+  const actionData = {
+    subject: SUBJECT_TODO,
+    status: status,
+    endStatus: endStatus,
+    type: TYPE_DRAG,
+    date: getToday(),
+  };
+
+  countStore.dispatch({ type: UPDATE_COUNT, payload: { status, endStatus } });
+  const newAction = await api.postActionFetch(actionData);
+
+  if (newAction) {
+    actionStore.dispatch({ type: ADD_ACTION, payload: newAction });
+  }
+};
+
 const handleBodyMouseUp = () => {
   document.body.addEventListener('mouseup', e => {
     if (shadowElement) {
       shadowElement.classList.remove('spectrum');
     }
 
-    if (e.target.className !== 'card-wrapper' || status === firstStatus) {
+    if (status === endStatus) {
       copyElement?.remove();
       setInitValues();
       return;
     }
 
     if (copyElement) {
+      // 액션에 데이터 추가, Card status 변경, Count 상태 변경
+      handleDataUpdate();
+
       copyElement.remove();
       setInitValues();
     }

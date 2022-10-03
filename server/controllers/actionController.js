@@ -25,7 +25,7 @@ export const postAction = async (req, res) => {
 
         const action = {
             uuid: createuuid(),
-            title: req.body.title,
+            title: req.body.title || '',
             subject: req.body.subject,
             content: req.body.content || '',
             status: req.body.status,
