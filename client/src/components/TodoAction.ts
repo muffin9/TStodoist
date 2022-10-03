@@ -56,7 +56,7 @@ export default class TodoAction {
       case 'delete':
         return `🗑 ${this.status}칼럼의 ${this.title}이 삭제되었습니다.`;
       case 'drag':
-        return '';
+        return `🖱 Todo ${this.title}를 ${this.status}칼럼에서 ${this.endStatus}칼럼으로 이동 하였습니다.`;
 
       default:
         return 'error';
@@ -71,8 +71,6 @@ export default class TodoAction {
         return `🚧 ${this.status}컬럼이 ${this.title}로 수정되었습니다.`;
       case 'delete':
         return `🗑 컬럼${this.title}이 삭제되었습니다.`;
-      case 'drag':
-        return '';
 
       default:
         return 'error';
