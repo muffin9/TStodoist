@@ -6,6 +6,7 @@ import { getToday } from '@/utils/date';
 import { $$ } from '@/utils/dom';
 
 const dragElement = $$('drag');
+const rootElement = $$('root');
 let copyElement = null; // 마우스를 따라다니는 복사된 카드
 let shadowElement = null; // 잔상카드
 let status = '';
@@ -31,7 +32,7 @@ const isBefore = (element1, element2) => {
 };
 
 const handleBodyMouseDown = () => {
-  document.body.addEventListener('mousedown', e => {
+  rootElement.addEventListener('mousedown', e => {
     const target = e.target;
     const clickedCardElement = target.closest("[data-drag='true']");
 
@@ -60,7 +61,7 @@ const handleBodyMouseDown = () => {
 };
 
 const handleBodyMouseMove = () => {
-  document.body.addEventListener('mousemove', e => {
+  rootElement.addEventListener('mousemove', e => {
     if (!copyElement) return;
 
     const { screenX, screenY } = e;
@@ -124,7 +125,7 @@ const handleDataUpdate = async (uuid, title) => {
 };
 
 const handleBodyMouseUp = () => {
-  document.body.addEventListener('mouseup', e => {
+  rootElement.addEventListener('mouseup', e => {
     if (shadowElement) {
       shadowElement.classList.remove('spectrum');
     }

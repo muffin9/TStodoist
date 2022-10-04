@@ -49,10 +49,36 @@ export default class TodoHeader {
     }
   };
 
+  handleArrowDownClick = () => {
+    const $arrowDown = $('.action__arrow-down');
+    if ($arrowDown) {
+      $arrowDown.addEventListener('click', () => {
+        const $actionWrapper = $('.action-wrapper');
+        if ($actionWrapper) {
+          $actionWrapper.scrollTop = $actionWrapper.scrollHeight;
+        }
+      });
+    }
+  };
+
+  handleArrowUpClick = () => {
+    const $arrowUp = $('.action__arrow-up');
+    if ($arrowUp) {
+      $arrowUp.addEventListener('click', () => {
+        const $actionWrapper = $('.action-wrapper');
+        if ($actionWrapper) {
+          $actionWrapper.scrollTop = 0;
+        }
+      });
+    }
+  };
+
   registerEventListener = () => {
     this.handleMenuClick();
     this.handleCancelClick();
     this.handleOutSideClick();
+    this.handleArrowDownClick();
+    this.handleArrowUpClick();
   };
 
   render = () => {
@@ -80,8 +106,10 @@ export default class TodoHeader {
             </div>
         </header>
         <article class="action-wrapper action-translated">
+          <div class="action__arrow-down"></div>
           <div class="action--close"></div>
           <div class="action"></div>
+          <div class="action__arrow-up"></div>
         </article>
     `;
   };
