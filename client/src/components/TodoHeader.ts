@@ -1,16 +1,7 @@
-import IUser from '@/interface/IUser';
+import userStore from '@/store/userStore';
 import { $ } from '@/utils/dom';
 
 export default class TodoHeader {
-  email: string;
-
-  avatarurl: string;
-
-  constructor({ email, avatarurl }: IUser) {
-    this.email = email;
-    this.avatarurl = avatarurl;
-  }
-
   handleOutSideClick = () => {
     const $actionContainer = $('.action-container');
 
@@ -58,13 +49,40 @@ export default class TodoHeader {
     }
   };
 
+  handleArrowDownClick = () => {
+    const $arrowDown = $('.action__arrow-down');
+    if ($arrowDown) {
+      $arrowDown.addEventListener('click', () => {
+        const $actionWrapper = $('.action-wrapper');
+        if ($actionWrapper) {
+          $actionWrapper.scrollTop = $actionWrapper.scrollHeight;
+        }
+      });
+    }
+  };
+
+  handleArrowUpClick = () => {
+    const $arrowUp = $('.action__arrow-up');
+    if ($arrowUp) {
+      $arrowUp.addEventListener('click', () => {
+        const $actionWrapper = $('.action-wrapper');
+        if ($actionWrapper) {
+          $actionWrapper.scrollTop = 0;
+        }
+      });
+    }
+  };
+
   registerEventListener = () => {
     this.handleMenuClick();
     this.handleCancelClick();
     this.handleOutSideClick();
+    this.handleArrowDownClick();
+    this.handleArrowUpClick();
   };
 
   render = () => {
+    const { email, avatarurl } = userStore.getState();
     return /* html */ `
         <header class="header__main">
             <h1 class="header__logo">
@@ -72,8 +90,10 @@ export default class TodoHeader {
             </h1>
             <div class="header__infos">
               <div class="header__user">
-                <img src="${this.avatarurl}" class="header__avatar" alt="프로필 이미지" />
-                <h3 class="header__email">${this.email}</h3>
+                <img src="${
+                  avatarurl || ''
+                }" class="header__avatar" alt="프로필 이미지" />
+                <h3 class="header__email">${email || ''}</h3>
                 <a href="/logout">
                   <button class="header__logout-btn">로그아웃</button>
                 </a>
@@ -86,8 +106,10 @@ export default class TodoHeader {
             </div>
         </header>
         <article class="action-wrapper action-translated">
+          <div class="action__arrow-down"></div>
           <div class="action--close"></div>
           <div class="action"></div>
+          <div class="action__arrow-up"></div>
         </article>
     `;
   };

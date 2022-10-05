@@ -32,7 +32,7 @@ export const postTodo = async (req, res) => {
         const columnId = await findColumnIdByuuid(todo.column_id);
 
         await connection.beginTransaction();
-        await connection.query(`INSERT INTO todos (uuid, title, content, status, column_id) VALUES('${todo.uuid}', '${todo.title}', '${todo.content}', '${todo.status}', '${columnId}')`);
+        await connection.query(`INSERT INTO todos (uuid, title, content, status, date, column_id) VALUES('${todo.uuid}', '${todo.title}', '${todo.content}', '${todo.status}', '${todo.date}', '${columnId}')`);
         await connection.commit();
         const newTodo = await findTodoByuuid(todo.uuid);
         return res.json({
@@ -60,10 +60,11 @@ export const patchTodo = async (req, res) => {
         const todo = {
             title: req.body.title,
             content: req.body.content,
+            date: new Date().toISOString().slice(0, 19).replace('T', ' '),
         }
 
         await connection.beginTransaction();
-        await connection.query(`UPDATE todos SET title='${todo.title}', content='${todo.content}' WHERE uuid='${uuid}' `);
+        await connection.query(`UPDATE todos SET title='${todo.title}', content='${todo.content}', date='${todo.date}' WHERE uuid='${uuid}' `);
         await connection.commit();
         const newTodo = await findTodoByuuid(uuid);
         const columnuuid = await findColumnuuidById(newTodo[0].column_id);
@@ -99,4 +100,24 @@ export const deleteTodo = async (req, res) => {
     }
 }
 
-export const patchTodoStatusByColumnId = () => {}
+export const patchStatusTodo = async (req, res) => {
+    const connection = await pool.getConnection(async conn => conn);
+
+    try {
+        const uuid = req.params.uuid;
+        const endStatus = req.body.endStatus;
+        console.log(uuid, endStatus);
+
+        if(!uuid) return res.sendStatus(500);
+        await connection.beginTransaction();
+        await connection.query(`UPDATE todos SET status='${endStatus}' WHERE uuid='${uuid}'`);
+        await connection.commit();
+        const newTodo = await findTodoByuuid(uuid);
+
+        return res.json(newTodo);
+    } catch (err) {
+        console.log(`query Error is ${err}...`);
+    } finally {
+        connection.release();
+    }
+}

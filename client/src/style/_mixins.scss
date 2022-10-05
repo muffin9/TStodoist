@@ -11,3 +11,10 @@
         align-items: $align-items;
     }
 }
+
+
+@mixin mobile{
+    @media (max-width: 767px){ 
+      @content;
+    }
+}

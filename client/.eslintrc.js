@@ -9,6 +9,7 @@ module.exports = {
   },
   ignorePatterns: [".eslintrc.js", 'webpack.config.js', 'dist', "server"],
   rules: {
+    "@typescript-eslint/indent": 'off',
     'prettier/prettier': 'error',
     'import/order': [
       'error',

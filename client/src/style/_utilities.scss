@@ -12,7 +12,12 @@
 
 .todo-delete-border {
     border: 1px solid $color-red;
-    // background-color: $color-red;
+    background-color: $color-red-light;
+}
+
+.todo-modify-border {
+    border: 1px solid $color-blue;
+    background-color: azure;
 }
 
 .modal-sub-title {
@@ -22,4 +27,13 @@
 
 .display-none {
     display: none;
+}
+
+#drag {
+    position: absolute;
+}
+
+.spectrum {
+    opacity: 0.6;
+    border: 1px solid $color-blue;
 }

@@ -4,6 +4,8 @@ import api from '@/helpers/api';
 import { createGlobalModal } from '@/helpers/globalModal';
 import IAction from '@/interface/IAction';
 import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/store/actionStore';
+import userStore from '@/store/userStore';
+import { calculateDate } from '@/utils/date';
 import { $$ } from '@/utils/dom';
 
 export default class TodoAction {
@@ -54,7 +56,7 @@ export default class TodoAction {
       case 'delete':
         return `🗑 ${this.status}칼럼의 ${this.title}이 삭제되었습니다.`;
       case 'drag':
-        return '';
+        return `🖱 Todo ${this.title}를 ${this.status}칼럼에서 ${this.endStatus}칼럼으로 이동 하였습니다.`;
 
       default:
         return 'error';
@@ -69,8 +71,6 @@ export default class TodoAction {
         return `🚧 ${this.status}컬럼이 ${this.title}로 수정되었습니다.`;
       case 'delete':
         return `🗑 컬럼${this.title}이 삭제되었습니다.`;
-      case 'drag':
-        return '';
 
       default:
         return 'error';
@@ -82,7 +82,10 @@ export default class TodoAction {
       const $trashIcon = this.element.querySelector('.action__header--trash');
       if ($trashIcon) {
         $trashIcon.addEventListener('click', () => {
-          createGlobalModal(DELETE_ACTION_TEXT, this.handleDeleteAction);
+          createGlobalModal(
+            `${this.title} ${DELETE_ACTION_TEXT}`,
+            this.handleDeleteAction,
+          );
         });
       }
     }
@@ -113,16 +116,20 @@ export default class TodoAction {
   render = () => {
     return /* html */ `
         <article class="action__inner" id="${this.uuid}">
-            <div class="action__icon">😀</div>
+            <img class="action__icon" src="${
+              userStore.getState() && userStore.getState().avatarurl
+            }" />
             <div class="action__contents">
                 <header class="action__header">
-                  <p class="action__writer">Muffin</p>
+                  <p class="action__writer">${
+                    userStore.getState() && userStore.getState().email
+                  }</p>
                   <div class="action__header--trash"></div>
                 </header>
                 <p class="action__content">
                   ${this.setContent()}
                 </p>
-                <p class="action__time">방금전</p>
+                <p class="action__time">${calculateDate(this.date)}전</p>
             </div>
         </article>
     `;

@@ -7,6 +7,8 @@ import { createGlobalModal } from '@/helpers/globalModal';
 import ITodo from '@/interface/ITodo';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
 import countStore, { MINUS_COUNT } from '@/store/todoCountStore';
+import userStore from '@/store/userStore';
+import { getToday } from '@/utils/date';
 import { $$ } from '@/utils/dom';
 
 export default class TodoCard {
@@ -20,7 +22,7 @@ export default class TodoCard {
 
   status: string;
 
-  date: Date;
+  date: string;
 
   element: HTMLElement | null;
 
@@ -36,7 +38,7 @@ export default class TodoCard {
 
   handleDeleteIconClick = () => {
     if (this.element) {
-      const $deleteIcon = this.element.querySelector('.card__delete--img');
+      const $deleteIcon = this.element.querySelector('.card__icons--delete');
       if ($deleteIcon) {
         $deleteIcon.addEventListener('click', () => {
           createGlobalModal(
@@ -48,27 +50,30 @@ export default class TodoCard {
     }
   };
 
-  handleOnDbClick = () => {
+  handleModifyIconClick = () => {
     if (this.element) {
       const $clickedclickedTodoCard = this.element;
-      this.element.addEventListener('dblclick', () => {
-        const cardData = {
-          uuid: this.uuid,
-          columnId: this.columnId,
-          title: this.title,
-          content: this.content,
-          status: this.status,
-          type: TYPE_MODIFY,
-        };
+      const $modifyIcon = this.element.querySelector('.card__icons--modify');
+      if ($modifyIcon) {
+        $modifyIcon.addEventListener('click', () => {
+          const cardData = {
+            uuid: this.uuid,
+            columnId: this.columnId,
+            title: this.title,
+            content: this.content,
+            status: this.status,
+            type: TYPE_MODIFY,
+          };
 
-        const todoForm = new TodoForm(cardData, {
-          element: this.element,
-          registerEventListener: this.registerEventListener,
+          const todoForm = new TodoForm(cardData, {
+            element: this.element,
+            registerEventListener: this.registerEventListener,
+          });
+
+          $clickedclickedTodoCard.outerHTML = todoForm.render();
+          todoForm.registerEventListener();
         });
-
-        $clickedclickedTodoCard.outerHTML = todoForm.render();
-        todoForm.registerEventListener();
-      });
+      }
     }
   };
 
@@ -78,6 +83,7 @@ export default class TodoCard {
       title: this.title,
       status: this.status,
       type: TYPE_DELETE,
+      date: getToday(),
     };
 
     const newAction = await api.postActionFetch(actionData);
@@ -95,7 +101,7 @@ export default class TodoCard {
 
   handleDeleteIconMouseEvent = () => {
     if (this.element) {
-      const $deleteIcon = this.element.querySelector('.card__delete--img');
+      const $deleteIcon = this.element.querySelector('.card__icons--delete');
       const $clickedTodoCard = this.element;
       if ($deleteIcon) {
         $deleteIcon.addEventListener('mouseover', () => {
@@ -108,19 +114,36 @@ export default class TodoCard {
     }
   };
 
+  handleModifyIconMouseEvent = () => {
+    if (this.element) {
+      const $modifyIcon = this.element.querySelector('.card__icons--modify');
+      const $clickedTodoCard = this.element;
+      if ($modifyIcon) {
+        $modifyIcon.addEventListener('mouseover', () => {
+          $clickedTodoCard.classList.toggle('todo-modify-border');
+        });
+        $modifyIcon.addEventListener('mouseout', () => {
+          $clickedTodoCard.classList.toggle('todo-modify-border');
+        });
+      }
+    }
+  };
+
   registerEventListener = () => {
     this.element = $$(this.uuid);
     this.handleDeleteIconMouseEvent();
     this.handleDeleteIconClick();
-    this.handleOnDbClick();
+    this.handleModifyIconClick();
+    this.handleModifyIconMouseEvent();
   };
 
   render = () => {
     return /* html */ `
-      <article class="card-wrapper" id="${this.uuid}">
+      <article class="card-wrapper" id="${this.uuid}" data-drag='true'>
         <div class="card-inner">
-            <div class="card__delete">
-              <div class="card__delete--img"></div>
+            <div class="card__icons">
+              <div class="card__icons--modify"></div>
+              <div class="card__icons--delete"></div>
             </div>
             <h1 class="card__title">
             ${this.title}
@@ -129,7 +152,7 @@ export default class TodoCard {
             ${this.content}
             </div>
             <div class="card__writer">
-            author by web
+            author by ${userStore.getState() && userStore.getState().email}
             </div>
         </div>
       </article>
