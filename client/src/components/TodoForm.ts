@@ -106,6 +106,7 @@ export default class TodoForm {
         const $previousTodoCard = this.previousCard!;
         $cancelButton.addEventListener('click', () => {
           if (this.type === TYPE_MODIFY && $previousTodoCard.element) {
+            $previousTodoCard.element.classList.remove('todo-modify-border');
             $formElement.outerHTML = $previousTodoCard.element.outerHTML;
             $previousTodoCard.registerEventListener();
             return;

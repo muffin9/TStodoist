@@ -38,7 +38,7 @@ export default class TodoCard {
 
   handleDeleteIconClick = () => {
     if (this.element) {
-      const $deleteIcon = this.element.querySelector('.card__delete--img');
+      const $deleteIcon = this.element.querySelector('.card__icons--delete');
       if ($deleteIcon) {
         $deleteIcon.addEventListener('click', () => {
           createGlobalModal(
@@ -50,27 +50,30 @@ export default class TodoCard {
     }
   };
 
-  handleOnDbClick = () => {
+  handleModifyIconClick = () => {
     if (this.element) {
       const $clickedclickedTodoCard = this.element;
-      this.element.addEventListener('dblclick', () => {
-        const cardData = {
-          uuid: this.uuid,
-          columnId: this.columnId,
-          title: this.title,
-          content: this.content,
-          status: this.status,
-          type: TYPE_MODIFY,
-        };
+      const $modifyIcon = this.element.querySelector('.card__icons--modify');
+      if ($modifyIcon) {
+        $modifyIcon.addEventListener('click', () => {
+          const cardData = {
+            uuid: this.uuid,
+            columnId: this.columnId,
+            title: this.title,
+            content: this.content,
+            status: this.status,
+            type: TYPE_MODIFY,
+          };
 
-        const todoForm = new TodoForm(cardData, {
-          element: this.element,
-          registerEventListener: this.registerEventListener,
+          const todoForm = new TodoForm(cardData, {
+            element: this.element,
+            registerEventListener: this.registerEventListener,
+          });
+
+          $clickedclickedTodoCard.outerHTML = todoForm.render();
+          todoForm.registerEventListener();
         });
-
-        $clickedclickedTodoCard.outerHTML = todoForm.render();
-        todoForm.registerEventListener();
-      });
+      }
     }
   };
 
@@ -98,7 +101,7 @@ export default class TodoCard {
 
   handleDeleteIconMouseEvent = () => {
     if (this.element) {
-      const $deleteIcon = this.element.querySelector('.card__delete--img');
+      const $deleteIcon = this.element.querySelector('.card__icons--delete');
       const $clickedTodoCard = this.element;
       if ($deleteIcon) {
         $deleteIcon.addEventListener('mouseover', () => {
@@ -111,19 +114,36 @@ export default class TodoCard {
     }
   };
 
+  handleModifyIconMouseEvent = () => {
+    if (this.element) {
+      const $modifyIcon = this.element.querySelector('.card__icons--modify');
+      const $clickedTodoCard = this.element;
+      if ($modifyIcon) {
+        $modifyIcon.addEventListener('mouseover', () => {
+          $clickedTodoCard.classList.toggle('todo-modify-border');
+        });
+        $modifyIcon.addEventListener('mouseout', () => {
+          $clickedTodoCard.classList.toggle('todo-modify-border');
+        });
+      }
+    }
+  };
+
   registerEventListener = () => {
     this.element = $$(this.uuid);
     this.handleDeleteIconMouseEvent();
     this.handleDeleteIconClick();
-    this.handleOnDbClick();
+    this.handleModifyIconClick();
+    this.handleModifyIconMouseEvent();
   };
 
   render = () => {
     return /* html */ `
       <article class="card-wrapper" id="${this.uuid}" data-drag='true'>
         <div class="card-inner">
-            <div class="card__delete">
-              <div class="card__delete--img"></div>
+            <div class="card__icons">
+              <div class="card__icons--modify"></div>
+              <div class="card__icons--delete"></div>
             </div>
             <h1 class="card__title">
             ${this.title}

@@ -14,13 +14,15 @@
     height: 100%;
   }
 
-  .card__delete {
+  .card__icons {
+    @include flexbox();
+    gap: 1rem;
     position: absolute;
     top: 1rem;
     right: 1rem;
     cursor: pointer;
 
-    &--img {
+    &--delete {
       width: 1rem;
       height: 1rem;
       background: url("../assets/close.svg") no-repeat;
@@ -28,6 +30,18 @@
 
       &:hover {
         background: url("../assets/close_hover.svg") no-repeat;
+        background-size: 100% 100%;
+      }
+    }
+
+    &--modify {
+      width: 1rem;
+      height: 1rem;
+      background: url("../assets/modify.svg") no-repeat;
+      background-size: 100% 100%;
+
+      &:hover {
+        background: url("../assets/modify_hover.svg") no-repeat;
         background-size: 100% 100%;
       }
     }
