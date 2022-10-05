@@ -5,7 +5,7 @@
 .action-overlay {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   background-color: rgba(0, 0, 0, 0.8);
   top: 0;
   left: 0;
@@ -22,6 +22,31 @@
   z-index: 1002;
   transition: 0.5s;
   overflow-y: auto;
+
+  @include mobile {
+    width: 20rem;
+  }
+
+  .action__arrow-down {
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    left: 1rem;
+    top: 2rem;
+    background: url("../assets/arrow-down.svg") no-repeat;
+    background-size: 100% 100%;
+    cursor: pointer;
+  }
+
+  .action__arrow-up {
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    left: 1rem;
+    background: url("../assets/arrow-up.svg") no-repeat;
+    background-size: 100% 100%;
+    cursor: pointer;
+  }
 
   .action--close {
     width: 1rem;

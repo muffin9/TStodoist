@@ -18,8 +18,6 @@ export const findTodoByuuid = async (uuid) => {
 
 export const postTodo = async (req, res) => {
     const connection = await pool.getConnection(async conn => conn);
-    const offset = new Date().getTimezoneOffset() * 60000;
-    const today = new Date(Date.now() - offset);
 
     try {
         const todo = {
@@ -27,7 +25,7 @@ export const postTodo = async (req, res) => {
             title: req.body.title,
             content: req.body.content,
             status: req.body.status,
-            date: today.toISOString().slice(0, 19).replace('T', ' '),
+            date: req.body.date,
             column_id: req.body.columnId
         }
 
@@ -102,4 +100,24 @@ export const deleteTodo = async (req, res) => {
     }
 }
 
-export const patchTodoStatusByColumnId = () => {}
+export const patchStatusTodo = async (req, res) => {
+    const connection = await pool.getConnection(async conn => conn);
+
+    try {
+        const uuid = req.params.uuid;
+        const endStatus = req.body.endStatus;
+        console.log(uuid, endStatus);
+
+        if(!uuid) return res.sendStatus(500);
+        await connection.beginTransaction();
+        await connection.query(`UPDATE todos SET status='${endStatus}' WHERE uuid='${uuid}'`);
+        await connection.commit();
+        const newTodo = await findTodoByuuid(uuid);
+
+        return res.json(newTodo);
+    } catch (err) {
+        console.log(`query Error is ${err}...`);
+    } finally {
+        connection.release();
+    }
+}

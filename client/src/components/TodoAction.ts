@@ -5,6 +5,7 @@ import { createGlobalModal } from '@/helpers/globalModal';
 import IAction from '@/interface/IAction';
 import actionStore, { SET_ACTIONS, DRAW_ACTION } from '@/store/actionStore';
 import userStore from '@/store/userStore';
+import { calculateDate } from '@/utils/date';
 import { $$ } from '@/utils/dom';
 
 export default class TodoAction {
@@ -55,7 +56,7 @@ export default class TodoAction {
       case 'delete':
         return `🗑 ${this.status}칼럼의 ${this.title}이 삭제되었습니다.`;
       case 'drag':
-        return '';
+        return `🖱 Todo ${this.title}를 ${this.status}칼럼에서 ${this.endStatus}칼럼으로 이동 하였습니다.`;
 
       default:
         return 'error';
@@ -70,8 +71,6 @@ export default class TodoAction {
         return `🚧 ${this.status}컬럼이 ${this.title}로 수정되었습니다.`;
       case 'delete':
         return `🗑 컬럼${this.title}이 삭제되었습니다.`;
-      case 'drag':
-        return '';
 
       default:
         return 'error';
@@ -130,7 +129,7 @@ export default class TodoAction {
                 <p class="action__content">
                   ${this.setContent()}
                 </p>
-                <p class="action__time">방금전</p>
+                <p class="action__time">${calculateDate(this.date)}전</p>
             </div>
         </article>
     `;

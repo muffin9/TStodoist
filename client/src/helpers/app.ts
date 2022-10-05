@@ -50,6 +50,7 @@ export const setInitColumns = async (
 
     newCounts.push({
       uuid: column.uuid,
+      status: column.title,
       count: todoData.length,
       clicked: false,
     });

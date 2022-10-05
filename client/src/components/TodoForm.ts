@@ -5,6 +5,7 @@ import api from '@/helpers/api';
 import IForm from '@/interface/IForm';
 import actionStore, { ADD_ACTION } from '@/store/actionStore';
 import countStore, { ADD_COUNT } from '@/store/todoCountStore';
+import { getToday } from '@/utils/date';
 import { $$ } from '@/utils/dom';
 
 export default class TodoForm {
@@ -105,6 +106,7 @@ export default class TodoForm {
         const $previousTodoCard = this.previousCard!;
         $cancelButton.addEventListener('click', () => {
           if (this.type === TYPE_MODIFY && $previousTodoCard.element) {
+            $previousTodoCard.element.classList.remove('todo-modify-border');
             $formElement.outerHTML = $previousTodoCard.element.outerHTML;
             $previousTodoCard.registerEventListener();
             return;
@@ -129,7 +131,7 @@ export default class TodoForm {
             content: this.content,
             status: this.status,
             type: this.type,
-            date: new Date(),
+            date: getToday(),
           };
 
           const actionData = {
@@ -138,6 +140,7 @@ export default class TodoForm {
             content: this.content,
             status: this.status,
             type: this.type,
+            date: getToday(),
           };
 
           const newAction = await api.postActionFetch(actionData);
