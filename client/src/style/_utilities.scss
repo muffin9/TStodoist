@@ -15,6 +15,11 @@
     background-color: $color-red-light;
 }
 
+.todo-modify-border {
+    border: 1px solid $color-blue;
+    background-color: azure;
+}
+
 .modal-sub-title {
     color: $color-grey-dark;
     font-size: $font-14;

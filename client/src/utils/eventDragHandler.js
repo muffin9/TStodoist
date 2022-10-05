@@ -41,7 +41,10 @@ const handleBodyMouseDown = () => {
     status = clickedCardElement.parentNode.getAttribute('data-status');
     endStatus = status;
 
-    if (target.className === 'card__delete--img') {
+    if (
+      target.className === 'card__icons--delete' ||
+      target.className === 'card__icons--modify'
+    ) {
       return;
     }
 
@@ -125,7 +128,7 @@ const handleDataUpdate = async (uuid, title) => {
 };
 
 const handleBodyMouseUp = () => {
-  rootElement.addEventListener('mouseup', e => {
+  rootElement.addEventListener('mouseup', () => {
     if (shadowElement) {
       shadowElement.classList.remove('spectrum');
     }
