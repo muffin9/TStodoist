@@ -123,7 +123,7 @@ export default class TodoForm {
       const $registerButton = this.element.querySelector('.input--register');
       if ($registerButton) {
         $registerButton.addEventListener('click', async () => {
-          const $columnElement = $$(this.columnId);
+          const $columnElement = $$(this.uuid)?.parentElement;
 
           const cardData = {
             columnId: this.columnId,
@@ -183,10 +183,11 @@ export default class TodoForm {
   };
 
   render = () => {
+    console.log(this.title);
     return /* html */ `
         <article class="input-wrapper todo-border" id="${this.uuid}">
-            <input class="input-title" placeholder="제목을 입력하세요"
-            value=${this.title}>
+            <input type="text" class="input-title" placeholder="제목을 입력하세요"
+            value="${this.title}">
             <textarea class="input-content" placeholder="내용을 입력하세요" maxlength ='500'></textarea>
             <div class="input-button-wrapper">
                 <button class="input__button input--cancel" type="button">취소</button>
